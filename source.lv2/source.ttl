@@ -9,12 +9,11 @@
 
 @prefix guiext: <http://lv2plug.in/ns/extensions/ui#>.
 
-#<http://www.openavproductions.com/source/gui>
-#  a guiext:GtkUI;
-#  guiext:binary <source_gui.so>;
-#  guiext:requiredFeature guiext:makeResident.
+<http://www.openavproductions.com/source/gui>
+  a guiext:GtkUI;
+  guiext:binary <source_gui.so>;
+  guiext:requiredFeature guiext:makeResident.
 
-#guiext:ui <http://www.openavproductions.com/source/gui>;
 
 <http://www.openavproductions.com/source>
        a lv2:Plugin, lv2:InstrumentPlugin ;
@@ -22,7 +21,7 @@
        lv2:binary <source.so> ;
        lv2:optionalFeature epp:supportsStrictBounds ;
        lv2:optionalFeature lv2:hardRtCapable ;
-       
+       guiext:ui <http://www.openavproductions.com/source/gui>;
   
     lv2:port [
 	a lv2:InputPort ;

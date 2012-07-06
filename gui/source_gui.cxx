@@ -34,13 +34,19 @@ typedef struct {
 } SourceGui;
 
 static GtkWidget* make_gui(SourceGui *self) {
-    //Gtk::Main::init_gtkmm_internals(); // for QT hosts
     
+    cout << "Init GTKMM!" << endl;
+    Gtk::Main::init_gtkmm_internals(); // for QT hosts
+    
+    
+    cout << "create container!" << endl;
     // Return a pointer to a gtk widget containing our GUI
     GtkWidget* container = gtk_vbox_new(FALSE, 2);
     
+    cout << "new canvast!" << endl;
     self->widget = new Canvas();
     
+    cout << "adding to window!" << endl;
     // get the gobject, and add that to the container
     gtk_container_add((GtkContainer*)container, (GtkWidget*)self->widget->gobj() );
     
@@ -63,6 +69,8 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     
     SourceGui* self = (SourceGui*)malloc(sizeof(SourceGui));
     
+    cout << "Allocated SourceGUI!" << endl;
+    
     if (self == NULL) return NULL;
     
     for(int i = 0; features[i]; i++)
@@ -76,10 +84,15 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     
     //self->guiState->uris.midiEvent    = self->guiState->map->map(self->guiState->map->handle, LV2_MIDI__MidiEvent);
     
+    cout << "Creating UI!" << endl;
     *widget = (LV2UI_Widget)make_gui(self);
+    
+    cout << "Writing controller f(x)!" << endl;
     
     self->widget->controller = controller;
     self->widget->write_function = write_function;
+    
+    cout << "returning..." << endl;
     
     return (LV2UI_Handle)self;
 }
