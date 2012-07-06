@@ -25,7 +25,7 @@ class Canvas : public Gtk::DrawingArea
       height = 546;
       set_size_request( width, height );
       
-      //loadHeaderImage();
+      loadHeaderImage();
       
       // connect GTK signals
       add_events( Gdk::EXPOSURE_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK| Gdk::POINTER_MOTION_MASK );
@@ -91,12 +91,11 @@ class Canvas : public Gtk::DrawingArea
       COLOUR_TRANSPARENT,
     };
     
-    /*
     void loadHeaderImage()
     {
       // Load pixbuf
       try {
-        imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/refractor.lv2/header.png");
+        imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/source.lv2/header.png");
         headerLoaded = true;
       }
       catch(Glib::FileError& e)
@@ -107,7 +106,7 @@ class Canvas : public Gtk::DrawingArea
       if ( !headerLoaded ) // if not in /usr/lib/lv2, try local
       {
         try {
-          imagePointer = Gdk::Pixbuf::create_from_file ("/usr/local/lib/lv2/refractor.lv2/header.png");
+          imagePointer = Gdk::Pixbuf::create_from_file ("/usr/local/lib/lv2/source.lv2/header.png");
           headerLoaded = true;
         }
         catch(Glib::FileError& e)
@@ -137,7 +136,6 @@ class Canvas : public Gtk::DrawingArea
       
       headerLoaded = true;
     }
-    */
     
     bool on_expose_event			(GdkEventExpose* event)
     {

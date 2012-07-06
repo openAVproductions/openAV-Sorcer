@@ -1,3 +1,3 @@
 #! /bin/sh
 
-jalv.qt http://www.openavproductions.com/source
+jalv.gtk http://www.openavproductions.com/source
