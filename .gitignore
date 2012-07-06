@@ -1,0 +1,15 @@
+
+.waf*
+gui/build/*
+
+faust/a.out
+faust/main.cpp
+faust/source
+faust/source.so
+faust/source.ttl
+
+gui/.lock-wafbuild
+gui/source_gui.so
+
+source.lv2/source_gui.so
+source.lv2/source.so

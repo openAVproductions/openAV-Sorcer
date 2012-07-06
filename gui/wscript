@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+
+# Variables for 'waf dist'
+APPNAME = 'refractor.lv2'
+VERSION = '1.0.0'
+
+# Mandatory variables
+top = '.'
+out = 'build'
+
+def options(opt):
+    opt.load('compiler_c')
+    opt.load('compiler_cxx')
+
+def configure(ctx):
+    ctx.load('compiler_c')
+    ctx.load('compiler_cxx')
+    
+    print('Refractor Configuration')
+
+    if ctx.env['MSVC_COMPILER']:
+        ctx.env.append_unique('CFLAGS', ['-TP', '-MD'])
+    else:
+        ctx.env.append_unique('CFLAGS', '-std=c99')
+    
+    # faust include and fast math 
+    #'-g', '-pg',
+    ctx.env.CXXFLAGS = ['-g', '-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-O3','-ffast-math']
+    
+    # Check for gtkmm to build UI, sndfile for loading
+    ctx.check_cfg(package='gtkmm-2.4',at_least_version='1.0',args='--cflags --libs',uselib_store='GTKMM')
+    ctx.check_cfg(package='lv2core',at_least_version='1.0',args='--cflags --libs',uselib_store='LV2CORE')
+    ctx.check_cfg(package='sndfile',at_least_version='1.0',args='--cflags --libs',uselib_store='SNDFILE')
+    
+    # Set env['pluginlib_PATTERN']
+    pat = ctx.env['cshlib_PATTERN']
+    if pat.startswith('lib'):
+        pat = pat[3:]
+    ctx.env['pluginlib_PATTERN'] = pat
+    ctx.env['pluginlib_EXT'] = pat[pat.rfind('.'):]
+
+    #print("LV2 bundle directory", ctx.env['LV2DIR'])
+    #print('')
+
+def build(ctx):
+    bundle = APPNAME
+    
+    includes = ''
+    
+    # Build plugin UI library
+    obj = ctx(features     = 'cxx cxxshlib',
+              source       = 'source_gui.cxx',
+              name         = 'source_gui',
+              target       = 'source_gui',
+              uselib       = 'GTKMM LV2CORE',
+              includes     = includes)
+
