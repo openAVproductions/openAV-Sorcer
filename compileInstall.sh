@@ -2,17 +2,17 @@
 
 cd faust
 
-faust -cn source -a lv2synth.cpp main.dsp -o main.cpp
+faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
 
-g++ -shared -DPLUGIN_URI='"http://www.openavproductions.com/source"'   main.cpp -lsndfile -o source.so
+g++ -shared -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"'   main.cpp -lsndfile -o sorcer.so
 
-g++ -DPLUGIN_URI='"http://www.openavproductions.com/source"' -lsndfile main.cpp
+g++ -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"' -lsndfile main.cpp
 
-./a.out > source.ttl
+./a.out > sorcer.ttl
 
-cp ./source.so ../source.lv2/
-cp ./source.ttl ../source.lv2/
+cp ./sorcer.so ../sorcer.lv2/
+cp ./sorcer.ttl ../sorcer.lv2/
 
 cd ../
 
-cp -r ./source.lv2/ /usr/lib/lv2/
+cp -r ./sorcer.lv2/ /usr/lib/lv2/

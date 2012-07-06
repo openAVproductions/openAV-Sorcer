@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Variables for 'waf dist'
-APPNAME = 'refractor.lv2'
+APPNAME = 'sorcer.lv2'
 VERSION = '1.0.0'
 
 # Mandatory variables
@@ -49,9 +49,9 @@ def build(ctx):
     
     # Build plugin UI library
     obj = ctx(features     = 'cxx cxxshlib',
-              source       = 'canvas.cxx source_gui.cxx',
-              name         = 'source_gui',
-              target       = 'source_gui',
+              source       = 'canvas.cxx sorcer_gui.cxx',
+              name         = 'sorcer_gui',
+              target       = 'sorcer_gui',
               uselib       = 'GTKMM LV2CORE',
               includes     = includes)
 

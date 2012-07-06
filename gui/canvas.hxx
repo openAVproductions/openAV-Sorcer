@@ -1,6 +1,6 @@
 
-#ifndef SOURCE_CANVAS_HXX
-#define SOURCE_CANVAS_HXX
+#ifndef SORCER_CANVAS_HXX
+#define SORCER_CANVAS_HXX
 
 #include <gtkmm/drawingarea.h>
 
@@ -100,7 +100,7 @@ class Canvas : public Gtk::DrawingArea
     {
       // Load pixbuf
       try {
-        imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/source.lv2/header.png");
+        imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/sorcer.lv2/header.png");
         headerLoaded = true;
       }
       catch(Glib::FileError& e)
@@ -111,7 +111,7 @@ class Canvas : public Gtk::DrawingArea
       if ( !headerLoaded ) // if not in /usr/lib/lv2, try local
       {
         try {
-          imagePointer = Gdk::Pixbuf::create_from_file ("/usr/local/lib/lv2/source.lv2/header.png");
+          imagePointer = Gdk::Pixbuf::create_from_file ("/usr/local/lib/lv2/sorcer.lv2/header.png");
           headerLoaded = true;
         }
         catch(Glib::FileError& e)

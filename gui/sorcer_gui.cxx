@@ -24,16 +24,16 @@
 
 #include "canvas.hxx"
 
-#define SOURCE_URI "http://www.openavproductions.com/source"
-#define SOURCE_UI_URI "http://www.openavproductions.com/source/gui"
+#define SORCER_URI "http://www.openavproductions.com/sorcer"
+#define SORCER_UI_URI "http://www.openavproductions.com/sorcer/gui"
 
 using namespace std;
 
 typedef struct {
     Canvas* widget;
-} SourceGui;
+} SorcerGui;
 
-static GtkWidget* make_gui(SourceGui *self) {
+static GtkWidget* make_gui(SorcerGui *self) {
     
     cout << "Init GTKMM!" << endl;
     Gtk::Main::init_gtkmm_internals(); // for QT hosts
@@ -62,12 +62,12 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
                 LV2UI_Widget * widget,
                 const LV2_Feature * const * features) {
 
-    if (strcmp(plugin_uri, SOURCE_URI) != 0) {
-        fprintf(stderr, "SOURCE_URI error: this GUI does not support plugin with URI %s\n", plugin_uri);
+    if (strcmp(plugin_uri, SORCER_URI) != 0) {
+        fprintf(stderr, "SORCER_URI error: this GUI does not support plugin with URI %s\n", plugin_uri);
         return NULL;
     }
     
-    SourceGui* self = (SourceGui*)malloc(sizeof(SourceGui));
+    SorcerGui* self = (SorcerGui*)malloc(sizeof(SorcerGui));
     
     cout << "Allocated SourceGUI!" << endl;
     
@@ -99,7 +99,7 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
 
 static void cleanup(LV2UI_Handle ui) {
     printf("cleanup()\n");
-    SourceGui *pluginGui = (SourceGui *) ui;
+    SorcerGui *pluginGui = (SorcerGui *) ui;
     free(pluginGui);
 }
 
@@ -109,7 +109,7 @@ static void port_event(LV2UI_Handle ui,
                uint32_t format,
                const void * buffer)
 {
-    SourceGui *self = (SourceGui *) ui;
+    SorcerGui *self = (SorcerGui *) ui;
     
     cout << "Port event on index " << port_index << "  Format is " << format << endl;
     
@@ -149,7 +149,7 @@ static void port_event(LV2UI_Handle ui,
 }
 
 static LV2UI_Descriptor descriptors[] = {
-    {SOURCE_UI_URI, instantiate, cleanup, port_event, NULL}
+    {SORCER_UI_URI, instantiate, cleanup, port_event, NULL}
 };
 
 const LV2UI_Descriptor * lv2ui_descriptor(uint32_t index) {

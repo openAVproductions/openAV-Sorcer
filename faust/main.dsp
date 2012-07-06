@@ -1,7 +1,4 @@
-declare name "Source";
-
-// Compile with :
-// faust -a dsp.cpp -o source_engine.cpp main.dsp
+declare name "Sorcer";
 
 import("math.lib");
 import("music.lib");
