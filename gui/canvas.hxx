@@ -173,16 +173,53 @@ class Canvas : public Gtk::DrawingArea
         
         // loop draw the bottom 5 backgrounds
         int drawX = 33;
-        for ( int i = 0; i < 5; i++ )
-        {
-          Background(cr, drawX, 310, 159, 215, i);
-          drawX += 159 + 24;
-        }
+        int drawY = 74;
+        
+        // Oscillators
+        Background( cr, drawX, drawY, 159, 135, "OSC 1");
+        drawY += 135 + 24;
+        Background( cr, drawX, drawY, 159, 135, "OSC 2");
+        drawY += 135 + 24;
+        Background( cr, drawX, drawY, 159, 135, "OSC 3");
+        
+        
+        // ADSR
+        drawX += 159 + 24;
+        drawY = 74;
+        Background( cr, drawX, drawY, 159, 135, "ADSR 1");
+        drawY += 135 + 24;
+        Background( cr, drawX, drawY, 159, 135, "ADSR 2");
+        
+        // Stepper
+        drawY += 135 + 24;
+        Background( cr, drawX, drawY, 159 + 24 + 159, 135, "Step Seq");
+        
+        
+        // LFO
+        drawX += 159 + 24;
+        drawY = 74;
+        Background( cr, drawX, drawY, 159, 135, "LFO 1");
+        drawY += 135 + 24;
+        Background( cr, drawX, drawY, 159, 135, "LFO 2");
+        
+        // Affect & Remove
+        drawX += 159 + 24;
+        drawY = 74;
+        Background(cr, drawX, drawY, 159, 215, "Affect");
+        drawY += 215 + 24;
+        Background(cr, drawX, drawY, 159, 215, "Remove");
+        
+        // Adjust and Master
+        drawX += 159 + 24;
+        drawY = 74;
+        Background(cr, drawX, drawY, 159, 215, "Adjust");
+        drawY += 215 + 24;
+        Background(cr, drawX, drawY, 159, 215, "Master");
       }
       return true;
     }
     
-    void Background(Cairo::RefPtr<Cairo::Context> cr, float x, float y, float sizeX, float sizeY, int num)
+    void Background(Cairo::RefPtr<Cairo::Context> cr, float x, float y, float sizeX, float sizeY, std::string name)
     {
       // fill background
       cr->rectangle( x, y, sizeX, sizeY);
@@ -209,7 +246,7 @@ class Canvas : public Gtk::DrawingArea
       cr->unset_dash();
       
       // draw header
-      if ( 0 <= num && num < 5 )
+      if ( true )
       {
         // backing
         cr->rectangle( x, y, sizeX, 20);
@@ -217,7 +254,7 @@ class Canvas : public Gtk::DrawingArea
         cr->fill();
         
         // text
-        std::string text = "test";
+        std::string text = name;
         cr->move_to( x + 10, y + 14 );
         setColour( cr, COLOUR_BLUE_1 );
         cr->set_font_size( 10 );
