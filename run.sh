@@ -1,3 +1,3 @@
 #! /bin/sh
 
-jalv.gtkmm http://www.openavproductions.com/source
+jalv.gtk http://www.openavproductions.com/source
