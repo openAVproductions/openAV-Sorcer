@@ -49,7 +49,7 @@ def build(ctx):
     
     # Build plugin UI library
     obj = ctx(features     = 'cxx cxxshlib',
-              source       = 'source_gui.cxx',
+              source       = 'canvas.cxx source_gui.cxx',
               name         = 'source_gui',
               target       = 'source_gui',
               uselib       = 'GTKMM LV2CORE',

@@ -10,6 +10,8 @@
 
 #include <gdkmm.h>
 
+#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+
 using namespace std;
 
 class Canvas : public Gtk::DrawingArea
@@ -34,6 +36,9 @@ class Canvas : public Gtk::DrawingArea
       signal_button_press_event()  .connect( sigc::mem_fun(*this, &Canvas::on_button_press_event) );
       signal_button_release_event().connect( sigc::mem_fun(*this, &Canvas::on_button_release_event) );
     }
+    
+    void drawMaster(Cairo::RefPtr<Cairo::Context> cr);
+    void drawRemove(Cairo::RefPtr<Cairo::Context> cr);
     
     bool redraw()
     {
@@ -215,6 +220,11 @@ class Canvas : public Gtk::DrawingArea
         Background(cr, drawX, drawY, 159, 215, "Adjust");
         drawY += 215 + 24;
         Background(cr, drawX, drawY, 159, 215, "Master");
+        
+        // fill in widgets
+        drawMaster(cr);
+        
+        drawRemove(cr);
       }
       return true;
     }
