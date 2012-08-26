@@ -5,9 +5,13 @@
 
 bool wave1loaded = false;
 bool wave2loaded = false;
+bool wave3loaded = false;
+bool wave4loaded = false;
 
 float wave1[752];
 float wave2[752];
+float wave3[752];
+float wave4[752];
 
 float wavetableRead(const char* fileName, float* buffer)
 {
@@ -29,13 +33,15 @@ float wavetableRead(const char* fileName, float* buffer)
   
   sf_close (infile);
   
+  printf ("Successfully loaded %s\n", fileName);
+  
 }
 
 float wavetable1(int index)
 {
   if ( wave1loaded == false )
   {
-     wavetableRead("/root/shout_0.wav", &wave1[0] );
+     wavetableRead("/home/openav/sorcer/wavetables/shout_0.wav", &wave1[0] );
      wave1loaded = true;
   }
   
@@ -48,11 +54,37 @@ float wavetable2(int index)
 {
   if ( wave2loaded == false )
   {
-     wavetableRead("/root/shout_100.wav", &wave2[0] );
+     wavetableRead("/home/openav/sorcer/wavetables/shout_100.wav", &wave2[0] );
      wave2loaded = true;
   }
   
   float output = wave2[index];
+  
+  return output;
+}
+
+float wavetable3(int index)
+{
+  if ( wave3loaded == false )
+  {
+     wavetableRead("/home/openav/sorcer/wavetables/sqwak_0.wav", &wave3[0] );
+     wave3loaded = true;
+  }
+  
+  float output = wave3[index];
+  
+  return output;
+}
+
+float wavetable4(int index)
+{
+  if ( wave4loaded == false )
+  {
+     wavetableRead("/home/openav/sorcer/wavetables/sqwak_100.wav", &wave4[0] );
+     wave4loaded = true;
+  }
+  
+  float output = wave4[index];
   
   return output;
 }
