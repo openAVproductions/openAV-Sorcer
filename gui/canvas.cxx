@@ -14,6 +14,143 @@
 
 using namespace std;
 
+
+
+bool Canvas::on_button_press_event(GdkEventButton* event)
+{
+  cout << "Click @ " << event->x << " " << event->y << endl;
+  
+  int x = event->x;
+  int y = event->y;
+  
+  if ( x > 37 && y > 73 && x < 83 && y < 93 ) // Osc1 header
+  {
+    cout << "OSC 1 header, toggle on off" << endl;
+  }
+  else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 header
+  {
+    float waveform = 5-(5 * ((192-83) - (x-83)) / 108);
+    cout << "OSC 1 waveform : " << waveform << endl;
+  }
+  
+}
+
+
+void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num)
+{
+  // wafeform co-ords
+  int X =  43;
+  int Y = 101;
+  int Xs= 181-43;
+  int Ys= 183-101;
+    
+  if ( num == 1 )
+  {
+    Y += 159;
+  }
+  if ( num == 2 )
+  {
+    Y += 318;
+  }
+  
+  // WAVEFORM graph
+    cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_4 );
+    cr->fill();
+    
+    // draw "frequency guides"
+    std::valarray< double > dashes(2);
+    dashes[0] = 2.0;
+    dashes[1] = 2.0;
+    cr->set_dash (dashes, 0.0);
+    cr->set_line_width(1.0);
+    cr->set_source_rgb (0.4,0.4,0.4);
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( X + ((Xs / 4.f)*i), Y );
+      cr->line_to( X + ((Xs / 4.f)*i), Y + Ys );
+    }
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( X     , Y + (( Ys / 4.f)*i) );
+      cr->line_to( X + Xs, Y + (( Ys / 4.f)*i) );
+    }
+    cr->stroke();
+    cr->unset_dash();
+  
+  // Waveform data: WavetableMod
+  {
+    int drawX = X;
+    int drawY = Y + 79;
+    
+    float wavetableMod = 0.7;
+    cr->rectangle(drawX, drawY, 138 * wavetableMod, 2); 
+    setColour( cr, COLOUR_GREEN_1, 0.7 );
+    cr->stroke();
+  }
+  // Waveform data: Volume
+  {
+    int drawX = X+135;
+    int drawY = Y;
+    
+    float volume = 0.7;
+    cr->rectangle(drawX, drawY+ 82*(1-volume), 2,  (82*volume) ); 
+    setColour( cr, COLOUR_ORANGE_1, 1.0 );
+    cr->stroke();
+  }
+  
+  // Waveform select boxes
+  {
+    int drawX = X + 43;
+    int drawY = Y - 27;
+    int boxXs= 105;
+    int boxYs=  20;
+    
+    for(int i = 0; i < 5; i++)
+    {
+      cr->move_to(drawX, drawY+1);
+      cr->line_to(drawX, drawY+boxYs-1);
+      drawX += 21;
+    }
+    setColour( cr, COLOUR_BLUE_1 );
+    cr->stroke();
+  }
+  
+  // Graph outline
+  {
+    cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_1 );
+    cr->set_line_width(1.1);
+    cr->stroke();
+  }
+  
+  // Lower select boxes
+  {
+    int drawX = X - 11;
+    int drawY = Y + 91;
+    
+    // bg
+    cr->rectangle(drawX+1, drawY, 159, 17);
+    setColour( cr, COLOUR_GREY_4 );
+    cr->fill_preserve();
+    
+    setColour( cr, COLOUR_BLUE_1 );
+    cr->set_line_width(0.9);
+    cr->stroke();
+    
+    drawX += 162 / 4.f;
+    for(int i = 0; i < 3; i++)
+    {
+      cr->move_to(drawX, drawY+1);
+      cr->line_to(drawX, drawY+17-1);
+      drawX += 162 / 4.f;
+    }
+    setColour( cr, COLOUR_BLUE_1 );
+    cr->stroke();
+  }
+}
+
+
 void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
 {
   int border = 10;
