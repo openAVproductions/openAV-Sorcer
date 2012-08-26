@@ -26,9 +26,14 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
 
 
 // Custom clipping functions
-    lowClip  = ffunction( float lowClip (float, float), "helpers.h","");
-    highClip = ffunction( float highClip(float, float), "helpers.h","");
+    clip     = ffunction( float clip (float , float , float ), "helpers.h","");
+    lowClip  = ffunction( float lowClip (float , float  ), "helpers.h","");
+    highClip = ffunction( float highClip(float , float  ), "helpers.h","");
 
+
+// Routing variables
+    lfo1_wavetable1pos = hslider("lfo1_wavetable1pos", 0.0, 0, 1, 0.01);
+    lfo1_wavetable2pos = hslider("lfo2_wavetable1pos", 0.0, 0, 1, 0.01);
 
 // LFO 1
     lfo1freq = hslider("lfo1freq", 3.0, 0, 10, 0.01);
@@ -36,9 +41,11 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
     lfo1output = osc( lfo1freq ) * lfo1amp;
 
 // OSC 1
+    wavetable1final = clip( 0.0, 1.0, wavetable1pos +  lfo1_wavetable1pos * lfo1output );
+    
     osc1w1 = osc1readWave1( ( (osc(freq)+ 1) / 2.0) * 751 );
     osc1w2 = osc1readWave2( ( (osc(freq)+ 1) / 2.0) * 751 );
-    osc1wsum = osc1w1 * (1-wavetable1pos) + wavetable1pos * osc1w2;
+    osc1wsum = osc1w1 * (1-wavetable1final) + wavetable1final * osc1w2;
     
     osc1vol    = hslider("osc1vol", 0.3, 0, 1, 0.001);
     osc1octave = hslider("osc1octave", 0, -4, 0, 1);

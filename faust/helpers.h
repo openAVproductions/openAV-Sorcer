@@ -25,6 +25,17 @@ float highClip(float lim, float sig)
   return sig;
 }
 
+float clip( float low, float high, float sig )
+{
+  if ( sig > high )
+    sig = high;
+  
+  if ( sig < low )
+    sig = low;
+  
+  return sig;
+}
+
 float print ( float x )
 {
   if ( x != prevPrint)
