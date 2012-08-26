@@ -14,6 +14,7 @@
   guiext:binary <sorcer_gui.so>;
   guiext:requiredFeature guiext:makeResident.
 
+
 <http://www.openavproductions.com/sorcer>
        a lv2:Plugin, lv2:InstrumentPlugin ;
        doap:name "Sorcer" ;
@@ -29,9 +30,9 @@
 	lv2:symbol "attack" ;
 	lv2:name "attack" ;
         lv2:portProperty epp:hasStrictBounds ;
-        epp:rangeSteps 999 ;
-	lv2:default 0.08 ;
-	lv2:minimum 0 ;
+        epp:rangeSteps 989 ;
+	lv2:default 0.01 ;
+	lv2:minimum 0.01 ;
 	lv2:maximum 1 ;
     ] , [
 	a lv2:InputPort ;
@@ -63,7 +64,7 @@
 	lv2:name "sustain" ;
         lv2:portProperty epp:hasStrictBounds ;
         epp:rangeSteps 100 ;
-	lv2:default 0.8 ;
+	lv2:default 1 ;
 	lv2:minimum 0 ;
 	lv2:maximum 1 ;
     ] , [
@@ -84,10 +85,10 @@
 	lv2:symbol "filter1cutoff" ;
 	lv2:name "filter1cutoff" ;
         lv2:portProperty epp:hasStrictBounds ;
-        epp:rangeSteps 199199 ;
-	lv2:default 2000 ;
+        epp:rangeSteps 179200 ;
+	lv2:default 18000 ;
 	lv2:minimum 80 ;
-	lv2:maximum 20000 ;
+	lv2:maximum 18000 ;
     ] , [
 	a lv2:InputPort ;
 	a lv2:ControlPort ;
@@ -96,13 +97,35 @@
 	lv2:name "filter1lfo1range" ;
         lv2:portProperty epp:hasStrictBounds ;
         epp:rangeSteps 6000 ;
-	lv2:default 300 ;
+	lv2:default 600 ;
 	lv2:minimum 0 ;
 	lv2:maximum 6000 ;
     ] , [
 	a lv2:InputPort ;
 	a lv2:ControlPort ;
 	lv2:index 7 ;
+	lv2:symbol "lfo1_wavetable1pos" ;
+	lv2:name "lfo1_wavetable1pos" ;
+        lv2:portProperty epp:hasStrictBounds ;
+        epp:rangeSteps 100 ;
+	lv2:default 0 ;
+	lv2:minimum 0 ;
+	lv2:maximum 1 ;
+    ] , [
+	a lv2:InputPort ;
+	a lv2:ControlPort ;
+	lv2:index 8 ;
+	lv2:symbol "lfo1_wavetable2pos" ;
+	lv2:name "lfo1_wavetable2pos" ;
+        lv2:portProperty epp:hasStrictBounds ;
+        epp:rangeSteps 100 ;
+	lv2:default 0 ;
+	lv2:minimum 0 ;
+	lv2:maximum 1 ;
+    ] , [
+	a lv2:InputPort ;
+	a lv2:ControlPort ;
+	lv2:index 9 ;
 	lv2:symbol "lfo1amp" ;
 	lv2:name "lfo1amp" ;
         lv2:portProperty epp:hasStrictBounds ;
@@ -113,7 +136,7 @@
     ] , [
 	a lv2:InputPort ;
 	a lv2:ControlPort ;
-	lv2:index 8 ;
+	lv2:index 10 ;
 	lv2:symbol "lfo1freq" ;
 	lv2:name "lfo1freq" ;
         lv2:portProperty epp:hasStrictBounds ;
@@ -124,7 +147,29 @@
     ] , [
 	a lv2:InputPort ;
 	a lv2:ControlPort ;
-	lv2:index 9 ;
+	lv2:index 11 ;
+	lv2:symbol "osc1vol" ;
+	lv2:name "osc1vol" ;
+        lv2:portProperty epp:hasStrictBounds ;
+        epp:rangeSteps 999 ;
+	lv2:default 0.3 ;
+	lv2:minimum 0 ;
+	lv2:maximum 1 ;
+    ] , [
+	a lv2:InputPort ;
+	a lv2:ControlPort ;
+	lv2:index 12 ;
+	lv2:symbol "osc2vol" ;
+	lv2:name "osc2vol" ;
+        lv2:portProperty epp:hasStrictBounds ;
+        epp:rangeSteps 999 ;
+	lv2:default 0.3 ;
+	lv2:minimum 0 ;
+	lv2:maximum 1 ;
+    ] , [
+	a lv2:InputPort ;
+	a lv2:ControlPort ;
+	lv2:index 13 ;
 	lv2:symbol "osc3vol" ;
 	lv2:name "osc3vol" ;
         lv2:portProperty epp:hasStrictBounds ;
@@ -135,9 +180,20 @@
     ] , [
 	a lv2:InputPort ;
 	a lv2:ControlPort ;
-	lv2:index 10 ;
-	lv2:symbol "wavetable" ;
-	lv2:name "wavetable" ;
+	lv2:index 14 ;
+	lv2:symbol "wavetable1pos" ;
+	lv2:name "wavetable1pos" ;
+        lv2:portProperty epp:hasStrictBounds ;
+        epp:rangeSteps 100 ;
+	lv2:default 0 ;
+	lv2:minimum 0 ;
+	lv2:maximum 1 ;
+    ] , [
+	a lv2:InputPort ;
+	a lv2:ControlPort ;
+	lv2:index 15 ;
+	lv2:symbol "wavetable2pos" ;
+	lv2:name "wavetable2pos" ;
         lv2:portProperty epp:hasStrictBounds ;
         epp:rangeSteps 100 ;
 	lv2:default 0 ;
@@ -146,20 +202,20 @@
     ] , [
 	a lv2:OutputPort ;
 	a lv2:AudioPort ;
-	lv2:index 11 ;
+	lv2:index 16 ;
 	lv2:symbol "out0" ;
 	lv2:name "out0" ;
     ] , [
 	a lv2:InputPort ;
 	a ev:EventPort ;
 	ev:supportsEvent <http://lv2plug.in/ns/ext/midi#MidiEvent> ;
-	lv2:index 12 ;
+	lv2:index 17 ;
 	lv2:symbol "midiin" ;
 	lv2:name "midiin"
     ] , [
 	a lv2:InputPort ;
 	a lv2:ControlPort ;
-	lv2:index 13 ;
+	lv2:index 18 ;
 	lv2:symbol "nvoices" ;
 	lv2:name "Polyphony" ;
         lv2:portProperty epp:hasStrictBounds ;

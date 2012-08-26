@@ -23,7 +23,7 @@ class Canvas : public Gtk::DrawingArea
     
     Canvas()
     {
-      width = 956;
+      width = 591;
       height = 546;
       set_size_request( width, height );
       
@@ -191,26 +191,7 @@ class Canvas : public Gtk::DrawingArea
         // ADSR
         drawX += 159 + 24;
         drawY = 74;
-        Background( cr, drawX, drawY, 159, 135, "ADSR 1");
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159, 135, "ADSR 2");
-        
-        // Stepper
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159 + 24 + 159, 135, "Step Seq");
-        
-        
-        // LFO
-        drawX += 159 + 24;
-        drawY = 74;
-        Background( cr, drawX, drawY, 159, 135, "LFO 1");
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159, 135, "LFO 2");
-        
-        // Affect & Remove
-        drawX += 159 + 24;
-        drawY = 74;
-        Background(cr, drawX, drawY, 159, 215, "Affect");
+        Background( cr, drawX, drawY, 159, 215, "LFO");
         drawY += 215 + 24;
         Background(cr, drawX, drawY, 159, 215, "Remove");
         
