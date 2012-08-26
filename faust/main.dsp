@@ -52,9 +52,11 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
     osc1output = osc1wsum * osc1vol;
 
 // OSC 2
+    wavetable2final = clip( 0.0, 1.0, wavetable2pos +  lfo1_wavetable2pos * lfo1output );
+    
     osc2w1 = osc2readWave2( ( (osc(freq)+ 1) / 2.0) * 751 );
     osc2w2 = osc2readWave1( ( (osc(freq)+ 1) / 2.0) * 751 );
-    osc2wsum = osc2w1 * (1-wavetable2pos) + wavetable2pos * osc2w2;
+    osc2wsum = osc2w1 * (1-wavetable2final) + wavetable2final * osc2w2;
     
     osc2vol    = hslider("osc2vol", 0.3, 0, 1, 0.001);
     osc2octave = hslider("osc2octave", 0, -4, 0, 1);
