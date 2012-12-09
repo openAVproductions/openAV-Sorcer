@@ -27,12 +27,12 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   {
     cout << "OSC 1 header, toggle on off" << endl;
     float writeVal;
-    if ( oscOn[0] )
+    if ( oscVol[0] )
       writeVal = 0.f;
     else
       writeVal = 1.f;
     
-    oscOn[0] = !oscOn[0];
+    oscVol[0] = !oscVol[0];
     write_function( controller, OSC1_VOL, sizeof(float), 0, (const void*)&writeVal );
     redraw();
   }
@@ -46,12 +46,12 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   {
     cout << "OSC 2 header, toggle on off" << endl;
     float writeVal;
-    if ( oscOn[1] )
+    if ( oscVol[1] )
       writeVal = 0.f;
     else
       writeVal = 1.f;
     
-    oscOn[1] = !oscOn[1];
+    oscVol[1] = !oscVol[1];
     
     write_function( controller, OSC2_VOL, sizeof(float), 0, (const void*)&writeVal );
     redraw();
@@ -61,12 +61,12 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   {
     cout << "OSC 2 header, toggle on off" << endl;
     float writeVal;
-    if ( oscOn[2] )
+    if ( oscVol[2] )
       writeVal = 0.f;
     else
       writeVal = 1.f;
     
-    oscOn[2] = !oscOn[2];
+    oscVol[2] = !oscVol[2];
     
     write_function( controller, OSC3_VOL, sizeof(float), 0, (const void*)&writeVal );
     redraw();
@@ -130,6 +130,75 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
     cr->stroke();
   }
   
+  
+  // sinewave (in graph 1)
+        int x1 = 228;
+        int xS = Xs; // already defined
+        int y1 = 103;
+        int yS = 83;
+        cr->move_to( x1, y1 + yS / 2 );
+        
+        int m1x = x1 + xS / 6;
+        int m1y = (y1 + yS / 2)   -   53 * lfoAmp;
+        
+        int m2x = x1 + xS / 3;
+        int m2y = m1y;
+        
+        int endX = x1 + xS / 2;
+        int endY = y1 + yS / 2;
+        cr->curve_to(m1x, m1y, m2x, m2y, endX, endY);
+        
+        int m3x = x1 + 2 * xS / 3;
+        int m3y = y1 + yS + 11;
+        
+        int m4x = x1 + 5 * xS / 6;
+        int m4y = m3y;
+        
+        int end2X = x1 + xS;
+        int end2Y = y1 + yS / 2;
+        cr->curve_to(m3x, m3y, m4x, m4y, end2X, end2Y);
+        
+        //cr->line_to( x1 + Xs, y1 + 82 ); // br
+        //cr->line_to( x1     , y1 + 82 ); // bl
+        cr->close_path();
+        setColour( cr, COLOUR_GREY_4, 0.5 );
+        cr->fill_preserve();
+        setColour( cr, COLOUR_GREEN_1 );
+        cr->stroke();
+        
+        /*
+        // sinewave =- WITH AMP -=
+        cr->move_to( 146, 64 + 82 / 2 );
+        
+        m1x = 146 + 172 / 6;
+        m1y = (64 + 82 / 2)   -   53 * 1; // data->amp;
+        
+        m2x = 146 + 172 / 3;
+        m2y = m1y;
+        
+        endX = 146 + 172 / 2;
+        endY = 64 + 82 / 2;
+        cr->curve_to(m1x, m1y, m2x, m2y, endX, endY);
+        
+        m3x = 146 + 2 * 172 / 3;
+        m3y = (64 + 82 / 2)   +   53 * 1; // data->amp;
+        
+        m4x = 146 + 5 * 172 / 6;
+        m4y = m3y;
+        
+        end2X = 146 + 172;
+        end2Y = 64 + 82 / 2;
+        cr->curve_to(m3x, m3y, m4x, m4y, end2X, end2Y);
+        
+        setColour( cr, COLOUR_GREY_1, 2 * 0.3 ); // rate
+        cr->fill_preserve();
+        setColour( cr, COLOUR_GREEN_1 );
+        cr->stroke();
+        */
+  
+  // LFO dials
+  SimpleDial( cr, true, 246, 215, 0.5);
+  SimpleDial( cr, true, 315, 215, 0.7);
   
   
   // Graph outline
@@ -233,7 +302,7 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num)
       for(int i = 0; i < 3; i++)
       {
         cr->rectangle( 33, drawY, 53, 20 );
-        if ( oscOn[i] )
+        if ( oscVol[i] )
           setColour( cr, COLOUR_GREEN_1 , 0.3);
         else
           setColour( cr, COLOUR_GREY_1 , 0.1);

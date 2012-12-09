@@ -25,11 +25,15 @@ class Canvas : public Gtk::DrawingArea
     {
       width = 591;
       height = 546;
+      
       set_size_request( width, height );
       
-      oscOn[0] = true;
-      oscOn[1] = true;
-      oscOn[2] = true;
+      lfoAmp = 1;
+      lfoFreq = 0.f;
+      
+      oscVol[0] = true;
+      oscVol[1] = true;
+      oscVol[2] = true;
       
       loadHeaderImage();
       
@@ -76,7 +80,10 @@ class Canvas : public Gtk::DrawingArea
     
     int width, height;
     
-    bool oscOn[3];
+    bool oscVol[3];
+    float adsr[4];
+    float lfoAmp, lfoFreq;
+    
     
     // Image header
     bool headerLoaded;
