@@ -27,6 +27,10 @@ class Canvas : public Gtk::DrawingArea
       height = 546;
       set_size_request( width, height );
       
+      oscOn[0] = true;
+      oscOn[1] = true;
+      oscOn[2] = true;
+      
       loadHeaderImage();
       
       // connect GTK signals
@@ -39,6 +43,8 @@ class Canvas : public Gtk::DrawingArea
     
     void drawMaster(Cairo::RefPtr<Cairo::Context> cr);
     void drawRemove(Cairo::RefPtr<Cairo::Context> cr);
+    void drawLFO(Cairo::RefPtr<Cairo::Context> cr);
+    void drawADSR(Cairo::RefPtr<Cairo::Context> cr);
     void drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num);
     bool on_button_press_event(GdkEventButton* event);
     
@@ -70,6 +76,8 @@ class Canvas : public Gtk::DrawingArea
     
     int width, height;
     
+    bool oscOn[3];
+    
     // Image header
     bool headerLoaded;
     Glib::RefPtr< Gdk::Pixbuf > imagePointer;
@@ -96,6 +104,36 @@ class Canvas : public Gtk::DrawingArea
       COLOUR_BACKGROUND,
       COLOUR_RECORD_RED,
       COLOUR_TRANSPARENT,
+    };
+    
+    enum PortNames{
+      PORT_ADSR_ATTACK = 0,
+      PORT_ADSR_DECAY,
+      PORT_ADSR_RELEASE,
+      PORT_ADSR_SUSTAIN,
+      
+      MASTER_VOL,
+      
+      FILTER1_CUTOFF,
+      FILTER1_LFO_RANGE,
+      
+      LFO1_WAVETABLE1_POS,
+      LFO1_WAVETABLE2_POS,
+      
+      LFO1_AMP,
+      LFO1_FREQ,
+      
+      OSC1_VOL,
+      OSC2_VOL,
+      OSC3_VOL,
+      
+      WAVETABLE1_POS,
+      WAVETABLE2_POS,
+      
+      // AUDIO OUTPUT
+      // MIDI INPUT
+      
+      NUM_VOICES = 18
     };
     
     void loadHeaderImage()
@@ -212,6 +250,9 @@ class Canvas : public Gtk::DrawingArea
         drawOSC(cr, 0);
         drawOSC(cr, 1);
         drawOSC(cr, 2);
+        
+        drawLFO(cr);
+        drawADSR(cr);
       }
       return true;
     }

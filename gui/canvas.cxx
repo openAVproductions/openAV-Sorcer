@@ -26,15 +26,188 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   if ( x > 37 && y > 73 && x < 83 && y < 93 ) // Osc1 header
   {
     cout << "OSC 1 header, toggle on off" << endl;
+    float writeVal;
+    if ( oscOn[0] )
+      writeVal = 0.f;
+    else
+      writeVal = 1.f;
+    
+    oscOn[0] = !oscOn[0];
+    write_function( controller, OSC1_VOL, sizeof(float), 0, (const void*)&writeVal );
+    redraw();
   }
-  else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 header
+  else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 waveform
   {
     float waveform = 5-(5 * ((192-83) - (x-83)) / 108);
     cout << "OSC 1 waveform : " << waveform << endl;
   }
   
+  if ( x > 35 && y > 235 && x < 86 && y < 254 ) // Osc2 header
+  {
+    cout << "OSC 2 header, toggle on off" << endl;
+    float writeVal;
+    if ( oscOn[1] )
+      writeVal = 0.f;
+    else
+      writeVal = 1.f;
+    
+    oscOn[1] = !oscOn[1];
+    
+    write_function( controller, OSC2_VOL, sizeof(float), 0, (const void*)&writeVal );
+    redraw();
+  }
+  
+  if ( x > 35 && y > 393 && x < 86 && y < 413 ) // Osc2 header
+  {
+    cout << "OSC 2 header, toggle on off" << endl;
+    float writeVal;
+    if ( oscOn[2] )
+      writeVal = 0.f;
+    else
+      writeVal = 1.f;
+    
+    oscOn[2] = !oscOn[2];
+    
+    write_function( controller, OSC3_VOL, sizeof(float), 0, (const void*)&writeVal );
+    redraw();
+  }
+  
 }
 
+
+void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
+{
+  
+  // LFO box co-ords
+  int X =  227;
+  int Y = 101;
+  int Xs= 181-43;
+  int Ys= 183-101;
+  
+  // WAVEFORM graph
+    cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_4 );
+    cr->fill();
+    
+    // draw guides
+    std::valarray< double > dashes(2);
+    dashes[0] = 2.0;
+    dashes[1] = 2.0;
+    cr->set_dash (dashes, 0.0);
+    cr->set_line_width(1.0);
+    cr->set_source_rgb (0.4,0.4,0.4);
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( X + ((Xs / 4.f)*i), Y );
+      cr->line_to( X + ((Xs / 4.f)*i), Y + Ys );
+    }
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( X     , Y + (( Ys / 4.f)*i) );
+      cr->line_to( X + Xs, Y + (( Ys / 4.f)*i) );
+    }
+    cr->stroke();
+    cr->unset_dash();
+  
+  // Waveform data: WavetableMod
+  {
+    int drawX = X;
+    int drawY = Y + 79;
+    
+    float wavetableMod = 0.7;
+    cr->rectangle(drawX, drawY, 138 * wavetableMod, 2); 
+    setColour( cr, COLOUR_GREEN_1, 0.7 );
+    cr->stroke();
+  }
+  // Waveform data: Volume
+  {
+    int drawX = X+135;
+    int drawY = Y;
+    
+    float volume = 0.7;
+    cr->rectangle(drawX, drawY+ 82*(1-volume), 2,  (82*volume) ); 
+    setColour( cr, COLOUR_ORANGE_1, 1.0 );
+    cr->stroke();
+  }
+  
+  
+  
+  // Graph outline
+  {
+    cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_1 );
+    cr->set_line_width(1.1);
+    cr->stroke();
+  }
+  
+}
+
+void Canvas::drawADSR(Cairo::RefPtr<Cairo::Context> cr)
+{
+  
+  // ADSR box co-ords
+  int X =  227+184;
+  int Y = 101;
+  int Xs= 181-43;
+  int Ys= 183-101;
+  
+  // WAVEFORM graph
+    cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_4 );
+    cr->fill();
+    
+    // draw guides
+    std::valarray< double > dashes(2);
+    dashes[0] = 2.0;
+    dashes[1] = 2.0;
+    cr->set_dash (dashes, 0.0);
+    cr->set_line_width(1.0);
+    cr->set_source_rgb (0.4,0.4,0.4);
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( X + ((Xs / 4.f)*i), Y );
+      cr->line_to( X + ((Xs / 4.f)*i), Y + Ys );
+    }
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( X     , Y + (( Ys / 4.f)*i) );
+      cr->line_to( X + Xs, Y + (( Ys / 4.f)*i) );
+    }
+    cr->stroke();
+    cr->unset_dash();
+  
+  // Waveform data: WavetableMod
+  {
+    int drawX = X;
+    int drawY = Y + 79;
+    
+    float wavetableMod = 0.7;
+    cr->rectangle(drawX, drawY, 138 * wavetableMod, 2); 
+    setColour( cr, COLOUR_GREEN_1, 0.7 );
+    cr->stroke();
+  }
+  // Waveform data: Volume
+  {
+    int drawX = X+135;
+    int drawY = Y;
+    
+    float volume = 0.7;
+    cr->rectangle(drawX, drawY+ 82*(1-volume), 2,  (82*volume) ); 
+    setColour( cr, COLOUR_ORANGE_1, 1.0 );
+    cr->stroke();
+  }
+  
+  
+  
+  // Graph outline
+  {
+    cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_1 );
+    cr->set_line_width(1.1);
+    cr->stroke();
+  }
+  
+}
 
 void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num)
 {
@@ -53,12 +226,28 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num)
     Y += 318;
   }
   
+  if ( num == 1 ) // draw status of all switches etc
+  {
+    // Oscillators on off
+      int drawY = 74;
+      for(int i = 0; i < 3; i++)
+      {
+        cr->rectangle( 33, drawY, 53, 20 );
+        if ( oscOn[i] )
+          setColour( cr, COLOUR_GREEN_1 , 0.3);
+        else
+          setColour( cr, COLOUR_GREY_1 , 0.1);
+        cr->fill();
+        drawY += 135 + 24;
+      }
+  }
+  
   // WAVEFORM graph
     cr->rectangle( X, Y, Xs, Ys );
     setColour( cr, COLOUR_GREY_4 );
     cr->fill();
     
-    // draw "frequency guides"
+    // draw guides
     std::valarray< double > dashes(2);
     dashes[0] = 2.0;
     dashes[1] = 2.0;
