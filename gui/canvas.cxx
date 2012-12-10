@@ -28,6 +28,12 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
           cout << "wavtable pos "<< values[WAVETABLE1_POS] << endl;
           write_function( controller, WAVETABLE1_POS, sizeof(float), 0, (const void*)&values[WAVETABLE1_POS] );
           break;
+      case OSC2_GRAPH:
+          values[WAVETABLE2_POS] = clickXvalue + deltaXValue;
+          cout << "wavtable pos "<< values[WAVETABLE2_POS] << endl;
+          write_function( controller, WAVETABLE2_POS, sizeof(float), 0, (const void*)&values[WAVETABLE2_POS] );
+          break;
+      default: break;
     }
   }
   
@@ -39,6 +45,7 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
 bool Canvas::on_button_release_event(GdkEventButton* event)
 {
   mouseDown = false;
+  clickedWidget = CLICKED_NONE;
   return true;
 }
 
@@ -110,6 +117,11 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
     
     write_function( controller, OSC3_VOL, sizeof(float), 0, (const void*)&writeVal );
     redraw();
+  }
+  else if ( x > 44 && y > 261 && x < 180 && y < 343 ) // Osc2 waveform graph
+  {
+    clickedWidget = OSC2_GRAPH;
+    clickXvalue += values[WAVETABLE2_POS];
   }
   
 }

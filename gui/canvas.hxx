@@ -134,7 +134,8 @@ class Canvas : public Gtk::DrawingArea
     };
     
     enum ClickedWidget{
-      OSC1_GRAPH = 0,
+      CLICKED_NONE = 0,
+      OSC1_GRAPH,
       OSC2_GRAPH,
       OSC3_GRAPH,
       
