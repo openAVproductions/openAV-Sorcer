@@ -28,6 +28,11 @@ class Canvas : public Gtk::DrawingArea
       
       set_size_request( width, height );
       
+      mouseDown = false;
+      
+      // sensitivity of *ALL* widgets
+      movementWeight = 150;
+      
       lfoAmp = 1;
       lfoFreq = 0.f;
       
@@ -35,14 +40,18 @@ class Canvas : public Gtk::DrawingArea
       oscVol[1] = true;
       oscVol[2] = true;
       
+      for(int i = 0; i < 20; i++)
+        values[i] = 0.f;
+      
       loadHeaderImage();
       
       // connect GTK signals
-      add_events( Gdk::EXPOSURE_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK| Gdk::POINTER_MOTION_MASK );
+      add_events( Gdk::EXPOSURE_MASK | Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
       
       signal_motion_notify_event() .connect( sigc::mem_fun(*this, &Canvas::on_mouse_move ) );
       signal_button_press_event()  .connect( sigc::mem_fun(*this, &Canvas::on_button_press_event) );
       signal_button_release_event().connect( sigc::mem_fun(*this, &Canvas::on_button_release_event) );
+      signal_motion_notify_event().connect( sigc::mem_fun( *this, &Canvas::on_motion_notify_event ) );
     }
     
     void drawMaster(Cairo::RefPtr<Cairo::Context> cr);
@@ -80,15 +89,26 @@ class Canvas : public Gtk::DrawingArea
     
     int width, height;
     
+    bool mouseDown;
+    int clickX, clickY;
+    float clickXvalue, clickYvalue;
+    
     bool oscVol[3];
     float adsr[4];
     float lfoAmp, lfoFreq;
     
+    float values[20];
+    
+    int movementWeight;
     
     // Image header
     bool headerLoaded;
     Glib::RefPtr< Gdk::Pixbuf > imagePointer;
     Cairo::RefPtr< Cairo::ImageSurface > imageSurfacePointer;
+    
+    
+    bool on_motion_notify_event(GdkEventMotion* event);
+    bool on_button_release_event(GdkEventButton* event);
     
     enum Colour {
       COLOUR_ORANGE_1 = 0,
@@ -112,6 +132,18 @@ class Canvas : public Gtk::DrawingArea
       COLOUR_RECORD_RED,
       COLOUR_TRANSPARENT,
     };
+    
+    enum ClickedWidget{
+      OSC1_GRAPH = 0,
+      OSC2_GRAPH,
+      OSC3_GRAPH,
+      
+      LFO_RATE,
+      LFO_AMP,
+    };
+    
+    // enumerates which widget has been clicked
+    ClickedWidget clickedWidget;
     
     enum PortNames{
       PORT_ADSR_ATTACK = 0,
@@ -414,10 +446,6 @@ class Canvas : public Gtk::DrawingArea
     void setColour( Cairo::RefPtr<Cairo::Context> cr, Colour c)
     {
       setColour(cr, c, 1.f);
-    }
-    
-    bool on_button_release_event(GdkEventButton* event)
-    {
     }
     
     bool on_mouse_move(GdkEventMotion* event)

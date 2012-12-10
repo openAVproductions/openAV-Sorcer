@@ -14,14 +14,48 @@
 
 using namespace std;
 
+bool Canvas::on_motion_notify_event(GdkEventMotion* event)
+{
+  if ( mouseDown )
+  {
+    cout << "pointer @ " << event->x << " " << event->y << "  deltaX: " << event->x - clickX << "  deltaY: " << clickY - event->y << endl;
+    float deltaXValue = float(event->x - clickX) / movementWeight;
+    cout << deltaXValue << endl;
+    switch ( clickedWidget )
+    {
+      case OSC1_GRAPH:
+          values[WAVETABLE1_POS] = clickXvalue + deltaXValue;
+          cout << "wavtable pos "<< values[WAVETABLE1_POS] << endl;
+          write_function( controller, WAVETABLE1_POS, sizeof(float), 0, (const void*)&values[WAVETABLE1_POS] );
+          break;
+    }
+  }
+  
+  redraw();
+  
+  return true;
+}
 
+bool Canvas::on_button_release_event(GdkEventButton* event)
+{
+  mouseDown = false;
+  return true;
+}
 
 bool Canvas::on_button_press_event(GdkEventButton* event)
 {
+  
   cout << "Click @ " << event->x << " " << event->y << endl;
   
   int x = event->x;
   int y = event->y;
+  
+  mouseDown = true;
+  
+  clickX = x;
+  clickY = y;
+  
+  clickXvalue = float(event->x - clickX) / movementWeight;
   
   if ( x > 37 && y > 73 && x < 83 && y < 93 ) // Osc1 header
   {
@@ -36,10 +70,16 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
     write_function( controller, OSC1_VOL, sizeof(float), 0, (const void*)&writeVal );
     redraw();
   }
-  else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 waveform
+  else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 waveform select
   {
     float waveform = 5-(5 * ((192-83) - (x-83)) / 108);
     cout << "OSC 1 waveform : " << waveform << endl;
+  }
+  else if ( x > 44 && y > 101 && x < 180 && y < 183 ) // Osc1 waveform graph
+  {
+    clickedWidget = OSC1_GRAPH;
+    clickXvalue += values[WAVETABLE1_POS];
+    //cout << "OSC 1 waveform : " << waveform << endl;
   }
   
   if ( x > 35 && y > 235 && x < 86 && y < 254 ) // Osc2 header
@@ -342,7 +382,7 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num)
     int drawY = Y + 79;
     
     float wavetableMod = 0.7;
-    cr->rectangle(drawX, drawY, 138 * wavetableMod, 2); 
+    cr->rectangle(drawX, drawY, 138 * values[WAVETABLE1_POS], 2);
     setColour( cr, COLOUR_GREEN_1, 0.7 );
     cr->stroke();
   }
