@@ -36,9 +36,9 @@ class Canvas : public Gtk::DrawingArea
       lfoAmp = 1;
       lfoFreq = 0.f;
       
-      oscVol[0] = true;
-      oscVol[1] = true;
-      oscVol[2] = true;
+      oscOn[0] = true;
+      oscOn[1] = true;
+      oscOn[2] = true;
       
       for(int i = 0; i < 20; i++)
         values[i] = 0.f;
@@ -58,7 +58,7 @@ class Canvas : public Gtk::DrawingArea
     void drawRemove(Cairo::RefPtr<Cairo::Context> cr);
     void drawLFO(Cairo::RefPtr<Cairo::Context> cr);
     void drawADSR(Cairo::RefPtr<Cairo::Context> cr);
-    void drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num);
+    void drawOSC(Cairo::RefPtr<Cairo::Context> cr);
     bool on_button_press_event(GdkEventButton* event);
     
     bool redraw()
@@ -93,7 +93,7 @@ class Canvas : public Gtk::DrawingArea
     int clickX, clickY;
     float clickXvalue, clickYvalue;
     
-    bool oscVol[3];
+    bool oscOn[3];
     float adsr[4];
     float lfoAmp, lfoFreq;
     
@@ -287,10 +287,7 @@ class Canvas : public Gtk::DrawingArea
         
         drawRemove(cr);
         
-        drawOSC(cr, 0);
-        drawOSC(cr, 1);
-        drawOSC(cr, 2);
-        
+        drawOSC(cr);
         drawLFO(cr);
         drawADSR(cr);
       }

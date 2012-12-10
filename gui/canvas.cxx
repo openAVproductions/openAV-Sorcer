@@ -14,24 +14,53 @@
 
 using namespace std;
 
+float clip(float v)
+{
+  float tmp = v;
+  if ( v > 1.0f )
+    tmp = 1.0f;
+  if ( v < 0.0f )
+    tmp = 0.0f;
+  
+  return tmp;
+}
+
 bool Canvas::on_motion_notify_event(GdkEventMotion* event)
 {
+  float zero = 0.f;
+  
   if ( mouseDown )
   {
     cout << "pointer @ " << event->x << " " << event->y << "  deltaX: " << event->x - clickX << "  deltaY: " << clickY - event->y << endl;
     float deltaXValue = float(event->x - clickX) / movementWeight;
-    cout << deltaXValue << endl;
+    float deltaYValue = float(clickY - event->y) / movementWeight;
+    
     switch ( clickedWidget )
     {
       case OSC1_GRAPH:
-          values[WAVETABLE1_POS] = clickXvalue + deltaXValue;
-          cout << "wavtable pos "<< values[WAVETABLE1_POS] << endl;
+          values[WAVETABLE1_POS] = clip(clickXvalue + deltaXValue);
+          values[OSC1_VOL] = clip(clickYvalue + deltaYValue);
           write_function( controller, WAVETABLE1_POS, sizeof(float), 0, (const void*)&values[WAVETABLE1_POS] );
+          if ( oscOn[0] )
+            write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&values[OSC1_VOL      ] );
+          else
+            write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&zero );
           break;
       case OSC2_GRAPH:
-          values[WAVETABLE2_POS] = clickXvalue + deltaXValue;
-          cout << "wavtable pos "<< values[WAVETABLE2_POS] << endl;
+          values[WAVETABLE2_POS] = clip(clickXvalue + deltaXValue);
+          values[OSC2_VOL] = clip(clickYvalue + deltaYValue);
           write_function( controller, WAVETABLE2_POS, sizeof(float), 0, (const void*)&values[WAVETABLE2_POS] );
+          if ( oscOn[1] )
+            write_function( controller, OSC2_VOL      , sizeof(float), 0, (const void*)&values[OSC2_VOL      ] );
+          else
+            write_function( controller, OSC2_VOL      , sizeof(float), 0, (const void*)&zero );
+          break;
+      case OSC3_GRAPH:
+          values[OSC2_VOL] = clip(clickYvalue + deltaYValue);
+          if ( oscOn[2] )
+            write_function( controller, OSC3_VOL      , sizeof(float), 0, (const void*)&values[OSC3_VOL      ] );
+          else
+            write_function( controller, OSC3_VOL      , sizeof(float), 0, (const void*)&zero );
           break;
       default: break;
     }
@@ -51,7 +80,7 @@ bool Canvas::on_button_release_event(GdkEventButton* event)
 
 bool Canvas::on_button_press_event(GdkEventButton* event)
 {
-  
+  float zero = 0.f;
   cout << "Click @ " << event->x << " " << event->y << endl;
   
   int x = event->x;
@@ -63,18 +92,16 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   clickY = y;
   
   clickXvalue = float(event->x - clickX) / movementWeight;
+  clickYvalue = float(clickY - event->y) / movementWeight;
   
   if ( x > 37 && y > 73 && x < 83 && y < 93 ) // Osc1 header
   {
     cout << "OSC 1 header, toggle on off" << endl;
-    float writeVal;
-    if ( oscVol[0] )
-      writeVal = 0.f;
+    oscOn[0] = !oscOn[0];
+    if ( oscOn[0] )
+      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&values[OSC1_VOL      ] );
     else
-      writeVal = 1.f;
-    
-    oscVol[0] = !oscVol[0];
-    write_function( controller, OSC1_VOL, sizeof(float), 0, (const void*)&writeVal );
+      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&zero );
     redraw();
   }
   else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 waveform select
@@ -86,42 +113,42 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   {
     clickedWidget = OSC1_GRAPH;
     clickXvalue += values[WAVETABLE1_POS];
+    clickYvalue += values[OSC1_VOL];
     //cout << "OSC 1 waveform : " << waveform << endl;
   }
   
   if ( x > 35 && y > 235 && x < 86 && y < 254 ) // Osc2 header
   {
     cout << "OSC 2 header, toggle on off" << endl;
-    float writeVal;
-    if ( oscVol[1] )
-      writeVal = 0.f;
+    oscOn[1] = !oscOn[1];
+    if ( oscOn[1] )
+      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&values[OSC2_VOL      ] );
     else
-      writeVal = 1.f;
-    
-    oscVol[1] = !oscVol[1];
-    
-    write_function( controller, OSC2_VOL, sizeof(float), 0, (const void*)&writeVal );
-    redraw();
-  }
-  
-  if ( x > 35 && y > 393 && x < 86 && y < 413 ) // Osc2 header
-  {
-    cout << "OSC 2 header, toggle on off" << endl;
-    float writeVal;
-    if ( oscVol[2] )
-      writeVal = 0.f;
-    else
-      writeVal = 1.f;
-    
-    oscVol[2] = !oscVol[2];
-    
-    write_function( controller, OSC3_VOL, sizeof(float), 0, (const void*)&writeVal );
+      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&zero );
     redraw();
   }
   else if ( x > 44 && y > 261 && x < 180 && y < 343 ) // Osc2 waveform graph
   {
     clickedWidget = OSC2_GRAPH;
     clickXvalue += values[WAVETABLE2_POS];
+    clickYvalue += values[OSC2_VOL];
+  }
+  
+  if ( x > 35 && y > 393 && x < 86 && y < 413 ) // Osc3 header
+  {
+    cout << "OSC 3 header, toggle on off" << endl;
+    oscOn[2] = !oscOn[2];
+    if ( oscOn[2] )
+      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&values[OSC3_VOL      ] );
+    else
+      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&zero );
+    redraw();
+  }
+  else if ( x > 44 && y > 421 && x < 180 && y < 502 ) // Osc3 waveform graph
+  {
+    cout << "OSC 3 graph" << endl;
+    clickedWidget = OSC3_GRAPH;
+    clickYvalue += values[OSC3_VOL];
   }
   
 }
@@ -160,6 +187,11 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
     }
     cr->stroke();
     cr->unset_dash();
+  
+  // background box for dials
+    cr->rectangle( X, Y + Ys/2.f + 5, Xs, (Ys/2.f) - 5 );
+    setColour( cr, COLOUR_GREY_4 );
+    cr->fill();
   
   // Waveform data: WavetableMod
   {
@@ -330,134 +362,127 @@ void Canvas::drawADSR(Cairo::RefPtr<Cairo::Context> cr)
   
 }
 
-void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr, int num)
+void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
 {
-  // wafeform co-ords
-  int X =  43;
+  int drawY = 74;
   int Y = 101;
-  int Xs= 181-43;
-  int Ys= 183-101;
-    
-  if ( num == 1 )
-  {
-    Y += 159;
-  }
-  if ( num == 2 )
-  {
-    Y += 318;
-  }
   
-  if ( num == 1 ) // draw status of all switches etc
+  for ( int num = 0; num < 3; num++ )
   {
+    // wafeform co-ords
+    int X =  43;
+    int Xs= 181-43;
+    int Ys= 183-101;
+    
     // Oscillators on off
-      int drawY = 74;
+    cr->rectangle( 33, drawY, 53, 20 );
+    if ( oscOn[num] )
+      setColour( cr, COLOUR_GREEN_1 , 0.3);
+    else
+      setColour( cr, COLOUR_GREY_1 , 0.1);
+    cr->fill();
+    drawY += 135 + 24;
+    
+    // WAVEFORM graph
+      cr->rectangle( X, Y, Xs, Ys );
+      setColour( cr, COLOUR_GREY_4 );
+      cr->fill();
+      
+      // draw guides
+      std::valarray< double > dashes(2);
+      dashes[0] = 2.0;
+      dashes[1] = 2.0;
+      cr->set_dash (dashes, 0.0);
+      cr->set_line_width(1.0);
+      cr->set_source_rgb (0.4,0.4,0.4);
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( X + ((Xs / 4.f)*i), Y );
+        cr->line_to( X + ((Xs / 4.f)*i), Y + Ys );
+      }
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( X     , Y + (( Ys / 4.f)*i) );
+        cr->line_to( X + Xs, Y + (( Ys / 4.f)*i) );
+      }
+      cr->stroke();
+      cr->unset_dash();
+    
+    // Waveform data: WavetableMod
+    {
+      int drawX = X;
+      int drawY = Y + 79;
+      
+      float wavetableMod = 0.7;
+      cr->rectangle(drawX, drawY, 138 * values[WAVETABLE1_POS+num], 2);
+      setColour( cr, COLOUR_GREEN_1, 0.7 );
+      cr->stroke();
+    }
+    // Waveform data: Volume
+    {
+      int drawX = X+135;
+      int drawY = Y;
+      
+      float volume = 0.7;
+      cr->rectangle(drawX, drawY+ 82*(1-values[OSC1_VOL+num]), 2,  (82*values[OSC1_VOL+num]) ); 
+      setColour( cr, COLOUR_ORANGE_1, 1.0 );
+      cr->stroke();
+    }
+    
+    // Waveform select boxes
+    {
+      int drawX = X + 43;
+      int drawY = Y - 27;
+      int boxXs= 105;
+      int boxYs=  20;
+      
+      for(int i = 0; i < 5; i++)
+      {
+        cr->move_to(drawX, drawY+1);
+        cr->line_to(drawX, drawY+boxYs-1);
+        drawX += 21;
+      }
+      setColour( cr, COLOUR_BLUE_1 );
+      cr->stroke();
+    }
+    
+    // Graph outline
+    {
+      cr->rectangle( X, Y, Xs, Ys );
+      setColour( cr, COLOUR_GREY_1 );
+      cr->set_line_width(1.1);
+      cr->stroke();
+    }
+    
+    // Lower select boxes
+    {
+      int drawX = X - 11;
+      int drawY = Y + 91;
+      
+      // bg
+      cr->rectangle(drawX+1, drawY, 159, 17);
+      setColour( cr, COLOUR_GREY_4 );
+      cr->fill_preserve();
+      
+      setColour( cr, COLOUR_BLUE_1 );
+      cr->set_line_width(0.9);
+      cr->stroke();
+      
+      drawX += 162 / 4.f;
       for(int i = 0; i < 3; i++)
       {
-        cr->rectangle( 33, drawY, 53, 20 );
-        if ( oscVol[i] )
-          setColour( cr, COLOUR_GREEN_1 , 0.3);
-        else
-          setColour( cr, COLOUR_GREY_1 , 0.1);
-        cr->fill();
-        drawY += 135 + 24;
+        cr->move_to(drawX, drawY+1);
+        cr->line_to(drawX, drawY+17-1);
+        drawX += 162 / 4.f;
       }
-  }
-  
-  // WAVEFORM graph
-    cr->rectangle( X, Y, Xs, Ys );
-    setColour( cr, COLOUR_GREY_4 );
-    cr->fill();
-    
-    // draw guides
-    std::valarray< double > dashes(2);
-    dashes[0] = 2.0;
-    dashes[1] = 2.0;
-    cr->set_dash (dashes, 0.0);
-    cr->set_line_width(1.0);
-    cr->set_source_rgb (0.4,0.4,0.4);
-    for ( int i = 0; i < 4; i++ )
-    {
-      cr->move_to( X + ((Xs / 4.f)*i), Y );
-      cr->line_to( X + ((Xs / 4.f)*i), Y + Ys );
+      setColour( cr, COLOUR_BLUE_1 );
+      cr->stroke();
     }
-    for ( int i = 0; i < 4; i++ )
-    {
-      cr->move_to( X     , Y + (( Ys / 4.f)*i) );
-      cr->line_to( X + Xs, Y + (( Ys / 4.f)*i) );
-    }
-    cr->stroke();
-    cr->unset_dash();
-  
-  // Waveform data: WavetableMod
-  {
-    int drawX = X;
-    int drawY = Y + 79;
     
-    float wavetableMod = 0.7;
-    cr->rectangle(drawX, drawY, 138 * values[WAVETABLE1_POS], 2);
-    setColour( cr, COLOUR_GREEN_1, 0.7 );
-    cr->stroke();
-  }
-  // Waveform data: Volume
-  {
-    int drawX = X+135;
-    int drawY = Y;
-    
-    float volume = 0.7;
-    cr->rectangle(drawX, drawY+ 82*(1-volume), 2,  (82*volume) ); 
-    setColour( cr, COLOUR_ORANGE_1, 1.0 );
-    cr->stroke();
+    // move down to next OSC
+    Y += 159;
   }
   
-  // Waveform select boxes
-  {
-    int drawX = X + 43;
-    int drawY = Y - 27;
-    int boxXs= 105;
-    int boxYs=  20;
-    
-    for(int i = 0; i < 5; i++)
-    {
-      cr->move_to(drawX, drawY+1);
-      cr->line_to(drawX, drawY+boxYs-1);
-      drawX += 21;
-    }
-    setColour( cr, COLOUR_BLUE_1 );
-    cr->stroke();
-  }
-  
-  // Graph outline
-  {
-    cr->rectangle( X, Y, Xs, Ys );
-    setColour( cr, COLOUR_GREY_1 );
-    cr->set_line_width(1.1);
-    cr->stroke();
-  }
-  
-  // Lower select boxes
-  {
-    int drawX = X - 11;
-    int drawY = Y + 91;
-    
-    // bg
-    cr->rectangle(drawX+1, drawY, 159, 17);
-    setColour( cr, COLOUR_GREY_4 );
-    cr->fill_preserve();
-    
-    setColour( cr, COLOUR_BLUE_1 );
-    cr->set_line_width(0.9);
-    cr->stroke();
-    
-    drawX += 162 / 4.f;
-    for(int i = 0; i < 3; i++)
-    {
-      cr->move_to(drawX, drawY+1);
-      cr->line_to(drawX, drawY+17-1);
-      drawX += 162 / 4.f;
-    }
-    setColour( cr, COLOUR_BLUE_1 );
-    cr->stroke();
-  }
 }
 
 
@@ -674,67 +699,10 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
   setColour( cr, COLOUR_GREY_4 );
   cr->fill();
   
-  // HIGHPASS
-  {
-      int x = 376 - 158 + border;
-      int y = 340;
-      
-      int xSize = 138;
-      int ySize = 175 / 2 - 5;
-      
-      bool active = true;
-      float highpass = 0.0;
-      float cutoff = 0.2 + ((1-highpass)*0.7f);
-      
-      // draw "frequency guides"
-      std::valarray< double > dashes(2);
-      dashes[0] = 2.0;
-      dashes[1] = 2.0;
-      cr->set_dash (dashes, 0.0);
-      cr->set_line_width(1.0);
-      cr->set_source_rgb (0.4,0.4,0.4);
-      for ( int i = 0; i < 4; i++ )
-      {
-        cr->move_to( x + ((xSize / 4.f)*i), y );
-        cr->line_to( x + ((xSize / 4.f)*i), y + ySize );
-      }
-      for ( int i = 0; i < 4; i++ )
-      {
-        cr->move_to( x       , y + ((ySize / 4.f)*i) );
-        cr->line_to( x +xSize, y + ((ySize / 4.f)*i) );
-      }
-      cr->stroke();
-      cr->unset_dash();
-      
-      // move to bottom right, draw line to middle right
-      cr->move_to( x + xSize, y + ySize );
-      cr->line_to( x + xSize, y + (ySize*0.47));
-      
-      // Curve
-      cr->curve_to( x + xSize - (xSize*cutoff)    , y+(ySize*0.5)    ,   // control point 1
-                    x + xSize - (xSize*cutoff)    , y+(ySize * 0.0)     ,   // control point 2
-                    x + xSize - (xSize*cutoff) -10, y+    ySize     );  // end of curve 1
-      
-      if ( active )
-        setColour(cr, COLOUR_BLUE_1, 0.2 );
-      else
-        setColour(cr, COLOUR_GREY_1, 0.2 );
-      cr->close_path();
-      cr->fill_preserve();
-      
-      // stroke cutoff line
-      cr->set_line_width(1.5);
-      if ( active )
-        setColour(cr, COLOUR_BLUE_1 );
-      else
-        setColour(cr, COLOUR_GREY_1 );
-      cr->stroke();
-  }
-  
   // LOWPASS
   {
       int x = 376 - 158 + border;
-      int y = 340 + 175 / 2 + 5;
+      int y = 340;
       
       int xSize = 138;
       int ySize = 175 / 2 - 5;
