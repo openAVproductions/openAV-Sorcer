@@ -38,7 +38,11 @@ static GtkWidget* make_gui(SorcerGui *self) {
     cout << "Init GTKMM!" << endl;
     Gtk::Main::init_gtkmm_internals(); // for QT hosts
     
-    
+    if( !Glib::thread_supported() )
+    {
+      cout << "calling Glib::thread_init()" << endl;
+      Glib::thread_init();
+    }
     cout << "create container!" << endl;
     // Return a pointer to a gtk widget containing our GUI
     GtkWidget* container = gtk_vbox_new(FALSE, 2);
@@ -117,6 +121,9 @@ static void port_event(LV2UI_Handle ui,
       cout << "Port " << port_index << " gets " << tmp << endl;
       self->widget->copyValues[port_index] = tmp ;
       self->widget->flagRedraw = true;
+      
+      // for presets to show in GUI, we check the state of flagRedraw, directly setting values seems to make Cairo deadlock..??
+      //Glib::signal_timeout().connect( sigc::mem_fun( self->widget, &Canvas::checkFlag), 100);
     }
     
     return;

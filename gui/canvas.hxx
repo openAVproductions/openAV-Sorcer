@@ -67,6 +67,8 @@ class Canvas : public Gtk::DrawingArea
       signal_button_press_event()  .connect( sigc::mem_fun(*this, &Canvas::on_button_press_event) );
       signal_button_release_event().connect( sigc::mem_fun(*this, &Canvas::on_button_release_event) );
       signal_motion_notify_event().connect( sigc::mem_fun( *this, &Canvas::on_motion_notify_event ) );
+      
+      
     }
     
     void setPortEventValue(int port, float value);
@@ -88,8 +90,21 @@ class Canvas : public Gtk::DrawingArea
           win->invalidate_rect(r, false);
       }
       
-      flagRedraw = false;
-      
+      return true;
+    }
+    
+    bool checkFlag()
+    {
+      if ( flagRedraw )
+      {
+        for ( int i = 0; i < 20; i++)
+        {
+          values[i] = copyValues[i];
+        }
+        flagRedraw = false;
+        redraw();
+      }
+      // stay connected
       return true;
     }
     
