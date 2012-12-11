@@ -21,6 +21,11 @@ class Canvas : public Gtk::DrawingArea
     LV2UI_Controller controller;
     LV2UI_Write_Function write_function;
     
+    bool flagRedraw;
+    float values[20];
+    
+    float copyValues[20];
+    
     Canvas()
     {
       width = 591;
@@ -64,6 +69,8 @@ class Canvas : public Gtk::DrawingArea
       signal_motion_notify_event().connect( sigc::mem_fun( *this, &Canvas::on_motion_notify_event ) );
     }
     
+    void setPortEventValue(int port, float value);
+    
     void drawMaster(Cairo::RefPtr<Cairo::Context> cr);
     void drawRemove(Cairo::RefPtr<Cairo::Context> cr);
     void drawLFO(Cairo::RefPtr<Cairo::Context> cr);
@@ -80,6 +87,9 @@ class Canvas : public Gtk::DrawingArea
                   get_allocation().get_height());
           win->invalidate_rect(r, false);
       }
+      
+      flagRedraw = false;
+      
       return true;
     }
     
@@ -107,7 +117,7 @@ class Canvas : public Gtk::DrawingArea
     float adsr[4];
     float lfoAmp, lfoFreq;
     
-    float values[20];
+    
     
     int movementWeight;
     

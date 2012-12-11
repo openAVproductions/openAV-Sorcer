@@ -656,7 +656,6 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
   
 }
 
-
 void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
 {
   int border = 10;

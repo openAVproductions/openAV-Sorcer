@@ -82,8 +82,6 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
       }
     }
     
-    //self->guiState->uris.midiEvent    = self->guiState->map->map(self->guiState->map->handle, LV2_MIDI__MidiEvent);
-    
     cout << "Creating UI!" << endl;
     *widget = (LV2UI_Widget)make_gui(self);
     
@@ -113,37 +111,13 @@ static void port_event(LV2UI_Handle ui,
     
     cout << "Port event on index " << port_index << "  Format is " << format << endl;
     
-    /*
     if ( format == 0 )
     {
-      float value =  *(float *)buffer;
-      switch ( port_index )
-      {
-        case REFRACTOR_CONTROL_RETRIGGER:
-            cout << "Refractor: Retrigger control event, value = " << value << endl;
-            //self->guiState->retrigger = value;
-            //self->widget->redraw();
-            break;
-        case REFRACTOR_MASTER_VOLUME:
-            cout << "Refractor: Master volume event, value = " << value << endl;
-            self->guiState->masterVol = value;
-            self->widget->redraw();
-      }
+      float tmp = *(float*)buffer;
+      cout << "Port " << port_index << " gets " << tmp << endl;
+      self->widget->copyValues[port_index] = tmp ;
+      self->widget->flagRedraw = true;
     }
-    else
-    {
-      LV2_ATOM_SEQUENCE_FOREACH( (LV2_Atom_Sequence*)buffer, ev)
-      {
-        //self->frame_offset = ev->time.frames;
-        
-        if (ev->body.type == self->guiState->uris.midiEvent)
-        {
-          cout << "Refractor GUI got MIDI event!" << endl;
-          //uint8_t* const data = (uint8_t* const)(ev + 1);
-        }
-      }
-    }
-    */
     
     return;
 }
