@@ -425,8 +425,19 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
       
       float volume = 0.7;
       cr->rectangle(drawX, drawY+ 82*(1-values[OSC1_VOL+num]), 2,  (82*values[OSC1_VOL+num]) ); 
+      setColour( cr, COLOUR_PURPLE_1, 1.0 );
+      cr->stroke();
+    }
+    // graph center circle:
+    {
+      cr->save();
+      cr->arc(X + Xs/4.f + (Xs/2.f) * values[WAVETABLE1_POS+num],
+              Y + Ys/4.f + (Ys/2.f) * (1-values[OSC1_VOL+num]),
+              7, 0, 6.28 );
+      cr->set_line_width( 2.0 );
       setColour( cr, COLOUR_ORANGE_1, 1.0 );
       cr->stroke();
+      cr->restore();
     }
     
     // Waveform select boxes
