@@ -43,6 +43,16 @@ class Canvas : public Gtk::DrawingArea
       for(int i = 0; i < 20; i++)
         values[i] = 0.f;
       
+      values[PORT_ADSR_DECAY] = 0.5;
+      values[PORT_ADSR_SUSTAIN] = 1.f;
+      values[FILTER1_CUTOFF] = 1.f;
+      
+      values[OSC1_VOL] = 0.3f;
+      values[OSC2_VOL] = 0.3f;
+      values[OSC3_VOL] = 0.3f;
+      
+      values[MASTER_VOL] = 0.3f;
+      
       loadHeaderImage();
       
       // connect GTK signals
@@ -141,6 +151,18 @@ class Canvas : public Gtk::DrawingArea
       
       LFO_RATE,
       LFO_AMP,
+      LFO_TO_WAVE1,
+      LFO_TO_WAVE2,
+      
+      FILTER_CUTOFF,
+      FILTER_LFO_RANGE,
+      
+      ADSR_A,
+      ADSR_D,
+      ADSR_S,
+      ADSR_R,
+      
+      MASTER,
     };
     
     // enumerates which widget has been clicked
@@ -367,7 +389,7 @@ class Canvas : public Gtk::DrawingArea
       
       // main arc
       if ( active )
-        setColour(cr, COLOUR_GREY_4 );
+        setColour(cr, COLOUR_GREY_3 );
       else
         setColour(cr, COLOUR_GREY_3 );
       cr->arc(xc,yc, radius, 2.46, 0.75 );
@@ -383,11 +405,11 @@ class Canvas : public Gtk::DrawingArea
       angle = 2.46 + (4.54 * value);
       
       if ( active )
-        setColour(cr, COLOUR_GREY_1 );
+        setColour(cr, COLOUR_ORANGE_1 );
       else
         setColour(cr, COLOUR_GREY_2 );
       
-      cr->set_line_width(1.7);
+      cr->set_line_width(1.1);
       cr->arc(xc,yc, 13, 2.46, angle );
       cr->line_to(xc,yc);
       cr->stroke();

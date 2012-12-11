@@ -29,6 +29,8 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
 {
   float zero = 0.f;
   
+  float tmp = 0.f;
+  
   if ( mouseDown )
   {
     cout << "pointer @ " << event->x << " " << event->y << "  deltaX: " << event->x - clickX << "  deltaY: " << clickY - event->y << endl;
@@ -56,11 +58,60 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
             write_function( controller, OSC2_VOL      , sizeof(float), 0, (const void*)&zero );
           break;
       case OSC3_GRAPH:
-          values[OSC2_VOL] = clip(clickYvalue + deltaYValue);
+          values[OSC3_VOL] = clip(clickYvalue + deltaYValue);
           if ( oscOn[2] )
             write_function( controller, OSC3_VOL      , sizeof(float), 0, (const void*)&values[OSC3_VOL      ] );
           else
             write_function( controller, OSC3_VOL      , sizeof(float), 0, (const void*)&zero );
+          break;
+      case LFO_TO_WAVE1:
+          values[LFO1_WAVETABLE1_POS] = clip(clickYvalue + deltaYValue);
+          write_function( controller, LFO1_WAVETABLE1_POS, sizeof(float), 0, (const void*)&values[LFO1_WAVETABLE1_POS] );
+          break; 
+      case LFO_TO_WAVE2:
+          values[LFO1_WAVETABLE2_POS] = clip(clickYvalue + deltaYValue);
+          write_function( controller, LFO1_WAVETABLE2_POS, sizeof(float), 0, (const void*)&values[LFO1_WAVETABLE2_POS] );
+          break; 
+      case LFO_RATE:
+          values[LFO1_FREQ] = clip(clickYvalue + deltaYValue);
+          tmp = values[LFO1_FREQ] * 10; // not 0-1 on plugin!
+          write_function( controller, LFO1_FREQ, sizeof(float), 0, (const void*)&tmp );
+          break; 
+      case LFO_AMP:
+          values[LFO1_AMP] = clip(clickYvalue + deltaYValue);
+          write_function( controller, LFO1_AMP, sizeof(float), 0, (const void*)&values[LFO1_AMP] );
+          break;
+      case FILTER_CUTOFF:
+          values[FILTER1_CUTOFF] = clip(clickYvalue + deltaYValue);
+          tmp = 80 + values[FILTER1_CUTOFF] * 17000; // not 0-1 on plugin!
+          cout << "filter cutoff " << tmp << endl;
+          write_function( controller, FILTER1_CUTOFF, sizeof(float), 0, (const void*)&tmp );
+          break; 
+      case FILTER_LFO_RANGE:
+          values[FILTER1_LFO_RANGE] = clip(clickYvalue + deltaYValue);
+          tmp = values[FILTER1_LFO_RANGE] * 6000; // not 0-1 on plugin!
+          cout << "port id, filter LFO range " << FILTER1_LFO_RANGE << " , " << tmp << endl;
+          write_function( controller, FILTER1_LFO_RANGE, sizeof(float), 0, (const void*)&tmp );
+          break;
+      case ADSR_A:
+          values[PORT_ADSR_ATTACK] =  clip(clickYvalue + 0.02 + deltaYValue);
+          write_function( controller, PORT_ADSR_ATTACK, sizeof(float), 0, (const void*)&values[PORT_ADSR_ATTACK] );
+          break;
+      case ADSR_D:
+          values[PORT_ADSR_DECAY] = clip(clickYvalue + deltaYValue);
+          write_function( controller, PORT_ADSR_DECAY, sizeof(float), 0, (const void*)&values[PORT_ADSR_DECAY] );
+          break;
+      case ADSR_S:
+          values[PORT_ADSR_SUSTAIN] = clip(clickYvalue + deltaYValue);
+          write_function( controller, PORT_ADSR_SUSTAIN, sizeof(float), 0, (const void*)&values[PORT_ADSR_SUSTAIN] );
+          break;
+      case ADSR_R:
+          values[PORT_ADSR_RELEASE] = clip(clickYvalue + deltaYValue);
+          write_function( controller, PORT_ADSR_RELEASE, sizeof(float), 0, (const void*)&values[PORT_ADSR_RELEASE] );
+          break;
+      case MASTER:
+          values[MASTER_VOL] = clip(clickYvalue + deltaYValue);
+          write_function( controller, MASTER_VOL, sizeof(float), 0, (const void*)&values[MASTER_VOL] );
           break;
       default: break;
     }
@@ -94,8 +145,16 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   clickXvalue = float(event->x - clickX) / movementWeight;
   clickYvalue = float(clickY - event->y) / movementWeight;
   
+  if ( x > 492 && y > 340 && x < 549 && y < 517 ) // Master vol
+  {
+    clickedWidget = MASTER;
+    clickXvalue += values[MASTER_VOL];
+  }
+  
+  
   if ( x > 37 && y > 73 && x < 83 && y < 93 ) // Osc1 header
   {
+    /*
     cout << "OSC 1 header, toggle on off" << endl;
     oscOn[0] = !oscOn[0];
     if ( oscOn[0] )
@@ -103,6 +162,7 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
     else
       write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&zero );
     redraw();
+    */
   }
   else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 waveform select
   {
@@ -119,6 +179,7 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   
   if ( x > 35 && y > 235 && x < 86 && y < 254 ) // Osc2 header
   {
+    /*
     cout << "OSC 2 header, toggle on off" << endl;
     oscOn[1] = !oscOn[1];
     if ( oscOn[1] )
@@ -126,6 +187,7 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
     else
       write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&zero );
     redraw();
+    */
   }
   else if ( x > 44 && y > 261 && x < 180 && y < 343 ) // Osc2 waveform graph
   {
@@ -136,19 +198,85 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   
   if ( x > 35 && y > 393 && x < 86 && y < 413 ) // Osc3 header
   {
+    /*
     cout << "OSC 3 header, toggle on off" << endl;
     oscOn[2] = !oscOn[2];
     if ( oscOn[2] )
-      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&values[OSC3_VOL      ] );
+      write_function( controller, OSC3_VOL      , sizeof(float), 0, (const void*)&values[OSC3_VOL      ] );
     else
-      write_function( controller, OSC1_VOL      , sizeof(float), 0, (const void*)&zero );
+      write_function( controller, OSC3_VOL      , sizeof(float), 0, (const void*)&zero );
     redraw();
+    */
   }
   else if ( x > 44 && y > 421 && x < 180 && y < 502 ) // Osc3 waveform graph
   {
     cout << "OSC 3 graph" << endl;
     clickedWidget = OSC3_GRAPH;
     clickYvalue += values[OSC3_VOL];
+  }
+  
+  
+  
+  //     LFO, left
+  if ( x > 240 && y > 197 && x < 286 && y < 234 ) // LFO to wavetable 1
+  {
+    clickedWidget = LFO_TO_WAVE1;
+    clickYvalue += values[LFO1_WAVETABLE1_POS];
+  }
+  else if ( x > 243 && y > 242 && x < 285 && y < 279 ) // LFO to wavetable 2
+  {
+    clickedWidget = LFO_TO_WAVE2;
+    clickYvalue += values[LFO1_WAVETABLE2_POS];
+  }
+  
+  //     LFO, right
+  if ( x > 310 && y > 200 && x < 353 && y < 232 ) // LFO to wavetable 1
+  {
+    clickedWidget = LFO_RATE;
+    clickYvalue += values[LFO1_FREQ];
+  }
+  else if ( x > 310 && y > 246 && x < 353 && y < 280 ) // LFO to wavetable 2
+  {
+    clickedWidget = LFO_AMP;
+    clickYvalue += values[LFO1_AMP];
+  }
+  
+  
+  //     REMOVE, left
+  if ( x > 245 && y > 454 && x < 287 && y < 494 ) // LFO to wavetable 1
+  {
+    clickedWidget = FILTER_CUTOFF;
+    clickYvalue += values[FILTER1_CUTOFF];
+  }
+  else if ( x > 310 && y > 454 && x < 353 && y < 494 ) // LFO to wavetable 2
+  {
+    clickedWidget = FILTER_LFO_RANGE;
+    clickYvalue += values[FILTER1_LFO_RANGE];
+  }
+  
+  
+  //     ADSR, left
+  if ( x > 424 && y > 197 && x < 470 && y < 234 ) // A
+  {
+    clickedWidget = ADSR_A;
+    clickYvalue += values[PORT_ADSR_ATTACK];
+  }
+  else if ( x > 424 && y > 242 && x < 470 && y < 279 ) // D
+  {
+    clickedWidget = ADSR_D;
+    clickYvalue += values[PORT_ADSR_DECAY];
+  }
+  
+  //     ADSR, right
+  if ( x > 494 && y > 200 && x < 537 && y < 232 ) // S
+  {
+    clickedWidget = ADSR_S;
+    clickYvalue += values[PORT_ADSR_SUSTAIN];
+  }
+  else if ( x > 494 && y > 246 && x < 537 && y < 280 ) // R
+  {
+    clickedWidget = ADSR_R;
+    clickYvalue += values[PORT_ADSR_RELEASE];
   }
   
 }
@@ -165,6 +293,12 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
   
   // WAVEFORM graph
     cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_4 );
+    cr->fill();
+    
+      
+  // background box for dials
+    cr->rectangle( X, Y + Ys + 10, Xs, Ys + 5 );
     setColour( cr, COLOUR_GREY_4 );
     cr->fill();
     
@@ -187,18 +321,14 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
     }
     cr->stroke();
     cr->unset_dash();
-  
-  // background box for dials
-    cr->rectangle( X, Y + Ys/2.f + 5, Xs, (Ys/2.f) - 5 );
-    setColour( cr, COLOUR_GREY_4 );
-    cr->fill();
+
   
   // Waveform data: WavetableMod
   {
     int drawX = X;
     int drawY = Y + 79;
     
-    float wavetableMod = 0.7;
+    float wavetableMod = values[LFO1_FREQ];
     cr->rectangle(drawX, drawY, 138 * wavetableMod, 2); 
     setColour( cr, COLOUR_GREEN_1, 0.7 );
     cr->stroke();
@@ -209,7 +339,7 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
     int drawY = Y;
     
     float volume = 0.7;
-    cr->rectangle(drawX, drawY+ 82*(1-volume), 2,  (82*volume) ); 
+    cr->rectangle(drawX, drawY+ 82*(1-values[LFO1_AMP]), 2,  (82*values[LFO1_AMP]) ); 
     setColour( cr, COLOUR_ORANGE_1, 1.0 );
     cr->stroke();
   }
@@ -223,7 +353,7 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
         cr->move_to( x1, y1 + yS / 2 );
         
         int m1x = x1 + xS / 6;
-        int m1y = (y1 + yS / 2)   -   53 * lfoAmp;
+        int m1y = (y1 + yS / 2)   -   53 * values[LFO1_AMP];
         
         int m2x = x1 + xS / 3;
         int m2y = m1y;
@@ -233,7 +363,7 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
         cr->curve_to(m1x, m1y, m2x, m2y, endX, endY);
         
         int m3x = x1 + 2 * xS / 3;
-        int m3y = y1 + yS + 11;
+        int m3y = y1 + yS / 2.f + ((yS + 7) * 0.5 * values[LFO1_AMP]);
         
         int m4x = x1 + 5 * xS / 6;
         int m4y = m3y;
@@ -244,9 +374,9 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
         
         //cr->line_to( x1 + Xs, y1 + 82 ); // br
         //cr->line_to( x1     , y1 + 82 ); // bl
-        cr->close_path();
-        setColour( cr, COLOUR_GREY_4, 0.5 );
-        cr->fill_preserve();
+        //cr->close_path();
+        //setColour( cr, COLOUR_GREY_4, 0.5 );
+        //cr->fill_preserve();
         setColour( cr, COLOUR_GREEN_1 );
         cr->stroke();
         
@@ -281,16 +411,20 @@ void Canvas::drawLFO(Cairo::RefPtr<Cairo::Context> cr)
         */
   
   // LFO dials
-  SimpleDial( cr, true, 246, 215, 0.5);
-  SimpleDial( cr, true, 315, 215, 0.7);
+  SimpleDial( cr, true, 246, 195, values[LFO1_WAVETABLE1_POS]);
+  SimpleDial( cr, true, 315, 195, values[LFO1_FREQ] );
+  SimpleDial( cr, true, 246, 240, values[LFO1_WAVETABLE2_POS]);
+  SimpleDial( cr, true, 315, 240, values[LFO1_AMP] );
   
   
   // Graph outline
   {
-    cr->rectangle( X, Y, Xs, Ys );
+    cr->rectangle( X, Y, Xs, Ys ); // higher
+    cr->rectangle( X, Y + Ys + 10, Xs, Ys + 5 ); // lower
     setColour( cr, COLOUR_GREY_1 );
     cr->set_line_width(1.1);
     cr->stroke();
+    
   }
   
 }
@@ -306,6 +440,11 @@ void Canvas::drawADSR(Cairo::RefPtr<Cairo::Context> cr)
   
   // WAVEFORM graph
     cr->rectangle( X, Y, Xs, Ys );
+    setColour( cr, COLOUR_GREY_4 );
+    cr->fill();
+  
+    // background box for dials
+    cr->rectangle( X, Y + Ys + 10, Xs, Ys + 5 );
     setColour( cr, COLOUR_GREY_4 );
     cr->fill();
     
@@ -329,32 +468,41 @@ void Canvas::drawADSR(Cairo::RefPtr<Cairo::Context> cr)
     cr->stroke();
     cr->unset_dash();
   
-  // Waveform data: WavetableMod
-  {
-    int drawX = X;
-    int drawY = Y + 79;
+  // ADSR graph plotting
+    float a = values[PORT_ADSR_ATTACK];
+    float d = values[PORT_ADSR_DECAY];
+    float s = 1 - values[PORT_ADSR_SUSTAIN];
+    float r = values[PORT_ADSR_RELEASE];
     
-    float wavetableMod = 0.7;
-    cr->rectangle(drawX, drawY, 138 * wavetableMod, 2); 
-    setColour( cr, COLOUR_GREEN_1, 0.7 );
-    cr->stroke();
-  }
-  // Waveform data: Volume
-  {
-    int drawX = X+135;
-    int drawY = Y;
+    cr->move_to( X + 2, Y + Ys - 2 );
     
-    float volume = 0.7;
-    cr->rectangle(drawX, drawY+ 82*(1-volume), 2,  (82*volume) ); 
-    setColour( cr, COLOUR_ORANGE_1, 1.0 );
+    cr->line_to( X + 5 + (Xs * (a / 5.f)), Y + Ys * 0.1   ); // attack
+    
+    cr->rel_line_to( Xs * (d / 5.f),   (Ys*0.9) * s   ); // decay, and sustain height
+    
+    cr->rel_line_to( Xs * 0.4, 0  ); // sustain horizontal line
+    
+    cr->rel_line_to( Xs * ( (r) / 5.f), Ys - (Ys*0.9) * s - Ys * 0.1  ); // remaining Y down
+    
+    setColour( cr, COLOUR_GREY_4, 0.5 );
+    cr->fill_preserve();
+    setColour( cr, COLOUR_BLUE_1 );
+    cr->set_line_width(2);
+    cr->set_line_join(Cairo::LINE_JOIN_ROUND);
+    cr->set_line_cap(Cairo::LINE_CAP_ROUND);
     cr->stroke();
-  }
   
   
+  // ADSR dials
+  SimpleDial( cr, true, 246+184, 195, values[PORT_ADSR_ATTACK]);
+  SimpleDial( cr, true, 315+184, 195, values[PORT_ADSR_SUSTAIN] );
+  SimpleDial( cr, true, 246+184, 240, values[PORT_ADSR_DECAY]);
+  SimpleDial( cr, true, 315+184, 240, values[PORT_ADSR_RELEASE] );
   
   // Graph outline
   {
-    cr->rectangle( X, Y, Xs, Ys );
+    cr->rectangle( X, Y, Xs, Ys ); // high
+    cr->rectangle( X, Y + Ys + 10, Xs, Ys + 5 ); //lower
     setColour( cr, COLOUR_GREY_1 );
     cr->set_line_width(1.1);
     cr->stroke();
@@ -375,6 +523,7 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
     int Ys= 183-101;
     
     // Oscillators on off
+    /*
     cr->rectangle( 33, drawY, 53, 20 );
     if ( oscOn[num] )
       setColour( cr, COLOUR_GREEN_1 , 0.3);
@@ -382,6 +531,7 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
       setColour( cr, COLOUR_GREY_1 , 0.1);
     cr->fill();
     drawY += 135 + 24;
+    */
     
     // WAVEFORM graph
       cr->rectangle( X, Y, Xs, Ys );
@@ -413,11 +563,11 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
       int drawX = X;
       int drawY = Y + 79;
       
-      float wavetableMod = 0.7;
       cr->rectangle(drawX, drawY, 138 * values[WAVETABLE1_POS+num], 2);
-      setColour( cr, COLOUR_GREEN_1, 0.7 );
+      setColour( cr, COLOUR_GREEN_1, 0.9 );
       cr->stroke();
     }
+    
     // Waveform data: Volume
     {
       int drawX = X+135;
@@ -442,6 +592,7 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
     
     // Waveform select boxes
     {
+      /*
       int drawX = X + 43;
       int drawY = Y - 27;
       int boxXs= 105;
@@ -455,6 +606,7 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
       }
       setColour( cr, COLOUR_BLUE_1 );
       cr->stroke();
+      */
     }
     
     // Graph outline
@@ -479,6 +631,7 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
       cr->set_line_width(0.9);
       cr->stroke();
       
+      /*
       drawX += 162 / 4.f;
       for(int i = 0; i < 3; i++)
       {
@@ -488,11 +641,18 @@ void Canvas::drawOSC(Cairo::RefPtr<Cairo::Context> cr)
       }
       setColour( cr, COLOUR_BLUE_1 );
       cr->stroke();
+      */
     }
     
     // move down to next OSC
     Y += 159;
   }
+  
+  // Waveform data: Wavetable LFO mod
+    cr->rectangle( 43, 199, 138 * values[LFO1_WAVETABLE1_POS], 3);
+    cr->rectangle( 43, 358, 138 * values[LFO1_WAVETABLE2_POS], 3);
+    setColour( cr, COLOUR_GREEN_1, 0.9 );
+    cr->stroke();
   
 }
 
@@ -682,7 +842,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     
     // Fader on the top
     float masterVol = 0.7;
-    cr->rectangle( x + 102, y + ySize*0.87*(1-masterVol), 16, 24);
+    cr->rectangle( x + 102, y + ySize*0.87*(1-values[MASTER_VOL]), 16, 24);
     setColour( cr, COLOUR_GREY_4 );
     cr->fill_preserve();
     setColour( cr, COLOUR_BLUE_1);
@@ -719,7 +879,7 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
       int ySize = 175 / 2 - 5;
       
       bool active = true;
-      float lowpass = 1.0;
+      float lowpass = values[FILTER1_CUTOFF];
       float cutoff = 0.2 + (lowpass*0.7f);
       
       // draw "frequency guides"
@@ -766,6 +926,15 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
         setColour(cr, COLOUR_GREY_1 );
       cr->stroke();
   }
+  
+  //SimpleDial( cr, true, x + border + xSize / 4 , y + ySize * 3/2, values[LFO1_WAVETABLE1_POS]);
+  SimpleDial( cr, true, x + xSize/4.f-15  , y + ySize/2.f + 25, values[FILTER1_CUTOFF]);
+  SimpleDial( cr, true, x + xSize*3/4.f-15, y + ySize/2.f + 25, values[FILTER1_LFO_RANGE]);
+  
+  // Filter modulation amount
+    cr->rectangle( 43, 199, 138 * values[LFO1_WAVETABLE1_POS], 3);
+    setColour( cr, COLOUR_GREEN_1, 0.9 );
+    cr->stroke();
   
   // highpass, lowpass outline
   cr->rectangle( x, y, xSize, (ySize/2.f) - 5 );
