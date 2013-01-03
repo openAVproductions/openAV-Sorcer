@@ -6,23 +6,14 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
-
-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#>.
-
-<http://www.openavproductions.com/sorcer/gui>
-  a guiext:GtkUI;
-  guiext:binary <sorcer_gui.so>;
-  guiext:requiredFeature guiext:makeResident.
-
-
+@prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
 <http://www.openavproductions.com/sorcer>
        a lv2:Plugin, lv2:InstrumentPlugin ;
        doap:name "Sorcer" ;
        lv2:binary <sorcer.so> ;
        lv2:optionalFeature epp:supportsStrictBounds ;
        lv2:optionalFeature lv2:hardRtCapable ;
-       guiext:ui <http://www.openavproductions.com/sorcer/gui>;
-    
+       ui:ui <http://www.openavproductions.com/sorcer/gui> ;
     lv2:port [
 	a lv2:InputPort ;
 	a lv2:ControlPort ;

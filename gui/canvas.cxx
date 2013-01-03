@@ -33,7 +33,7 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
   
   if ( mouseDown )
   {
-    cout << "pointer @ " << event->x << " " << event->y << "  deltaX: " << event->x - clickX << "  deltaY: " << clickY - event->y << endl;
+    //cout << "pointer @ " << event->x << " " << event->y << "  deltaX: " << event->x - clickX << "  deltaY: " << clickY - event->y << endl;
     float deltaXValue = float(event->x - clickX) / movementWeight;
     float deltaYValue = float(clickY - event->y) / movementWeight;
     
@@ -84,13 +84,13 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
       case FILTER_CUTOFF:
           values[FILTER1_CUTOFF] = clip(clickYvalue + deltaYValue);
           tmp = 80 + values[FILTER1_CUTOFF] * 17000; // not 0-1 on plugin!
-          cout << "filter cutoff " << tmp << endl;
+          //cout << "filter cutoff " << tmp << endl;
           write_function( controller, FILTER1_CUTOFF, sizeof(float), 0, (const void*)&tmp );
           break; 
       case FILTER_LFO_RANGE:
           values[FILTER1_LFO_RANGE] = clip(clickYvalue + deltaYValue);
           tmp = values[FILTER1_LFO_RANGE] * 6000; // not 0-1 on plugin!
-          cout << "port id, filter LFO range " << FILTER1_LFO_RANGE << " , " << tmp << endl;
+          //cout << "port id, filter LFO range " << FILTER1_LFO_RANGE << " , " << tmp << endl;
           write_function( controller, FILTER1_LFO_RANGE, sizeof(float), 0, (const void*)&tmp );
           break;
       case ADSR_A:
@@ -132,7 +132,7 @@ bool Canvas::on_button_release_event(GdkEventButton* event)
 bool Canvas::on_button_press_event(GdkEventButton* event)
 {
   float zero = 0.f;
-  cout << "Click @ " << event->x << " " << event->y << endl;
+  //cout << "Click @ " << event->x << " " << event->y << endl;
   
   int x = event->x;
   int y = event->y;
@@ -167,7 +167,7 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   else if ( x > 83 && y > 73 && x < 192 && y < 93 ) // Osc1 waveform select
   {
     float waveform = 5-(5 * ((192-83) - (x-83)) / 108);
-    cout << "OSC 1 waveform : " << waveform << endl;
+    //cout << "OSC 1 waveform : " << waveform << endl;
   }
   else if ( x > 44 && y > 101 && x < 180 && y < 183 ) // Osc1 waveform graph
   {
@@ -210,7 +210,7 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   }
   else if ( x > 44 && y > 421 && x < 180 && y < 502 ) // Osc3 waveform graph
   {
-    cout << "OSC 3 graph" << endl;
+    //cout << "OSC 3 graph" << endl;
     clickedWidget = OSC3_GRAPH;
     clickYvalue += values[OSC3_VOL];
   }
