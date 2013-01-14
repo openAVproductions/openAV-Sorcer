@@ -148,7 +148,7 @@ bool Canvas::on_button_press_event(GdkEventButton* event)
   if ( x > 492 && y > 340 && x < 549 && y < 517 ) // Master vol
   {
     clickedWidget = MASTER;
-    clickXvalue += values[MASTER_VOL];
+    clickYvalue += values[MASTER_VOL];
   }
   
   
@@ -668,7 +668,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
   cr->set_line_width(1.1);
   
   // LIMITER ZONE
-    float limiter = 0.5;
+    float limiter = 0.0;
     //graph background
     cr->rectangle( x, y, 76, 76);
     setColour( cr, COLOUR_GREY_4 );
@@ -711,9 +711,9 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->line_to(x + 76, y + 76  );
     cr->line_to(x     , y + 76  );
     cr->close_path();
-    setColour( cr, COLOUR_BLUE_1, 0.2 );
+    //setColour( cr, COLOUR_BLUE_1, 0.2 );
     cr->fill_preserve();
-    setColour( cr, COLOUR_BLUE_1 );
+    //setColour( cr, COLOUR_BLUE_1 );
     cr->set_line_width(1.0);
     cr->stroke();
     
