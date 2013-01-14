@@ -36,17 +36,15 @@ typedef struct {
 static GtkWidget* make_gui(SorcerGui *self) {
     
     cout << "Init GTKMM!" << endl;
-    //Gtk::Main* main = Gtk::Main::instance(); // _gtkmm_internals // for QT hosts
+    Gtk::Main* main = Gtk::Main::instance(); // _gtkmm_internals // for QT hosts
     
-    //main->init_gtkmm_internals();
+    main->init_gtkmm_internals();
     
-    /*
     if( !Glib::thread_supported() )
     {
       cout << "calling Glib::thread_init()" << endl;
       Glib::thread_init();
     }
-    */
     
     cout << "create container!" << endl;
     // Return a pointer to a gtk widget containing our GUI
