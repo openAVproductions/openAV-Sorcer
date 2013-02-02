@@ -37,7 +37,13 @@ echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 echo -e "\e[34m:: \e[97mCopying .ttl and .so..."
 cp ./sorcer.so ../sorcer.lv2/
 cp ./sorcer.ttl ../sorcer.lv2/
-cd ../
+echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
+
+
+echo -e "\e[34m:: \e[97mPatching plugin UI RDF..."
+cd ../sorcer.lv2
+patch -u sorcer.ttl addUiRdf.patch > /dev/null 2>&1
+cd ..
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
