@@ -36,7 +36,7 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
     lfo1_wavetable2pos = hslider("lfo1_wavetable2pos", 0.0, 0, 1, 0.01);
 
 // LFO 1
-    lfo1freq = hslider("lfo1freq [midi:ctrl 1]", 0.5, 0.0, 10.0, 0.01);
+    lfo1freq = hslider("lfo1freq [midi:ctrl 1]", 3, 0.0, 10.0, 0.01);
     
     // concider using a different value when speed < 0.1 or so, as otherwise
     // the output value depends on the current phase of the LFO
