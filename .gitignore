@@ -4,12 +4,14 @@ gui/build/*
 
 faust/a.out
 faust/main.cpp
-faust/source
-faust/source.so
-faust/source.ttl
+faust/sorcer
+faust/sorcer.so
+faust/sorcer.ttl
 
 gui/.lock-wafbuild
 gui/source_gui.so
 
-source.lv2/source_gui.so
-source.lv2/source.so
+/faust/sorcer
+/faust/sorcer.ttl
+/sorcer.lv2/sorcer.so
+/sorcer.lv2/sorcer_gui.so
