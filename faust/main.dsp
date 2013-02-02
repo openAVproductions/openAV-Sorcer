@@ -19,10 +19,10 @@ wavetable1pos = hslider("wavetable1pos", 0.0, 0, 1, 0.01);
 wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
 
 // Custom wavetable read functions:
-    osc1readWave1 = ffunction(float wavetable1(int), "wavetableReader.h","-lsndfile");
-    osc1readWave2 = ffunction(float wavetable2(int), "wavetableReader.h","-lsndfile");
-    osc2readWave1 = ffunction(float wavetable3(int), "wavetableReader.h","-lsndfile");
-    osc2readWave2 = ffunction(float wavetable4(int), "wavetableReader.h","-lsndfile");
+    osc1readWave1 = ffunction(float wavetable1(int), "wavetableReader.h","");
+    osc1readWave2 = ffunction(float wavetable2(int), "wavetableReader.h","");
+    osc2readWave1 = ffunction(float wavetable3(int), "wavetableReader.h","");
+    osc2readWave2 = ffunction(float wavetable4(int), "wavetableReader.h","");
 
 
 // Custom clipping functions

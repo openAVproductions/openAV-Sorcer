@@ -26,10 +26,10 @@ float wavetable2(int index)
 
 float wavetable3(int index)
 {  
-  return 0; // wave3[index];
+  return wave3[index];
 }
 
 float wavetable4(int index)
 {
-  return  0; //wave4[index];
+  return wave4[index];
 }
