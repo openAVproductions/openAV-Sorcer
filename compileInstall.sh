@@ -4,9 +4,9 @@ cd faust
 
 faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
 
-g++ -fPIC -shared -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"'   main.cpp -lsndfile -o sorcer.so
+g++ -fPIC -shared -ffast-math -O3 -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"'   main.cpp -o sorcer.so
 
-g++ -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"' -lsndfile main.cpp
+g++ -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"' main.cpp
 
 ./a.out > sorcer.ttl
 
