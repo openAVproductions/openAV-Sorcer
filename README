@@ -1,0 +1,21 @@
+
+    Sorcer - OpenAV Productions
+
+This is the repository of a wavetable synthesizer called Sorcer.
+
+
+== INSTALL
+To install, just run the script "compileInstall.sh". Printouts will keep
+you informed of the progress.
+
+$  ./compileInstall.sh
+
+
+== RUNNING
+After the INSTALL step Ardour3, QTractor, and any other LV2 host should
+automatically find Sorcer, and add it to the list of loadable plugins.
+
+If you have the JALV LV2 host installed, the "run.sh" script can be used to
+launch Sorcer as a standalone JACK client.
+
+$  ./run.sh
