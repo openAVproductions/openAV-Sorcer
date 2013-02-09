@@ -931,9 +931,17 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
   SimpleDial( cr, true, x + xSize*3/4.f-15, y + ySize/2.f + 25, values[FILTER1_LFO_RANGE]);
   
   // Filter modulation amount
-    cr->rectangle( 43, 199, 138 * values[LFO1_WAVETABLE1_POS], 3);
+  {
+    // co-ords of the box
+    int x = 376 - 158 + border;
+    int y = 340;
+    int xSize = 138;
+    int ySize = 175 / 2 - 5;
+    
+    cr->rectangle( x+(xSize/2) -  120/2.f * values[FILTER1_LFO_RANGE], y + 10, 240/2.f * values[FILTER1_LFO_RANGE], 3);
     setColour( cr, COLOUR_GREEN_1, 0.9 );
     cr->stroke();
+  }
   
   // highpass, lowpass outline
   cr->rectangle( x, y, xSize, (ySize/2.f) - 5 );
