@@ -77,11 +77,14 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
 
 // Filter1
     filter1lfo1rangeZeroOne = hslider("filter1lfo1range", 0, 0, 1, 0.0001);
-    
     filter1lfo1rangePreClip = ( pow( (filter1lfo1rangeZeroOne*15) + 1, 4) - 1 );
     filter1lfo1range = clip( 0, 10000, filter1lfo1rangePreClip );
     
-    filter1freqSmooth =  clip( 40, 16000, (lfo1output *filter1lfo1range ) + hslider("filter1cutoff", 18000, 80, 18000, 0.1)  ): smooth(tau2pole( 0.05 ));
+    // lin->log frequncy, pow( input, 4) 
+    filter1cutoffZeroOne = hslider("filter1cutoff", 1, 0, 1, 0.001);
+    filter1cutoff = clip ( 80, 18000, ( pow( (filter1cutoffZeroOne*0.5)+0.3 ,4) * 18000) );
+    
+    filter1freqSmooth =  clip( 40, 16000, (lfo1output *filter1lfo1range ) +  filter1cutoff  ): smooth(tau2pole( 0.06 ));
     filterOutputSignal = oscOutputsignal : lowpass( 4 , filter1freqSmooth );
 
 //y = signal * gate : vgroup("1-adsr", adsr(attack, decay, sustain, release) );
