@@ -10,7 +10,7 @@ vol = hslider("vol", 0.3, 0, 10, 0.01); // %
 attack = 0.01 + hslider("attack", 0.01, 0.01, 1, 0.001); // sec
 decay = hslider("decay", 0.3, 0, 1, 0.001); // sec
 sustain = hslider("sustain", 1.0, 0, 1, 0.01); // %
-release = hslider("release", 0.2, 0, 1, 0.001); // sec
+release = hslider("release", 0.2, 0, 1, 0.001) + 0.1; // sec
 freq = nentry("freq", 20, 20, 20000, 1) / 2.0; // Hz
 gain = nentry("gain", 0.3, 0, 10, 0.01); // %
 gate = button("gate"); // 0/1
@@ -77,14 +77,14 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
 
 // Filter1
     filter1lfo1rangeZeroOne = hslider("filter1lfo1range", 0, 0, 1, 0.0001);
-    filter1lfo1rangePreClip = ( pow( (filter1lfo1rangeZeroOne*15) + 1, 4) - 1 );
-    filter1lfo1range = clip( 0, 10000, filter1lfo1rangePreClip );
+    filter1lfo1rangePreClip = ( pow( (filter1lfo1rangeZeroOne*4) + 1, 4) - 1 );
+    filter1lfo1range = clip( 0, 6000, filter1lfo1rangePreClip );
     
     // lin->log frequncy, pow( input, 4) 
-    filter1cutoffZeroOne = hslider("filter1cutoff", 1, 0, 1, 0.001);
+    filter1cutoffZeroOne = hslider("filter1cutoff", 1, 0, 1, 0.001) : smooth(tau2pole( 0.06 ));
     filter1cutoff = clip ( 80, 18000, ( pow( (filter1cutoffZeroOne*0.5)+0.3 ,4) * 18000) );
     
-    filter1freqSmooth =  clip( 40, 16000, (lfo1output *filter1lfo1range ) +  filter1cutoff  ): smooth(tau2pole( 0.06 ));
+    filter1freqSmooth =  clip( 80, 16000, (lfo1output *filter1lfo1range ) + filter1cutoff  );
     filterOutputSignal = oscOutputsignal : lowpass( 4 , filter1freqSmooth );
 
 //y = signal * gate : vgroup("1-adsr", adsr(attack, decay, sustain, release) );

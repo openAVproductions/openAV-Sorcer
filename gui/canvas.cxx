@@ -83,13 +83,13 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
           break;
       case FILTER_CUTOFF:
           values[FILTER1_CUTOFF] = clip(clickYvalue + deltaYValue);
-          tmp = 80 + values[FILTER1_CUTOFF] * 17000; // not 0-1 on plugin!
+          tmp = values[FILTER1_CUTOFF];
           //cout << "filter cutoff " << tmp << endl;
           write_function( controller, FILTER1_CUTOFF, sizeof(float), 0, (const void*)&tmp );
           break; 
       case FILTER_LFO_RANGE:
           values[FILTER1_LFO_RANGE] = clip(clickYvalue + deltaYValue);
-          tmp = values[FILTER1_LFO_RANGE] * 6000; // not 0-1 on plugin!
+          tmp = values[FILTER1_LFO_RANGE];
           //cout << "port id, filter LFO range " << FILTER1_LFO_RANGE << " , " << tmp << endl;
           write_function( controller, FILTER1_LFO_RANGE, sizeof(float), 0, (const void*)&tmp );
           break;
