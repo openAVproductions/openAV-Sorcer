@@ -7,7 +7,7 @@ import("oscillator.lib");
 
 
 vol = hslider("vol", 0.3, 0, 10, 0.01); // %
-attack = hslider("attack", 0.01, 0.01, 1, 0.001); // sec
+attack = 0.01 + hslider("attack", 0.01, 0.01, 1, 0.001); // sec
 decay = hslider("decay", 0.3, 0, 1, 0.001); // sec
 sustain = hslider("sustain", 1.0, 0, 1, 0.01); // %
 release = hslider("release", 0.2, 0, 1, 0.001); // sec
@@ -42,7 +42,7 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
     // the output value depends on the current phase of the LFO
     
     lfo1amp  = hslider("lfo1amp" , 0.1, 0,  1, 0.001);
-    lfo1output = osc( lfo1freq ) * lfo1amp;
+    lfo1output = osc( lfo1freq ) * (lfo1amp-0.01);
 
 // OSC 1
     wavetable1final = clip( 0.0, 1.0, wavetable1pos +  lfo1_wavetable1pos * lfo1output );
@@ -76,8 +76,12 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
     oscOutputsignal =   osc1output + osc2output + osc3output;
 
 // Filter1
-    filter1lfo1range = hslider("filter1lfo1range", 600, 0, 6000, 1);
-    filter1freqSmooth =  lowClip( 10, lfo1output *filter1lfo1range ) + hslider("filter1cutoff", 18000, 80, 18000, 0.1)  : smooth(tau2pole( 0.05 ));
+    filter1lfo1rangeZeroOne = hslider("filter1lfo1range", 0, 0, 1, 0.0001);
+    
+    filter1lfo1rangePreClip = ( pow( (filter1lfo1rangeZeroOne*15) + 1, 4) - 1 );
+    filter1lfo1range = clip( 0, 10000, filter1lfo1rangePreClip );
+    
+    filter1freqSmooth =  clip( 40, 16000, (lfo1output *filter1lfo1range ) + hslider("filter1cutoff", 18000, 80, 18000, 0.1)  ): smooth(tau2pole( 0.05 ));
     filterOutputSignal = oscOutputsignal : lowpass( 4 , filter1freqSmooth );
 
 //y = signal * gate : vgroup("1-adsr", adsr(attack, decay, sustain, release) );
