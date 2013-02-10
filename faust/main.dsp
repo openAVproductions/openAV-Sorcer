@@ -7,16 +7,17 @@ import("oscillator.lib");
 
 
 vol = hslider("vol", 0.3, 0, 10, 0.01); // %
-attack = 0.01 + hslider("attack", 0.01, 0.01, 1, 0.001); // sec
-decay = hslider("decay", 0.3, 0, 1, 0.001); // sec
-sustain = hslider("sustain", 1.0, 0, 1, 0.01); // %
-release = hslider("release", 0.2, 0, 1, 0.001) + 0.1; // sec
+attack = 0.01 + hslider("attack [midi:ctrl 24]", 0.01, 0.01, 1, 0.001); // sec
+decay = hslider("decay [midi:ctrl 25]", 0.3, 0, 1, 0.001) * 0.8 + 0.2; // sec
+sustain = hslider("sustain [midi:ctrl 26]", 1.0, 0, 1, 0.01) + 0.1; // %
+release = hslider("release [midi:ctrl 27]", 0.2, 0, 1, 0.001) + 0.1; // sec
+
 freq = nentry("freq", 20, 20, 20000, 1) / 2.0; // Hz
 gain = nentry("gain", 0.3, 0, 10, 0.01); // %
 gate = button("gate"); // 0/1
 
-wavetable1pos = hslider("wavetable1pos", 0.0, 0, 1, 0.01);
-wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
+wavetable1pos = hslider("wavetable1pos [midi:ctrl 15]", 0.0, 0, 1, 0.01);
+wavetable2pos = hslider("wavetable2pos [midi:ctrl 16]", 0.0, 0, 1, 0.01);
 
 // Custom wavetable read functions:
     osc1readWave1 = ffunction(float wavetable1(int), "wavetableReader.h","");
@@ -32,8 +33,8 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
 
 
 // Routing variables
-    lfo1_wavetable1pos = hslider("lfo1_wavetable1pos", 0.0, 0, 1, 0.01);
-    lfo1_wavetable2pos = hslider("lfo1_wavetable2pos", 0.0, 0, 1, 0.01);
+    lfo1_wavetable1pos = hslider("lfo1_wavetable1pos [midi:ctrl 17]", 0.0, 0, 1, 0.01);
+    lfo1_wavetable2pos = hslider("lfo1_wavetable2pos [midi:ctrl 18]", 0.0, 0, 1, 0.01);
 
 // LFO 1
     lfo1freq = hslider("lfo1freq [midi:ctrl 1]", 3, 0.0, 10.0, 0.01);
@@ -67,7 +68,7 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
     osc2output = osc2wsum * osc2vol;
 
 // OSC 3
-    osc3vol    = hslider("osc3vol", 0.3, 0, 1, 0.001);
+    osc3vol    = hslider("osc3vol [midi:ctrl 21", 0.3, 0, 1, 0.001);
     osc3octave = hslider("osc3octave", 0, -4, 0, 1);
     osc3output = osc(freq) * osc3vol; // +freq*(1/osc3octave)
 
@@ -76,12 +77,12 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
     oscOutputsignal =   osc1output + osc2output + osc3output;
 
 // Filter1
-    filter1lfo1rangeZeroOne = hslider("filter1lfo1range", 0, 0, 1, 0.0001);
+    filter1lfo1rangeZeroOne = hslider("filter1lfo1range [midi:ctrl 20]", 0, 0, 1, 0.0001);
     filter1lfo1rangePreClip = ( pow( (filter1lfo1rangeZeroOne*4) + 1, 4) - 1 );
     filter1lfo1range = clip( 0, 6000, filter1lfo1rangePreClip );
     
     // lin->log frequncy, pow( input, 4) 
-    filter1cutoffZeroOne = hslider("filter1cutoff", 1, 0, 1, 0.001) : smooth(tau2pole( 0.06 ));
+    filter1cutoffZeroOne = hslider("filter1cutoff [midi:ctrl 19]", 1, 0, 1, 0.001) : smooth(tau2pole( 0.06 ));
     filter1cutoff = clip ( 80, 18000, ( pow( (filter1cutoffZeroOne*0.5)+0.3 ,4) * 18000) );
     
     filter1freqSmooth =  clip( 80, 16000, (lfo1output *filter1lfo1range ) + filter1cutoff  );
