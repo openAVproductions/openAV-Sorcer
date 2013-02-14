@@ -122,11 +122,9 @@ static void port_event(LV2UI_Handle ui,
     {
       float tmp = *(float*)buffer;
       cout << "Port " << port_index << " gets " << tmp << endl;
-      //self->widget->values[port_index] = tmp ;
+      self->widget->values[port_index] = tmp;
+      self->widget->queue_draw();
       //self->widget->redraw();
-      
-      // for presets to show in GUI, we check the state of flagRedraw, directly setting values seems to make Cairo deadlock..??
-      //Glib::signal_timeout().connect( sigc::mem_fun( self->widget, &Canvas::checkFlag), 100);
     }
     
     return;

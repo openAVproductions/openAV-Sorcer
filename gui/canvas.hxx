@@ -24,7 +24,7 @@ class Canvas : public Gtk::DrawingArea
     bool flagRedraw;
     float values[20];
     
-    float copyValues[20];
+    //float copyValues[20];
     
     Canvas()
     {
@@ -90,21 +90,6 @@ class Canvas : public Gtk::DrawingArea
           win->invalidate_rect(r, false);
       }
       
-      return true;
-    }
-    
-    bool checkFlag()
-    {
-      if ( flagRedraw )
-      {
-        for ( int i = 0; i < 20; i++)
-        {
-          values[i] = copyValues[i];
-        }
-        flagRedraw = false;
-        redraw();
-      }
-      // stay connected
       return true;
     }
     
