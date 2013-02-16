@@ -6,14 +6,14 @@ import("filter.lib");
 import("oscillator.lib");
 
 
-vol = hslider("vol", 0.3, 0, 10, 0.01); // %
+vol = hslider("vol", 0.3, 0, 1, 0.01); // %
 attack = 0.01 + hslider("attack [midi:ctrl 24]", 0.01, 0.01, 1, 0.001); // sec
 decay = hslider("decay [midi:ctrl 25]", 0.3, 0, 1, 0.001) * 0.8 + 0.2; // sec
 sustain = hslider("sustain [midi:ctrl 26]", 1.0, 0, 1, 0.01) + 0.1; // %
 release = hslider("release [midi:ctrl 27]", 0.2, 0, 1, 0.001) + 0.1; // sec
 
 freq = nentry("freq", 20, 20, 20000, 1) / 2.0; // Hz
-gain = nentry("gain", 0.3, 0, 10, 0.01); // %
+gain = nentry("gain", 0.3, 0, 1, 0.01); // %
 gate = button("gate"); // 0/1
 
 wavetable1pos = hslider("wavetable1pos [midi:ctrl 15]", 0.0, 0, 1, 0.01);
@@ -37,7 +37,9 @@ wavetable2pos = hslider("wavetable2pos [midi:ctrl 16]", 0.0, 0, 1, 0.01);
     lfo1_wavetable2pos = hslider("lfo1_wavetable2pos [midi:ctrl 18]", 0.0, 0, 1, 0.01);
 
 // LFO 1
-    lfo1freq = hslider("lfo1freq [midi:ctrl 1]", 3, 0.0, 10.0, 0.01);
+    lfo1freqZeroOne = hslider("lfo1freq [midi:ctrl 1]", 0.3, 0.0, 1.0, 0.001);
+    
+    lfo1freq = lfo1freqZeroOne * 10;
     
     // concider using a different value when speed < 0.1 or so, as otherwise
     // the output value depends on the current phase of the LFO

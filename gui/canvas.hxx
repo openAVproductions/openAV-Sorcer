@@ -69,6 +69,8 @@ class Canvas : public Gtk::DrawingArea
       signal_motion_notify_event().connect( sigc::mem_fun( *this, &Canvas::on_motion_notify_event ) );
       
       
+      // draw callback
+      Glib::signal_timeout().connect( sigc::mem_fun(*this, &Canvas::countRedrawUpdate), 1000/10);
     }
     
     void setPortEventValue(int port, float value);
@@ -94,15 +96,26 @@ class Canvas : public Gtk::DrawingArea
     }
     
     // will redraw a portion of the screen
-    bool redraw(int x, int y, int sx, int sy)
+    bool countRedrawUpdate()
     {
-      Glib::RefPtr<Gdk::Window> win = get_window();
-      if (win)
+      if ( redrawCount != redrawCountOld )
       {
-          Gdk::Rectangle r(x,y,sx,sy);
-          win->invalidate_rect(r, false);
+        redraw();
+        redrawCountOld = redrawCount;
       }
       return true;
+    }
+    
+    // alternative widget update system:
+    // count the current "revision" of the port values,
+    // callback checks periodically, if new version, redraw
+    int redrawCount;
+    int redrawCountOld;
+    
+    void updateRedrawCount()
+    {
+      redrawCount++;
+      cout << "draw counter now " << redrawCount << endl;
     }
     
   protected:

@@ -123,8 +123,8 @@ static void port_event(LV2UI_Handle ui,
       float tmp = *(float*)buffer;
       cout << "Port " << port_index << " gets " << tmp << endl;
       self->widget->values[port_index] = tmp;
-      self->widget->queue_draw();
-      //self->widget->redraw();
+      //self->widget->queue_draw();
+      self->widget->updateRedrawCount();
     }
     
     return;

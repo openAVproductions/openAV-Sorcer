@@ -74,7 +74,8 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
           break; 
       case LFO_RATE:
           values[LFO1_FREQ] = clip(clickYvalue + deltaYValue);
-          tmp = values[LFO1_FREQ] * 10; // not 0-1 on plugin!
+          tmp = values[LFO1_FREQ];
+          //cout << "writing LFO rate " << tmp << endl;
           write_function( controller, LFO1_FREQ, sizeof(float), 0, (const void*)&tmp );
           break; 
       case LFO_AMP:
@@ -480,7 +481,7 @@ void Canvas::drawADSR(Cairo::RefPtr<Cairo::Context> cr)
     
     cr->line_to( X + 5 + (Xs * (a / 5.f)), Y + Ys * 0.1   ); // attack
     
-    cr->rel_line_to( Xs * (d / 5.f),   (Ys*0.9) * s   ); // decay, and sustain height
+    cr->rel_line_to( Xs * (d / 5.2f),   (Ys*0.9) * s   ); // decay, and sustain height
     
     cr->rel_line_to( Xs * 0.4, 0  ); // sustain horizontal line
     
