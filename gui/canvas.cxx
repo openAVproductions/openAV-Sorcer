@@ -113,11 +113,13 @@ bool Canvas::on_motion_notify_event(GdkEventMotion* event)
           values[MASTER_VOL] = clip(clickYvalue + deltaYValue);
           write_function( controller, MASTER_VOL, sizeof(float), 0, (const void*)&values[MASTER_VOL] );
           break;
-      default: break;
+      default: 
+          // return, so the widget doesn't redraw itself un-necessarily
+          return true;
     }
+    
+    redraw();
   }
-  
-  redraw();
   
   return true;
 }
