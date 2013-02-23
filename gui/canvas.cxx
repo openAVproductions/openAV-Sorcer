@@ -438,7 +438,7 @@ void Canvas::drawADSR(Cairo::RefPtr<Cairo::Context> cr)
   // ADSR box co-ords
   int X =  227+184;
   int Y = 101;
-  int Xs= 181-43;
+  int Xs= 126;
   int Ys= 183-101;
   
   // WAVEFORM graph
@@ -485,7 +485,7 @@ void Canvas::drawADSR(Cairo::RefPtr<Cairo::Context> cr)
     
     cr->rel_line_to( Xs * 0.4, 0  ); // sustain horizontal line
     
-    cr->rel_line_to( Xs * ( (r) / 5.f), Ys - (Ys*0.9) * s - Ys * 0.1  ); // remaining Y down
+    cr->rel_line_to( 0.85 * Xs * ( (r) / 5.f), Ys - (Ys*0.9) * s - Ys * 0.1  ); // remaining Y down
     
     setColour( cr, COLOUR_GREY_4, 0.5 );
     cr->fill_preserve();
