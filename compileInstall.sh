@@ -12,6 +12,7 @@ echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 echo -e "\e[34m:: \e[97mCopying GUI to sorcer.lv2..."
 cp build/libsorcer_gui.so ../sorcer.lv2/sorcer_gui.so
+cp ../planning/header.png ../sorcer.lv2/header.png
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
