@@ -16,7 +16,6 @@ cp ../planning/header.png ../sorcer.lv2/header.png
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
-
 echo -e "\e[34m:: \e[97mBuilding FAUST dsp..."
 cd ../faust
 faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
@@ -49,5 +48,12 @@ echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
 echo -e "\e[34m:: \e[97mCopying bundle to /usr/lib/lv2..."
-cp -r ./sorcer.lv2/ /usr/lib/lv2/
+if [ $(whoami) = root ]
+then
+   install -d /usr/lib/lv2/sorcer.lv2
+   install -t /usr/lib/lv2/sorcer.lv2 ./sorcer.lv2/*
+else
+   install -d $HOME/.lv2/sorcer.lv2
+   install -t $HOME/.lv2/sorcer.lv2 ./sorcer.lv2/*
+fi
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m] \e[97m"
