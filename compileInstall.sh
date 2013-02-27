@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 echo -e "\e[34m:: \e[97mBuilding GUI"
 
