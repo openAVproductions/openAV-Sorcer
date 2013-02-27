@@ -29,8 +29,7 @@ def configure(ctx):
     
     # Check for gtkmm to build UI, sndfile for loading
     ctx.check_cfg(package='gtkmm-2.4',at_least_version='1.0',args='--cflags --libs',uselib_store='GTKMM')
-    ctx.check_cfg(package='lv2core',at_least_version='1.0',args='--cflags --libs',uselib_store='LV2CORE')
-    #ctx.check_cfg(package='sndfile',at_least_version='1.0',args='--cflags --libs',uselib_store='SNDFILE')
+    ctx.check_cfg(package='lv2',at_least_version='1.0',args='--cflags --libs',uselib_store='LV2')
     
     # Set env['pluginlib_PATTERN']
     pat = ctx.env['cshlib_PATTERN']
@@ -52,6 +51,6 @@ def build(ctx):
               source       = 'canvas.cxx sorcer_gui.cxx',
               name         = 'sorcer_gui',
               target       = 'sorcer_gui',
-              uselib       = 'GTKMM LV2CORE',
+              uselib       = 'GTKMM LV2',
               includes     = includes)
 
