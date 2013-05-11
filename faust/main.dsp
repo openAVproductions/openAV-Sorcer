@@ -1,4 +1,6 @@
 declare name "Sorcer";
+declare author "OpenAV Productions";
+declare description "Wavetable Synth";
 
 import("math.lib");
 import("music.lib");
