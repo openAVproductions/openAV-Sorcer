@@ -23,6 +23,11 @@ launch Sorcer as a standalone JACK client.
 $  ./run.sh
 
 
+== PRESETS
+Presets are available in a different repo:
+https://github.com/harryhaaren/openAV-presets
+
+
 == BUG REPORTING
 Please use the issue tracker on github to report bugs:
 https://github.com/harryhaaren/openAV-Sorcer/issues
@@ -34,6 +39,7 @@ included in the repo now. To tweak the FAUST code, just edit faust/main.dsp.
 Uncomment the commented section in ./compileInstall.sh to re-generate the CPP
 code from faust. The LV2-FAUST libraries are necessary, please ensure they're
 installed.
+
 
 == CONTACT
 If you want to get in touch, please do!
