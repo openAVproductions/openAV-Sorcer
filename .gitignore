@@ -3,7 +3,6 @@
 gui/build/*
 
 faust/a.out
-faust/main.cpp
 faust/sorcer
 faust/sorcer.so
 faust/sorcer.ttl

@@ -16,10 +16,11 @@ cp ../planning/header.png ../sorcer.lv2/header.png
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
-echo -e "\e[34m:: \e[97mBuilding FAUST dsp..."
 cd ../faust
-faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
-echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
+# Uncomment to build FAUST->CPP: not needed as repo contains release CPP file
+#echo -e "\e[34m:: \e[97mBuilding FAUST dsp..."
+#faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
+#echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
 
@@ -47,13 +48,14 @@ cd ..
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
-echo -e "\e[34m:: \e[97mCopying bundle to /usr/lib/lv2..."
 if [ $(whoami) = root ]
 then
-   install -d /usr/lib/lv2/sorcer.lv2
-   install -t /usr/lib/lv2/sorcer.lv2 ./sorcer.lv2/*
+  echo -e "\e[34m:: \e[97mCopying bundle to /usr/lib/lv2/sorcer.lv2"
+  install -d /usr/lib/lv2/sorcer.lv2
+  install -t /usr/lib/lv2/sorcer.lv2 ./sorcer.lv2/*
 else
-   install -d $HOME/.lv2/sorcer.lv2
-   install -t $HOME/.lv2/sorcer.lv2 ./sorcer.lv2/*
+  echo -e "\e[34m:: \e[97mCopying bundle to $HOME/.lv2/sorcer.lv2"
+  install -d $HOME/.lv2/sorcer.lv2
+  install -t $HOME/.lv2/sorcer.lv2 ./sorcer.lv2/*
 fi
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m] \e[97m"
