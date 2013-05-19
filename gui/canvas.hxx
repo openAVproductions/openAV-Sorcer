@@ -290,7 +290,7 @@ class Canvas : public Gtk::DrawingArea
         drawY += 135 + 24;
         Background( cr, drawX, drawY, 159, 135, "OSC 2");
         drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159, 135, "OSC 3");
+        Background( cr, drawX, drawY, 159, 135, "Sub-bass");
         
         
         // ADSR
