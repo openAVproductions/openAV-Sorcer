@@ -1,6 +1,8 @@
 
     Sorcer - OpenAV Productions
 
+  http://openavproductions.com/sorcer
+
 This is the repository of a wavetable synthesizer called Sorcer.
 
 
@@ -19,3 +21,21 @@ If you have the JALV LV2 host installed, the "run.sh" script can be used to
 launch Sorcer as a standalone JACK client.
 
 $  ./run.sh
+
+
+== BUG REPORTING
+Please use the issue tracker on github to report bugs:
+https://github.com/harryhaaren/openAV-Sorcer/issues
+
+
+== DETAILS
+I've removed the dependency on FAUST to install: the generated CPP file is
+included in the repo now. To tweak the FAUST code, just edit faust/main.dsp.
+Uncomment the commented section in ./compileInstall.sh to re-generate the CPP
+code from faust. The LV2-FAUST libraries are necessary, please ensure they're
+installed.
+
+== CONTACT
+If you want to get in touch, please do!
+-Harry van Haaren
+ harryhaaren@gmail.com
