@@ -48,6 +48,7 @@ def build(ctx):
     
     # Build plugin UI library
     obj = ctx(features     = 'cxx cxxshlib',
+              linkflags    = '-Wl,-z,nodelete',
               source       = 'canvas.cxx sorcer_gui.cxx',
               name         = 'sorcer_gui',
               target       = 'sorcer_gui',
