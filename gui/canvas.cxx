@@ -747,6 +747,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->stroke();
   
   // SAMPLE Zone
+  /*
     // background
     cr->rectangle( x, y + 84, 76, 42);
     setColour( cr, COLOUR_GREY_4 );
@@ -785,9 +786,10 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->rectangle( x, y + 84, 76, 42);
     setColour( cr, COLOUR_GREY_1 );
     cr->stroke();
-  
+  */
   
   // SESSION ZONE
+  /*
     //load save zone background
     cr->rectangle( x, y + 134, 76, 42);
     setColour( cr, COLOUR_GREY_4 );
@@ -826,7 +828,21 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->rectangle( x, y + 134, 76, 42);
     setColour( cr, COLOUR_GREY_1 );
     cr->stroke();
+  */
   
+  // blank zone outline
+  cr->rectangle( x, y + 84, 76, 92);
+  setColour( cr, COLOUR_GREY_4 );
+  cr->fill_preserve();
+  setColour( cr, COLOUR_GREY_1 );
+  cr->stroke();
+  
+  cr->move_to( x     , y + 84 );
+  cr->line_to( x + 76, y + 84 + 92 );
+  cr->move_to( x + 76, y + 84 );
+  cr->line_to( x     , y + 84 + 92 );
+  setColour( cr, COLOUR_GREY_1 );
+  cr->stroke();
   
   // FADER 
     //background
