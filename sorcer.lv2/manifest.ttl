@@ -3,6 +3,7 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
 
 <http://www.openavproductions.com/sorcer>
     a lv2:Plugin ;
@@ -14,4 +15,6 @@
 <http://www.openavproductions.com/sorcer/gui>
   a guiext:GtkUI;
   guiext:binary <sorcer_gui.so>;
-  guiext:requiredFeature guiext:makeResident.
+  guiext:requiredFeature guiext:makeResident;
+  lv2:optionalFeature ui:noUserResize ;
+  .
