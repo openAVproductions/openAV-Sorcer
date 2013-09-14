@@ -107,7 +107,7 @@ class Oscillator : public Fl_Slider
         
         // Waveform data: Volume
         cairo_set_line_width(cr, 2.4);
-        cairo_rectangle(cr, x+w-4, y + 82*(1-wavetableVol), 2,  (82*wavetableVol) ); 
+        cairo_rectangle(cr, x+w-4, y + h*(1-wavetableVol), 2,  (h*wavetableVol) ); 
         cairo_set_source_rgba( cr, 255 / 255.f, 104 / 255.f ,   0 / 255.f , 1 );
         cairo_stroke(cr);
         
