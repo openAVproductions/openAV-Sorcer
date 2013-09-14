@@ -84,6 +84,7 @@ class Compressor : public Fl_Slider
       active = a;
       redraw();
     }
+    bool getActive(){return active;}
     
     void draw()
     {

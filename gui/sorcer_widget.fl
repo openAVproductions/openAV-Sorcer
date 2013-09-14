@@ -12,7 +12,7 @@ class SorcerUI {open
   Function {SorcerUI()} {open
   } {
     Fl_Window window {open
-      xywh {2194 320 515 450} type Double color 48
+      xywh {2102 292 515 450} type Double color 48
       code0 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code1 {\#include <iostream>}
       code2 {using namespace std;}
@@ -106,23 +106,19 @@ class SorcerUI {open
       }
       Fl_Dial wave1 {
         label {Wave 1}
-        callback {//cutoff = o->value();
-//float g = o->getGain();
-//gainDial->value( g );
-//freq->value( cutoff ); // update dial
-//writePort(CUTOFF_FREQ, cutoff);
-//writePort(CUTOFF_GAIN, g);}
+        callback {float x = o->X();
+float y = o->Y();
+writePort(OSC_1_VOLUME, y);
+writePort(WAVETABLE_1_POS, x);}
         xywh {15 64 148 98} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Oscillator}
       }
       Fl_Dial wave2 {
         label {Wave 2}
-        callback {//cutoff = o->value();
-//float g = o->getGain();
-//gainDial->value( g );
-//freq->value( cutoff ); // update dial
-//writePort(CUTOFF_FREQ, cutoff);
-//writePort(CUTOFF_GAIN, g);}
+        callback {float x = o->X();
+float y = o->Y();
+writePort(OSC_2_VOLUME, y);
+writePort(WAVETABLE_2_POS, x);} selected
         xywh {15 198 148 98} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Oscillator}
       }
@@ -130,11 +126,8 @@ class SorcerUI {open
         label {Sub-Bass}
         callback {o->X( 0.5 );
 o->modulation( 0 );
-//float g = o->getGain();
-//gainDial->value( g );
-//freq->value( cutoff ); // update dial
-//writePort(CUTOFF_FREQ, cutoff);
-//writePort(CUTOFF_GAIN, g);}
+float tmp = o->Y();
+writePort(OSC_3_VOLUME, tmp );}
         xywh {15 335 148 98} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Oscillator}
       }
@@ -156,7 +149,7 @@ o->modulation( 0 );
         label Speed
         callback {float tmp = o->value();
 lfo->modulation( tmp );
-//writePort( int(ROOMY_TIME), tmp );}
+writePort( int(LFO_FREQUENCY), tmp );}
         xywh {258 165 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
@@ -164,7 +157,7 @@ lfo->modulation( tmp );
         label W2
         callback {float tmp = o->value();
 wave2->modulation( tmp );
-//writePort( int(ROOMY_DAMPING), tmp );}
+writePort( int(LFO_TO_WAVETABLE_2), tmp );}
         xywh {223 185 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
@@ -172,7 +165,7 @@ wave2->modulation( tmp );
         label {W 1}
         callback {float tmp = o->value();
 wave1->modulation( tmp );
-//writePort( int(ROOMY_DRY_WET),tmp );}
+writePort( int(LFO_TO_WAVETABLE_1),tmp );}
         xywh {189 164 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
@@ -180,7 +173,7 @@ wave1->modulation( tmp );
         label Amp
         callback {float tmp = o->value();
 lfo->value( tmp );
-//writePort( int(ROOMY_TIME), tmp );}
+writePort( int(LFO_AMPLITUDE), tmp );}
         xywh {296 186 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
@@ -202,7 +195,7 @@ lfo->value( tmp );
         label Cutoff
         callback {float tmp = o->value();
 filter->value( tmp );
-//writePort( int(ROOMY_DAMPING), tmp );}
+writePort( int(FILTER_CUTOFF),tmp );}
         xywh {200 375 50 45} color 90 labelsize 10
         class {Avtk::Dial}
       }
@@ -210,7 +203,7 @@ filter->value( tmp );
         label Modulation
         callback {float tmp = o->value();
 filter->modulation( tmp );
-//writePort( int(ROOMY_TIME), tmp );}
+writePort( int(LFO_TO_FILTER_RANGE),tmp );}
         xywh {264 377 50 40} color 90 labelsize 10
         class {Avtk::Dial}
       }
@@ -232,7 +225,7 @@ filter->modulation( tmp );
         label S
         callback {float tmp = o->value();
 adsr->sustain( tmp );
-//writePort( int(ROOMY_TIME), tmp );}
+writePort( int(ADSR_SUSTAIN),tmp );}
         xywh {427 165 30 30} color 90 labelsize 11
         class {Avtk::Dial}
       }
@@ -240,7 +233,7 @@ adsr->sustain( tmp );
         label D
         callback {float tmp = o->value();
 adsr->decay( tmp );
-//writePort( int(ROOMY_DAMPING), tmp );}
+writePort( int(ADSR_DECAY),tmp );}
         xywh {393 185 30 30} color 90 labelsize 11
         class {Avtk::Dial}
       }
@@ -248,7 +241,7 @@ adsr->decay( tmp );
         label A
         callback {float tmp = o->value();
 adsr->attack( tmp );
-//writePort( int(ROOMY_DRY_WET),tmp );}
+writePort( int(ADSR_ATTACK),tmp );}
         xywh {360 164 30 30} color 90 labelsize 11
         class {Avtk::Dial}
       }
@@ -256,18 +249,20 @@ adsr->attack( tmp );
         label R
         callback {float tmp = o->value();
 adsr->release( tmp );
-//writePort( int(ROOMY_TIME), tmp );}
+writePort( int(ADSR_RELEASE),tmp );}
         xywh {464 186 30 30} color 90 labelsize 11
         class {Avtk::Dial}
       }
       Fl_Box volume {
         callback {float tmp = pow( o->value(), 4 );
-writePort( int(VOLUME), tmp );} selected
+writePort( int(VOLUME), tmp );}
         xywh {453 268 48 168} box DOWN_BOX labeltype NO_LABEL
         code0 {\#include <cmath>}
         class {Avtk::Volume}
       }
       Fl_Box comp {
+        callback {float tmp = o->getActive();
+writePort( int(COMPRESSOR_ENABLE), tmp );}
         xywh {351 268 98 93} box DOWN_BOX labeltype NO_LABEL
         class {Avtk::Compressor}
       }
@@ -278,7 +273,7 @@ writePort( int(VOLUME), tmp );} selected
         label Thres
         callback {float tmp = o->value();
 comp->threshold( tmp );
-//writePort( int(ROOMY_TIME), tmp );}
+writePort( int(COMPRESSOR_THRESHOLD),tmp );}
         xywh {404 369 30 30} color 90 labelfont 1 labelsize 11 align 0
         class {Avtk::Dial}
       }
@@ -286,7 +281,7 @@ comp->threshold( tmp );
         label A
         callback {float tmp = o->value();
 //comp->attack( tmp );
-//writePort( int(ROOMY_DAMPING), tmp );}
+writePort( int(COMPRESSOR_ATTACK),tmp );}
         xywh {361 401 30 30} color 90 labelfont 1 labelsize 12 align 0
         class {Avtk::Dial}
       }
@@ -294,7 +289,7 @@ comp->threshold( tmp );
         label Ratio
         callback {float tmp = o->value();
 comp->ratio( tmp );
-//writePort( int(ROOMY_DRY_WET),tmp );}
+writePort( int(COMPRESSOR_RATIO),tmp );}
         xywh {361 369 30 30} color 90 labelfont 1 labelsize 11 align 0
         class {Avtk::Dial}
       }
@@ -302,7 +297,7 @@ comp->ratio( tmp );
         label R
         callback {float tmp = o->value();
 //comp->release( tmp );
-//writePort( int(ROOMY_TIME), tmp );}
+writePort( int(COMPRESSOR_RELEASE),tmp );}
         xywh {404 401 30 30} color 90 labelfont 1 labelsize 12 align 0
         class {Avtk::Dial}
       }
