@@ -20,18 +20,24 @@
  */
 
 
-#ifndef AVTK_ADSR_H
-#define AVTK_ADSR_H
+#ifndef AVTK_COMPRESSOR_H
+#define AVTK_COMPRESSOR_H
 
+
+#include "avtk_helpers.h"
+
+#include <FL/Fl_Widget.H>
 #include <FL/Fl_Slider.H>
+#include <valarray>
+#include <string>
 
 namespace Avtk
 {
-
-class ADSR : public Fl_Slider
+  
+class Compressor : public Fl_Slider
 {
   public:
-    ADSR(int _x, int _y, int _w, int _h, const char *_label =0):
+    Compressor(int _x, int _y, int _w, int _h, const char *_label = 0):
         Fl_Slider(_x, _y, _w, _h, _label)
     {
       x = _x;
@@ -39,32 +45,45 @@ class ADSR : public Fl_Slider
       w = _w;
       h = _h;
       
-      a = 0.f;
-      d = s = r = 0.5f;
-      
-      active = true;
-      
       label = _label;
       
+      mouseClickedX = 0;
+      mouseClickedY = 0;
+      mouseClicked = false;
+      
+      active = true;
       highlight = false;
-      mouseOver = false;
+      
+      ratioVal = 0;
+      makeupGain = 0;
+      threshVal = 0;
     }
     
-    void attack (float v) { a = v; redraw(); }
-    void decay  (float v) { d = v; redraw(); }
-    void sustain(float v) { s=1-v; redraw(); }
-    void release(float v) { r = v; redraw(); }
+    void threshold(float t) {threshVal  = t; redraw();}
+    void makeup   (float m) {makeupGain = m; redraw();}
+    void ratio    (float r) {ratioVal   = r; redraw();}
     
-    float a;
-    float d;
-    float s;
-    float r;
+    float getMakeup(){return makeupGain;}
     
     bool active;
-    bool mouseOver;
     bool highlight;
     int x, y, w, h;
     const char* label;
+    
+    int mouseClickedX;
+    int mouseClickedY;
+    bool mouseClicked;
+    bool mouseRightClicked;
+    
+    float threshVal;
+    float makeupGain;
+    float ratioVal;
+    
+    void set_active(bool a)
+    {
+      active = a;
+      redraw();
+    }
     
     void draw()
     {
@@ -74,10 +93,14 @@ class ADSR : public Fl_Slider
         
         cairo_save( cr );
         
-        // WAVEFORM graph
-        cairo_rectangle( cr, x, y, w, h );
-        cairo_set_source_rgb( cr,28 / 255.f,  28 / 255.f ,  28 / 255.f  );
-        cairo_fill(cr);
+        cairo_set_line_width(cr, 1.5);
+        
+        
+        // fill background
+        cairo_rectangle( cr, x, y, w, h);
+        cairo_set_source_rgb( cr, 28 / 255.f,  28 / 255.f ,  28 / 255.f  );
+        cairo_fill_preserve( cr );
+        cairo_clip( cr );
         
         
         // set up dashed lines, 1 px off, 1 px on
@@ -106,35 +129,65 @@ class ADSR : public Fl_Slider
         cairo_set_dash ( cr, dashes, 0, 0.0);
         
         
-      
-      // ADSR graph plotting
-        cairo_move_to( cr, x + 2, y + h );
+        // draw the cutoff line:
+        // move to bottom left, draw line to middle left
+        cairo_move_to( cr, x , y + h );
         
-        cairo_line_to( cr, x + 5 + (w * (a / 5.f)), y + h * 0.1   ); // attack
+        cairo_line_to( cr, x , y + (h*0.47));
         
-        cairo_rel_line_to( cr, w * (d / 5.2f),   (h*0.9) * s   ); // decay, and sustain height
+        float makeupGainPx = makeupGain * h * 0.5;
         
-        cairo_rel_line_to( cr, w * 0.4, 0  ); // sustain horizontal line
+        float xDist = 0.1 * w;
+        float yDist = 0.1 * h;
         
-        cairo_rel_line_to( cr, 0.85 * w * ( (r) / 5.f), h - (h*0.9) * s - h * 0.1  ); // remaining Y down
+        float xThresh = x + (w * 0.25) + (w*0.5) * threshVal;
+        float yThresh = y + (h * 0.25) + (h*0.5)*(1-threshVal);
         
-        //cairo_set_source_rgb( cr,28 / 255.f,  28 / 255.f ,  28 / 255.f  );
+        float startx = xThresh - xDist;
+        float starty = yThresh + yDist;
+        
+        float cp1x = xThresh;
+        float cp1y = yThresh - makeupGainPx;
+        
+        float cp2x = xThresh;
+        float cp2y = yThresh - makeupGainPx;
+        
+        float endx = xThresh + (xDist*1.2);
+        float endy = yThresh - (yDist*1.2)*(1-ratioVal) - makeupGainPx;
+        
+        // normal line (greyed)
+        cairo_move_to( cr, x , y + h );
+        cairo_line_to( cr, x + w, y );
+        cairo_set_source_rgba( cr,  66 / 255.f,  66 / 255.f ,  66 / 255.f , 0.5 );
+        cairo_set_line_width(cr, 1.4);
+        cairo_stroke( cr );
+        
+        cairo_move_to( cr, x , y + h - makeupGainPx );
+        cairo_line_to( cr, startx, starty - makeupGainPx );
+        
+        // draw curve
+        cairo_curve_to( cr, cp1x, cp1y, cp2x, cp2y, endx, endy );
+        
+        cairo_line_to( cr, x + w, y + (h/4)*ratioVal + (h)*(1-threshVal)*(0.5*ratioVal) - makeupGainPx );
+        
+        cairo_line_to( cr, x + w, y + h );
+        cairo_line_to( cr, x , y + h );
+        cairo_close_path(cr);
+        
         cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 0.21 );
         cairo_fill_preserve(cr);
+        
         cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 1 );
         cairo_set_line_width(cr, 1.5);
         cairo_set_line_join( cr, CAIRO_LINE_JOIN_ROUND);
         cairo_set_line_cap ( cr, CAIRO_LINE_CAP_ROUND);
         cairo_stroke( cr );
         
-        // stroke rim
+        // stroke outline
         cairo_rectangle(cr, x, y, w, h);
-        //cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 1 );
         cairo_set_source_rgba( cr,  126 / 255.f,  126 / 255.f ,  126 / 255.f , 0.8 );
-        cairo_set_line_width(cr, 1.);
+        cairo_set_line_width(cr, 1.9);
         cairo_stroke( cr );
-        
-        
         
         if ( !active )
         {
@@ -151,10 +204,7 @@ class ADSR : public Fl_Slider
           cairo_stroke( cr );
         }
         
-        
         cairo_restore( cr );
-        
-        draw_label();
       }
     }
     
@@ -170,38 +220,63 @@ class ADSR : public Fl_Slider
     
     int handle(int event)
     {
-      switch(event) {
+      switch(event)
+      {
         case FL_PUSH:
-          highlight = 1;
+          highlight = 0;
+          mouseRightClicked = false;
           if ( Fl::event_button() == FL_RIGHT_MOUSE )
           {
             active = !active;
             redraw();
+            mouseRightClicked = true;
             do_callback();
           }
           return 1;
-        case FL_DRAG: {
-            int t = Fl::event_inside(this);
-            if (t != highlight) {
-              highlight = t;
+        case FL_DRAG:
+          {
+            if ( Fl::event_state(FL_BUTTON1) )
+            {
+              if ( mouseClicked == false ) // catch the "click" event
+              {
+                mouseClickedX = Fl::event_x();
+                mouseClickedY = Fl::event_y();
+                mouseClicked = true;
+              }
+              
+              float deltaX = mouseClickedX - Fl::event_x();
+              float deltaY = mouseClickedY - Fl::event_y();
+              
+              float valX = value();
+              valX -= deltaX / 100.f;
+              float valY = makeupGain;
+              valY += deltaY / 100.f;
+              
+              if ( valX > 1.0 ) valX = 1.0;
+              if ( valX < 0.0 ) valX = 0.0;
+              
+              if ( valY > 1.0 ) valY = 1.0;
+              if ( valY < 0.0 ) valY = 0.0;
+              
+              //handle_drag( value + deltaY );
+              set_value( valX );
+              makeupGain = valY;
+              
+              mouseClickedX = Fl::event_x();
+              mouseClickedY = Fl::event_y();
               redraw();
+              do_callback();
             }
           }
           return 1;
-        case FL_ENTER:
-          mouseOver = true;
-          redraw();
-          return 1;
-        case FL_LEAVE:
-          mouseOver = false;
-          redraw();
-          return 1;
         case FL_RELEASE:
+          mouseRightClicked = false;
           if (highlight) {
             highlight = 0;
             redraw();
             do_callback();
           }
+          mouseClicked = false;
           return 1;
         case FL_SHORTCUT:
           if ( test_shortcut() )
@@ -214,9 +289,10 @@ class ADSR : public Fl_Slider
           return Fl_Widget::handle(event);
       }
     }
+    
+  private:
 };
 
 } // Avtk
 
-#endif // AVTK_ADSR_H
-
+#endif // AVTK_COMPRESSOR_H

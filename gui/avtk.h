@@ -25,6 +25,8 @@
 #include "avtk/avtk_adsr.h"
 #include "avtk/avtk_dial.h"
 #include "avtk/avtk_image.h"
+#include "avtk/avtk_volume.h"
+#include "avtk/avtk_compressor.h"
 #include "avtk/avtk_oscillator.h"
 #include "avtk/avtk_background.h"
 #include "avtk/avtk_filtergraph.h"

@@ -145,8 +145,7 @@ static void port_event(LV2UI_Handle ui,
             } break;
       
       case VOLUME: {
-            //self->widget->adsr->release( value );
-            //self->widget->release->value( value );
+            self->widget->volume->value( value );
             } break;
       case FILTER_CUTOFF: {
             self->widget->filter->value( value );

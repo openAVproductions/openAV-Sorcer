@@ -180,7 +180,7 @@ class LFO : public Fl_Slider
         // stroke outline
         cairo_rectangle(cr, x, y, w, h);
         cairo_set_source_rgba( cr,  126 / 255.f,  126 / 255.f ,  126 / 255.f , 0.8 );
-        cairo_set_line_width(cr, 1.9);
+        cairo_set_line_width(cr, 1);
         cairo_stroke( cr );
         
         
