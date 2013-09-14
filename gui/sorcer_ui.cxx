@@ -82,7 +82,7 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
   self->widget = new SorcerUI();
   
   self->widget->window->border(0);
-  
+  self->widget->subbass->X(0.5);
   
   // write functions into the widget
   self->widget->controller = controller;
