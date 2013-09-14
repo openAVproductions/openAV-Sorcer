@@ -22,6 +22,7 @@ declare description "Wavetable Synth";
 
 import("math.lib");
 import("music.lib");
+import("effect.lib");
 import("filter.lib");
 import("oscillator.lib");
 
@@ -115,11 +116,23 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
 finalSignal = filterOutputSignal;
 
 
+// COMPRESSION
+compressorEnable = hslider("compressorEnable", 0, 0, 1, 0.001);
+compRatio = hslider("compRatio"    , 0, 0, 1, 0.001);
+compThreshold = hslider("compThreshold", 0, 0, 1, 0.001);
+compAttack = hslider("compAttack", 0, 0, 1, 0.001);
+compRelease = hslider("compRelease", 0, 0, 1, 0.001);
+
+compress(x) = vgroup( "compress",  x  * compressorEnable : compressor_mono( (compRatio+1)*20, ((compThreshold-1)*20) ,
+              (compAttack+0.01)*0.5, (compRelease+0.01)*0.5) , x * (1-compressorEnable) : + ) ;
+
 //  Metering
 vmeter(x) = attach(x, envelop(x) : vbargraph("output_db", -96, 10));
 envelop   = abs : max(db2linear(-96)) : linear2db : min(10)  : max ~ -(96.0/SR);
 
 
+
+
 process = finalSignal
   * (gate : vgroup("1-adsr", adsr(attack, decay, sustain, release)))
-  * gain : vgroup("2-master", *(vol)) : vmeter;
+  * gain : vgroup("2-master", _ : *(vol)) : compress : vmeter;
