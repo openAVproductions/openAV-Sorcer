@@ -13,8 +13,8 @@
 @prefix guiext: <http://lv2plug.in/ns/extensions/ui#>.
 
 <http://www.openavproductions.com/sorcer/gui>
-  a guiext:GtkUI;
-  guiext:binary <sorcer_gui.so>;
-  guiext:requiredFeature guiext:makeResident;
+  a ui:X11UI;
+  ui:binary <sorcer_ui.so> ;
+  lv2:extensionData ui:idle;
   lv2:optionalFeature ui:noUserResize ;
   .
