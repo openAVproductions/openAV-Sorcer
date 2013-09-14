@@ -118,7 +118,7 @@ writePort(WAVETABLE_1_POS, x);}
         callback {float x = o->X();
 float y = o->Y();
 writePort(OSC_2_VOLUME, y);
-writePort(WAVETABLE_2_POS, x);} selected
+writePort(WAVETABLE_2_POS, x);}
         xywh {15 198 148 98} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Oscillator}
       }
@@ -179,12 +179,9 @@ writePort( int(LFO_AMPLITUDE), tmp );}
       }
       Fl_Dial filter {
         label LFO
-        callback {//cutoff = o->value();
-//float g = o->getGain();
-//gainDial->value( g );
-//freq->value( cutoff ); // update dial
-//writePort(CUTOFF_FREQ, cutoff);
-//writePort(CUTOFF_GAIN, g);}
+        callback {float tmp = o->value();
+filterCutoff->value( tmp );
+writePort( int(FILTER_CUTOFF),tmp );} selected
         xywh {184 268 148 90} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Filtergraph}
       }
