@@ -147,6 +147,11 @@ static void port_event(LV2UI_Handle ui,
       case VOLUME: {
             self->widget->volume->value( value );
             } break;
+      case OUTPUT_DB: {
+            float tmp = (1-(value / -96.f));
+            self->widget->volume->amplitude( tmp, tmp );
+            } break;
+      
       case FILTER_CUTOFF: {
             self->widget->filter->value( value );
             self->widget->filterCutoff->value( value );

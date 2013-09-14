@@ -12,7 +12,7 @@ class SorcerUI {open
   Function {SorcerUI()} {open
   } {
     Fl_Window window {open
-      xywh {1907 328 515 450} type Double color 48
+      xywh {2194 320 515 450} type Double color 48
       code0 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code1 {\#include <iostream>}
       code2 {using namespace std;}
@@ -260,8 +260,11 @@ adsr->release( tmp );
         xywh {464 186 30 30} color 90 labelsize 11
         class {Avtk::Dial}
       }
-      Fl_Box volume {selected
+      Fl_Box volume {
+        callback {float tmp = pow( o->value(), 4 );
+writePort( int(VOLUME), tmp );} selected
         xywh {453 268 48 168} box DOWN_BOX labeltype NO_LABEL
+        code0 {\#include <cmath>}
         class {Avtk::Volume}
       }
       Fl_Box comp {
