@@ -12,7 +12,7 @@ class SorcerUI {open
   Function {SorcerUI()} {open
   } {
     Fl_Window window {open
-      xywh {2273 235 515 450} type Double color 48
+      xywh {1678 267 515 450} type Double color 48
       code0 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code1 {\#include <iostream>}
       code2 {using namespace std;}
@@ -104,7 +104,7 @@ class SorcerUI {open
         xywh {348 244 158 194} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Background}
       }
-      Fl_Dial {} {
+      Fl_Dial wave1 {
         label {Wave 1}
         callback {//cutoff = o->value();
 //float g = o->getGain();
@@ -115,7 +115,7 @@ class SorcerUI {open
         xywh {15 64 148 98} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Oscillator}
       }
-      Fl_Dial {} {
+      Fl_Dial wave2 {
         label {Wave 2}
         callback {//cutoff = o->value();
 //float g = o->getGain();
@@ -147,17 +147,6 @@ class SorcerUI {open
 //writePort(CUTOFF_GAIN, g);}
         xywh {184 64 148 90} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::LFO}
-      }
-      Fl_Dial {} {
-        label Remove
-        callback {//cutoff = o->value();
-//float g = o->getGain();
-//gainDial->value( g );
-//freq->value( cutoff ); // update dial
-//writePort(CUTOFF_FREQ, cutoff);
-//writePort(CUTOFF_GAIN, g);}
-        xywh {184 268 148 166} box UP_BOX color 179 labeltype NO_LABEL
-        class {Avtk::Filtergraph}
       }
       Fl_Dial {} {
         label ADSR
@@ -194,16 +183,16 @@ lfo->modulation( tmp );
       }
       Fl_Dial lfoToW2 {
         label W2
-        callback {//float tmp = o->value();
-//graph->damping( tmp );
-//writePort( int(ROOMY_DAMPING), tmp );}
+        callback {float tmp = o->value();
+wave2->modulation( tmp );
+//writePort( int(ROOMY_DAMPING), tmp );} selected
         xywh {224 185 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
       Fl_Dial lfoToW1 {
         label {W 1}
-        callback {//float tmp = o->value();
-//graph->wet( tmp );
+        callback {float tmp = o->value();
+wave1->modulation( tmp );
 //writePort( int(ROOMY_DRY_WET),tmp );}
         xywh {191 164 30 30} color 90 labelsize 10
         class {Avtk::Dial}
@@ -212,8 +201,38 @@ lfo->modulation( tmp );
         label Amp
         callback {float tmp = o->value();
 lfo->value( tmp );
-//writePort( int(ROOMY_TIME), tmp );} selected
+//writePort( int(ROOMY_TIME), tmp );}
         xywh {295 186 30 30} color 90 labelsize 10
+        class {Avtk::Dial}
+      }
+      Fl_Dial filter {
+        label LFO
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {184 268 148 90} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Filtergraph}
+      }
+      Fl_Box {} {
+        xywh {184 364 148 70} box DOWN_BOX labeltype NO_LABEL
+      }
+      Fl_Dial filterCutoff {
+        label W2
+        callback {float tmp = o->value();
+filter->value( tmp );
+//writePort( int(ROOMY_DAMPING), tmp );}
+        xywh {200 375 50 45} color 90 labelsize 10
+        class {Avtk::Dial}
+      }
+      Fl_Dial filterLfoMod {
+        label Amp
+        callback {float tmp = o->value();
+filter->modulation( tmp );
+//writePort( int(ROOMY_TIME), tmp );}
+        xywh {264 377 50 40} color 90 labelsize 10
         class {Avtk::Dial}
       }
     }

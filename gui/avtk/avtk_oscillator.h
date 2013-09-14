@@ -45,6 +45,10 @@ class Oscillator : public Fl_Slider
       
       highlight = false;
       mouseOver = false;
+      
+      wavetablePos = 0;
+      wavetableVol = 0;
+      modulate  = 0;
     }
     
     void Y (float v){ wavetableVol =  v; redraw(); }
@@ -53,8 +57,15 @@ class Oscillator : public Fl_Slider
     float Y(){return wavetableVol;}
     float X(){return wavetablePos;}
     
+    void modulation( float mod )
+    {
+      modulate = mod;
+      redraw();
+    }
+    
     float wavetableVol;
     float wavetablePos;
+    float modulate;
     
     bool active;
     bool mouseOver;
@@ -102,7 +113,8 @@ class Oscillator : public Fl_Slider
         
         // Waveform data: WavetableMod
         cairo_rectangle( cr, x, y + h - 4, 138 * wavetablePos, 2);
-        cairo_set_source_rgb( cr, 25 / 255.f, 255 / 255.f ,   0 / 255.f  );
+        //cairo_set_source_rgb( cr, 25 / 255.f, 255 / 255.f ,   0 / 255.f  );
+        cairo_set_source_rgb( cr, 230 / 255.f,   0 / 255.f , 255 / 255.f );
         cairo_stroke(cr);
         
         // Waveform data: Volume
@@ -110,6 +122,17 @@ class Oscillator : public Fl_Slider
         cairo_rectangle(cr, x+w-4, y + h*(1-wavetableVol), 2,  (h*wavetableVol) ); 
         cairo_set_source_rgba( cr, 255 / 255.f, 104 / 255.f ,   0 / 255.f , 1 );
         cairo_stroke(cr);
+        
+        // filter modulation
+        if ( modulate > 0.05 )
+        {
+          int drawX = x + (w/2) - w*0.25*modulate;
+          int drawY = y + h * 0.25;
+          cairo_rectangle( cr, drawX, drawY, w*0.5*modulate, 2); 
+          cairo_set_source_rgba( cr, 25 / 255.f, 255 / 255.f ,   0 / 255.f , 0.7 );
+          cairo_set_line_width(cr, 1.9);
+          cairo_stroke( cr );
+        }
         
         // graph center circle:
         cairo_arc( cr, x + w/4.f + (w/2.f) * wavetablePos,

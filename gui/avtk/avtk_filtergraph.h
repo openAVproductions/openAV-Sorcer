@@ -68,12 +68,19 @@ class Filtergraph : public Fl_Slider
       
       gain = 0;
       bandwidth = 0;
+      modulate  = 0;
     }
     
     void setGain(float g) {gain = g; redraw();}
     void setBandwidth(float b) {bandwidth = b; redraw();}
     float getGain() {return gain;}
     float getBandwidth() {return bandwidth;}
+    
+    void modulation( float mod )
+    {
+      modulate = mod;
+      redraw();
+    }
     
     void setType(Type t)
     {
@@ -97,6 +104,7 @@ class Filtergraph : public Fl_Slider
     int mouseClickedY;
     bool mouseClicked;
     
+    float modulate;
     float gain;
     float bandwidth;
     
@@ -152,6 +160,17 @@ class Filtergraph : public Fl_Slider
           case FILTER_HIGHSHELF:  drawHighshelf(cr);    break;
           default:
             cout << "Filtergraph: unknown filter type selected!" << endl;
+        }
+        
+        // filter modulation
+        if ( modulate > 0.05 )
+        {
+          int drawX = x + (w/2) - w*0.25*modulate;
+          int drawY = y + h * 0.25;
+          cairo_rectangle( cr, drawX, drawY, w*0.5*modulate, 2); 
+          cairo_set_source_rgba( cr, 25 / 255.f, 255 / 255.f ,   0 / 255.f , 0.7 );
+          cairo_set_line_width(cr, 1.9);
+          cairo_stroke( cr );
         }
         
         // stroke outline
