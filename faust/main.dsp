@@ -114,6 +114,12 @@ wavetable2pos = hslider("wavetable2pos", 0.0, 0, 1, 0.01);
 
 finalSignal = filterOutputSignal;
 
+
+//  Metering
+vmeter(x) = attach(x, envelop(x) : vbargraph("output_db", -96, 10));
+envelop   = abs : max(db2linear(-96)) : linear2db : min(10)  : max ~ -(96.0/SR);
+
+
 process = finalSignal
   * (gate : vgroup("1-adsr", adsr(attack, decay, sustain, release)))
-  * gain : vgroup("2-master", *(vol));
+  * gain : vgroup("2-master", *(vol)) : vmeter;

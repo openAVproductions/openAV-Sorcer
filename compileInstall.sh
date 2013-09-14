@@ -2,25 +2,17 @@
 
 echo -e "\e[34m:: \e[97mBuilding GUI"
 
+
+make
 cd gui
-
-./waf configure > /dev/null 2>&1
-./waf > /dev/null 2>&1
-echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
-
-
-
-echo -e "\e[34m:: \e[97mCopying GUI to sorcer.lv2..."
-cp build/libsorcer_gui.so ../sorcer.lv2/sorcer_gui.so
-cp ../planning/header.png ../sorcer.lv2/header.png
 echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
 cd ../faust
 # Uncomment to build FAUST->CPP: not needed as repo contains release CPP file
-#echo -e "\e[34m:: \e[97mBuilding FAUST dsp..."
-#faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
-#echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
+echo -e "\e[34m:: \e[97mBuilding FAUST dsp..."
+faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
+echo -e "\e[1A\e[73C \e[34m[\e[97mDONE\e[34m]"
 
 
 
