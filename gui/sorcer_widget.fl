@@ -12,7 +12,7 @@ class SorcerUI {open
   Function {SorcerUI()} {open
   } {
     Fl_Window window {open
-      xywh {590 259 515 450} type Double
+      xywh {2273 235 515 450} type Double color 48
       code0 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code1 {\#include <iostream>}
       code2 {using namespace std;}
@@ -27,39 +27,193 @@ class SorcerUI {open
         code3 {headerImage->setPixbuf(header.pixel_data,4);}
         class {Avtk::Image}
       }
-      Fl_Dial graph {
-        label graph
+      Fl_Dial {} {
+        label {Wave 1}
         callback {//cutoff = o->value();
 //float g = o->getGain();
 //gainDial->value( g );
 //freq->value( cutoff ); // update dial
 //writePort(CUTOFF_FREQ, cutoff);
-//writePort(CUTOFF_GAIN, g);} selected
-        xywh {5 36 150 126} box UP_BOX color 179 labeltype NO_LABEL
+//writePort(CUTOFF_GAIN, g);}
+        xywh {10 40 158 126} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label {Wave 2}
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {10 174 158 126} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label {Sub-Bass}
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {10 311 158 126} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label LFO
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {179 40 158 194} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label Remove
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {179 244 158 194} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label ADSR
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {348 40 158 194} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label Master
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {348 244 158 194} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label {Wave 1}
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {15 64 148 98} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::Oscillator}
       }
+      Fl_Dial {} {
+        label {Wave 2}
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {15 198 148 98} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Oscillator}
+      }
+      Fl_Dial {} {
+        label {Sub-Bass}
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {15 335 148 98} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Oscillator}
+      }
+      Fl_Dial lfo {
+        label LFO
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {184 64 148 90} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::LFO}
+      }
+      Fl_Dial {} {
+        label Remove
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {184 268 148 166} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Filtergraph}
+      }
+      Fl_Dial {} {
+        label ADSR
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {353 64 148 166} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Dial {} {
+        label Master
+        callback {//cutoff = o->value();
+//float g = o->getGain();
+//gainDial->value( g );
+//freq->value( cutoff ); // update dial
+//writePort(CUTOFF_FREQ, cutoff);
+//writePort(CUTOFF_GAIN, g);}
+        xywh {353 268 148 166} box UP_BOX color 179 labeltype NO_LABEL
+        class {Avtk::Background}
+      }
+      Fl_Box {} {
+        xywh {184 160 148 70} box DOWN_BOX labeltype NO_LABEL
+      }
       Fl_Dial time {
-        label Time
-        callback {//float tmp = o->value();
-//graph->size( tmp );
+        label Speed
+        callback {float tmp = o->value();
+lfo->modulation( tmp );
 //writePort( int(ROOMY_TIME), tmp );}
-        xywh {10 169 37 37} color 90 labelsize 10
+        xywh {258 165 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
-      Fl_Dial damping {
-        label Damping
+      Fl_Dial lfoToW2 {
+        label W2
         callback {//float tmp = o->value();
 //graph->damping( tmp );
 //writePort( int(ROOMY_DAMPING), tmp );}
-        xywh {62 169 37 37} color 90 labelsize 10
+        xywh {224 185 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
-      Fl_Dial dryWet {
-        label {Dry / Wet}
+      Fl_Dial lfoToW1 {
+        label {W 1}
         callback {//float tmp = o->value();
 //graph->wet( tmp );
 //writePort( int(ROOMY_DRY_WET),tmp );}
-        xywh {113 168 37 37} color 90 labelsize 10
+        xywh {191 164 30 30} color 90 labelsize 10
+        class {Avtk::Dial}
+      }
+      Fl_Dial other {
+        label Amp
+        callback {float tmp = o->value();
+lfo->value( tmp );
+//writePort( int(ROOMY_TIME), tmp );} selected
+        xywh {295 186 30 30} color 90 labelsize 10
         class {Avtk::Dial}
       }
     }

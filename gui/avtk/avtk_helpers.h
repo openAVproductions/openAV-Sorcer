@@ -16,16 +16,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
+ * 
  */
 
-#ifndef SORCER_AVTK
-#define SORCER_AVTK
 
-#include "avtk/avtk_lfo.h"
-#include "avtk/avtk_dial.h"
-#include "avtk/avtk_image.h"
-#include "avtk/avtk_oscillator.h"
-#include "avtk/avtk_background.h"
-#include "avtk/avtk_filtergraph.h"
+#ifndef AVTK_HELPERS_H
+#define AVTK_HELPERS_H
 
-#endif
+#include <iostream>
+
+using namespace std;
+
+inline void avtk_stroke_line(cairo_t* cr, bool active)
+{
+  cairo_save(cr);
+  // stroke cutoff lines, or border backgrounds
+  cairo_set_line_width(cr, 1.5);
+  cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 0.8 );
+  cairo_restore(cr);
+}
+
+#endif // AVTK_HELPERS_H
+
