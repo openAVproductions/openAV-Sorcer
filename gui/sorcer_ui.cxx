@@ -126,27 +126,72 @@ static void port_event(LV2UI_Handle ui,
     float value =  *(float *)buffer;
     switch ( port_index )
     {
-      /*
-      case ROOMY_TIME:
-          {
-            self->widget->graph->size( value );
-            self->widget->time->value( value );
-          }
-          break;
-      case ROOMY_DAMPING:
-          {
-            self->widget->graph->damping( value );
-            self->widget->damping->value( value );
-          }
-          break;
-      case ROOMY_DRY_WET:
-          {
-            self->widget->graph->wet( value );
-            self->widget->dryWet->value( value );
-          }
-          break;
-          break;
-      */
+      
+      case ADSR_ATTACK: {
+            self->widget->adsr->attack( value );
+            self->widget->attack->value( value );
+            } break;
+      case ADSR_DECAY: {
+            self->widget->adsr->decay( value );
+            self->widget->decay->value( value );
+            } break;
+      case ADSR_SUSTAIN: {
+            self->widget->adsr->sustain( value );
+            self->widget->sustain->value( value );
+            } break;
+      case ADSR_RELEASE: {
+            self->widget->adsr->release( value );
+            self->widget->release->value( value );
+            } break;
+      
+      case VOLUME: {
+            //self->widget->adsr->release( value );
+            //self->widget->release->value( value );
+            } break;
+      case FILTER_CUTOFF: {
+            self->widget->filter->value( value );
+            self->widget->filterCutoff->value( value );
+            } break;
+      case LFO_TO_FILTER_RANGE: {
+            self->widget->filter->modulation( value );
+            self->widget->filterLfoMod->value( value );
+            } break;
+            
+      case LFO_TO_WAVETABLE_1: {
+            self->widget->wave1->modulation( value );
+            self->widget->lfoToW1->value( value );
+            } break;
+      case LFO_TO_WAVETABLE_2: {
+            self->widget->wave2->modulation( value );
+            self->widget->lfoToW2->value( value );
+            } break;
+      
+      case LFO_AMPLITUDE: {
+            self->widget->lfo->value( value );
+            self->widget->lfoAmp->value( value );
+            } break;
+      case LFO_FREQUENCY: {
+            self->widget->lfo->modulation( value );
+            self->widget->lfoSpeed->value( value );
+            } break;
+      
+      case OSC_1_VOLUME: {
+            self->widget->wave1->Y( value );
+            } break;
+      case OSC_2_VOLUME: {
+            self->widget->wave2->Y( value );
+            } break;
+      case OSC_3_VOLUME: {
+            self->widget->subbass->Y( value );
+            } break;
+      
+      
+      case WAVETABLE_1_POS: {
+            self->widget->wave1->X( value );
+            } break;
+      case WAVETABLE_2_POS: {
+            self->widget->wave2->X( value );
+            } break;
     }
   }
   

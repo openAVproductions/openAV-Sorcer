@@ -22,6 +22,7 @@
 #define SORCER_AVTK
 
 #include "avtk/avtk_lfo.h"
+#include "avtk/avtk_adsr.h"
 #include "avtk/avtk_dial.h"
 #include "avtk/avtk_image.h"
 #include "avtk/avtk_oscillator.h"
