@@ -118,13 +118,13 @@ finalSignal = filterOutputSignal;
 
 // COMPRESSION
 compressorEnable = hslider("compressorEnable", 0, 0, 1, 0.001);
-compRatio = hslider("compRatio"    , 0, 0, 1, 0.001);
+compMakeup = hslider("compMakeup"    , 0, 0, 1, 0.001);
 compThreshold = hslider("compThreshold", 0, 0, 1, 0.001);
 compAttack = hslider("compAttack", 0, 0, 1, 0.001);
 compRelease = hslider("compRelease", 0, 0, 1, 0.001);
 
-compress(x) = vgroup( "compress",  x  * compressorEnable : compressor_mono( (compRatio+1)*20, ((compThreshold-1)*20) ,
-              (compAttack+0.01)*0.5, (compRelease+0.01)*0.5) , x * (1-compressorEnable) : + ) ;
+compress(x) = vgroup( "compress",  x  * compressorEnable : compressor_mono( 10, ((compThreshold-1)*20) ,
+              (compAttack+0.01)*0.5, (compRelease+0.01)*0.5) , x * (1-compressorEnable) : + : * (compMakeup+1) ) ;
 
 //  Metering
 vmeter(x) = attach(x, envelop(x) : vbargraph("output_db", -96, 10));

@@ -152,6 +152,23 @@ static void port_event(LV2UI_Handle ui,
             self->widget->volume->amplitude( tmp, tmp );
             } break;
       
+      case COMPRESSOR_ATTACK: {
+            self->widget->compAttack->value( value );
+            } break;
+      case COMPRESSOR_RELEASE: {
+            self->widget->compRelease->value( value );
+            } break;
+      case COMPRESSOR_MAKEUP: {
+            self->widget->compMakeup->value( value );
+            } break;
+      case COMPRESSOR_THRESHOLD: {
+            self->widget->compThres->value( value );
+            } break;
+      case COMPRESSOR_ENABLE: {
+            
+            self->widget->comp->set_active( value > 0.5 ? true : false );
+            } break;
+      
       case FILTER_CUTOFF: {
             self->widget->filter->value( value );
             self->widget->filterCutoff->value( value );

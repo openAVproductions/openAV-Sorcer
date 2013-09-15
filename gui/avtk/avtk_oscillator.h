@@ -146,7 +146,7 @@ class Oscillator : public Fl_Slider
         cairo_set_source_rgba( cr, 126 / 255.f, 126 / 255.f , 126 / 255.f , 0.8 );
         cairo_stroke( cr );
         
-        if ( !active )
+        if ( false ) // !active )
         {
           // big grey X
           cairo_set_line_width(cr, 20.0);

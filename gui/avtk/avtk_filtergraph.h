@@ -179,7 +179,7 @@ class Filtergraph : public Fl_Slider
         cairo_set_line_width(cr, 1.0);
         cairo_stroke( cr );
         
-        if ( !active )
+        if ( false ) // !active )
         {
           // big grey X
           cairo_set_line_width(cr, 20.0);

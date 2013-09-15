@@ -136,7 +136,7 @@ class ADSR : public Fl_Slider
         
         
         
-        if ( !active )
+        if ( false ) // !active )
         {
           // big grey X
           cairo_set_line_width(cr, 20.0);
