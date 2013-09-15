@@ -7,10 +7,9 @@ This is the repository of a wavetable synthesizer called Sorcer.
 
 
 == INSTALL
-To install, just run the script "compileInstall.sh". Printouts will keep
-you informed of the progress.
 
-$  ./compileInstall.sh
+$  make
+$  make install
 
 
 == RUNNING
@@ -36,9 +35,8 @@ https://github.com/harryhaaren/openAV-Sorcer/issues
 == DETAILS
 I've removed the dependency on FAUST to install: the generated CPP file is
 included in the repo now. To tweak the FAUST code, just edit faust/main.dsp.
-Uncomment the commented section in ./compileInstall.sh to re-generate the CPP
-code from faust. The LV2-FAUST libraries are necessary, please ensure they're
-installed.
+Running "make faustGenerateCpp" to re-generate the CPP code from faust.
+The LV2-FAUST libraries are necessary, please ensure they're installed.
 
 
 == CONTACT

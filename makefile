@@ -9,42 +9,38 @@ UISOURCES=gui/sorcer_widget.cxx gui/sorcer_ui.cxx
 UIOBJECTS=$(UISOURCES:.cpp=.o)
 UI=sorcer.lv2/sorcer_ui.so
 
-#SASOURCES=gui/sorcer.cxx gui/ui_helpers.cxx gui/ui_test.cxx
-#SAOBJECTS=$(SASOURCES:.cpp=.o)
-#SA=uiTest
 
-#DSPSOURCES=dsp/sorcer.c
-#DSPOBJECTS=$(DSPSOURCES:.cpp=.o)
-#DSP=sorcer.lv2/sorcer.so
 
-all: folder ui
+all: folder ui dsp
 
-#genUI:
-#	cd gui; ntk-fluid -c sorcer.fl
+# *NOT* needed for building in general: the generated main.cpp file is included
+# in the repository for convinience and to remove the dependency on FAUST.
+faustGenerateCpp:
+	cd faust/ && faust -cn sorcer -a lv2synth.cpp main.dsp -o main.cpp
 
 folder:
 	mkdir -p sorcer.lv2/
-	
 
 install:
-	#cp dsp/sorcer.ttl sorcer.lv2/
-	cp -r sorcer.lv2 ~/.lv2/
-	#cp -r presets/*.lv2 ~/.lv2/
+	#cp -r sorcer.lv2 ~/.lv2/
+	install -d $(HOME)/.lv2/sorcer.lv2
+	install -t $(HOME)/.lv2/sorcer.lv2 ./sorcer.lv2/*
+
 
 ui: $(UISOURCES) $(UI)
-#dsp: $(DSPSOURCES) $(DSP)
 
-# for testing only: builds a standalone NTK app
-#sa: $(SASOURCES) $(SA)
-
-#$(DSP): $(DSPOBJECTS)
-#	$(CC) $(DSPOBJECTS) $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@
+# use manual command to build
+dsp:
+	cd faust/ && g++ -fPIC -shared -ffast-math -O3 -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"'   main.cpp -o sorcer.so
+	cd faust/ && g++ -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"' main.cpp
+	cd faust/ && ./a.out > sorcer.ttl
+	cd faust/ && patch -u sorcer.ttl addUiRdf.patch
+	cp faust/sorcer.so 	sorcer.lv2/
+	cp faust/sorcer.ttl sorcer.lv2/
 
 $(UI): $(UIOBJECTS)
 	$(CC) $(UIOBJECTS)  $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@
 
-#$(SA): $(SAOBJECTS)
-#	$(CC) $(SAOBJECTS) $(INCLUDES) $(LDFLAGS) -o $@
 
 .cpp.o:
 	$(CC) $< -g $(CFLAGS) -c -o $@

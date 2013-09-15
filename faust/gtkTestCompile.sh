@@ -1,6 +1,6 @@
 #! /bin/bash
 
-cd faust
+# for testing purposes only
 
 faust -cn source -a jack-gtk.cpp main.dsp -o main.cpp
 
