@@ -1705,7 +1705,7 @@ activate(LV2_Handle instance)
   for (int i = 0, j = 0; i < plugin->ui[0]->nelems; i++) {
     int p = plugin->ui[0]->elems[i].port;
     float val = plugin->ui[0]->elems[i].init;
-    plugin->portvals[p] = val;
+    //plugin->portvals[p] = val;
   }
   plugin->active = true;
 }
