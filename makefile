@@ -31,7 +31,7 @@ ui: $(UISOURCES) $(UI)
 
 # use manual command to build
 dsp:
-	cd faust/ && g++ -fPIC -shared -ffast-math -O3 -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"'   main.cpp -o sorcer.so
+	cd faust/ && g++ -fPIC -shared -ffast-math -O3 -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"'  -Wl,-z,nodelete main.cpp -o sorcer.so
 	cd faust/ && g++ -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"' main.cpp
 	cd faust/ && ./a.out > sorcer.ttl
 	cd faust/ && patch -u sorcer.ttl addUiRdf.patch
