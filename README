@@ -8,6 +8,9 @@ This is the repository of a wavetable synthesizer called Sorcer.
 
 == INSTALL
 
+The Sorcer UI depends on NTK, which may not yet be packaged in your distro:
+To acquire, use: git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
+
 $  make
 $  make install
 
