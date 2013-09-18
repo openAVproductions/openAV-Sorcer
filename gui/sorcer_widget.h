@@ -56,6 +56,7 @@ private:
   void cb_lfo_i(Avtk::LFO*, void*);
   static void cb_lfo(Avtk::LFO*, void*);
 public:
+  Fl_Box *lfoBox;
   Avtk::Dial *lfoSpeed;
 private:
   void cb_lfoSpeed_i(Avtk::Dial*, void*);
@@ -81,6 +82,7 @@ private:
   void cb_filter_i(Avtk::Filtergraph*, void*);
   static void cb_filter(Avtk::Filtergraph*, void*);
 public:
+  Fl_Box *filterBox;
   Avtk::Dial *filterCutoff;
 private:
   void cb_filterCutoff_i(Avtk::Dial*, void*);
@@ -96,6 +98,7 @@ private:
   void cb_adsr_i(Avtk::ADSR*, void*);
   static void cb_adsr(Avtk::ADSR*, void*);
 public:
+  Fl_Box *adsrBox;
   Avtk::Dial *sustain;
 private:
   void cb_sustain_i(Avtk::Dial*, void*);
@@ -126,6 +129,7 @@ private:
   void cb_comp_i(Avtk::Compressor*, void*);
   static void cb_comp(Avtk::Compressor*, void*);
 public:
+  Fl_Box *compBox;
   Avtk::Dial *compThres;
 private:
   void cb_compThres_i(Avtk::Dial*, void*);

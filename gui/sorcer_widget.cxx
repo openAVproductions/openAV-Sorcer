@@ -445,10 +445,11 @@ SorcerUI::SorcerUI() {
       lfo->align(Fl_Align(FL_ALIGN_BOTTOM));
       lfo->when(FL_WHEN_CHANGED);
     } // Avtk::LFO* lfo
-    { Fl_Box* o = new Fl_Box(182, 157, 152, 75);
-      o->box(FL_DOWN_BOX);
-      o->labeltype(FL_NO_LABEL);
-    } // Fl_Box* o
+    { lfoBox = new Fl_Box(182, 157, 152, 75);
+      lfoBox->box(FL_DOWN_BOX);
+      lfoBox->labeltype(FL_NO_LABEL);
+      lfoBox->color( fl_rgb_color( 28,28,28 ));
+    } // Fl_Box* lfoBox
     { lfoSpeed = new Avtk::Dial(258, 165, 30, 30, "Speed");
       lfoSpeed->box(FL_NO_BOX);
       lfoSpeed->color((Fl_Color)90);
@@ -509,10 +510,11 @@ SorcerUI::SorcerUI() {
       filter->align(Fl_Align(FL_ALIGN_BOTTOM));
       filter->when(FL_WHEN_CHANGED);
     } // Avtk::Filtergraph* filter
-    { Fl_Box* o = new Fl_Box(184, 364, 148, 70);
-      o->box(FL_DOWN_BOX);
-      o->labeltype(FL_NO_LABEL);
-    } // Fl_Box* o
+    { filterBox = new Fl_Box(184, 364, 148, 70);
+      filterBox->box(FL_DOWN_BOX);
+      filterBox->labeltype(FL_NO_LABEL);
+      filterBox->color( fl_rgb_color( 28,28,28 ));
+    } // Fl_Box* filterBox
     { filterCutoff = new Avtk::Dial(200, 375, 50, 45, "Cutoff");
       filterCutoff->box(FL_NO_BOX);
       filterCutoff->color((Fl_Color)90);
@@ -549,10 +551,11 @@ SorcerUI::SorcerUI() {
       adsr->align(Fl_Align(FL_ALIGN_BOTTOM));
       adsr->when(FL_WHEN_CHANGED);
     } // Avtk::ADSR* adsr
-    { Fl_Box* o = new Fl_Box(353, 160, 148, 70);
-      o->box(FL_DOWN_BOX);
-      o->labeltype(FL_NO_LABEL);
-    } // Fl_Box* o
+    { adsrBox = new Fl_Box(353, 160, 148, 70);
+      adsrBox->box(FL_DOWN_BOX);
+      adsrBox->labeltype(FL_NO_LABEL);
+      adsrBox->color( fl_rgb_color( 28,28,28 ));
+    } // Fl_Box* adsrBox
     { sustain = new Avtk::Dial(427, 165, 30, 30, "S");
       sustain->box(FL_NO_BOX);
       sustain->color((Fl_Color)90);
@@ -626,10 +629,11 @@ SorcerUI::SorcerUI() {
       comp->when(FL_WHEN_RELEASE);
       comp->ratio(0.6);
     } // Avtk::Compressor* comp
-    { Fl_Box* o = new Fl_Box(351, 364, 98, 72);
-      o->box(FL_DOWN_BOX);
-      o->labeltype(FL_NO_LABEL);
-    } // Fl_Box* o
+    { compBox = new Fl_Box(351, 364, 98, 72);
+      compBox->box(FL_DOWN_BOX);
+      compBox->labeltype(FL_NO_LABEL);
+      compBox->color( fl_rgb_color( 28,28,28 ));
+    } // Fl_Box* compBox
     { compThres = new Avtk::Dial(404, 369, 30, 30, "Thres");
       compThres->box(FL_NO_BOX);
       compThres->color((Fl_Color)90);
