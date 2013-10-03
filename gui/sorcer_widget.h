@@ -5,12 +5,12 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
-#include <iostream>
 using namespace std;
 #include "ports.h"
 #include "avtk.h"
 #include <stdio.h>
 #include "header.c"
+#include <iostream>
 #include <FL/Fl_Box.H>
 #include <cmath>
 

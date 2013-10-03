@@ -11,10 +11,10 @@ class SorcerUI {open
   }
   Function {SorcerUI()} {open
   } {
-    Fl_Window window {open
+    Fl_Window window {open selected
       xywh {495 265 515 450} type Double color 48
       code0 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
-      code1 {\#include <iostream>}
+      code1 {window->color( fl_rgb_color( 15,15,15 ) );}
       code2 {using namespace std;}
       code3 {\#include "ports.h"} visible
     } {
@@ -36,6 +36,7 @@ class SorcerUI {open
 //writePort(CUTOFF_FREQ, cutoff);
 //writePort(CUTOFF_GAIN, g);}
         xywh {10 40 158 126} box UP_BOX labeltype NO_LABEL labelcolor 20
+        code0 {\#include <iostream>}
         class {Avtk::Background}
       }
       Fl_Box {} {
@@ -142,7 +143,7 @@ writePort(OSC_3_VOLUME, tmp );}
         xywh {184 64 148 90} box UP_BOX color 179 labeltype NO_LABEL
         class {Avtk::LFO}
       }
-      Fl_Box lfoBox {selected
+      Fl_Box lfoBox {
         xywh {182 157 152 75} box DOWN_BOX labeltype NO_LABEL
         code0 {lfoBox->color( fl_rgb_color( 28,28,28 ));}
       }

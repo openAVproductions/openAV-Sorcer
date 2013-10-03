@@ -25,6 +25,7 @@ install:
 	#cp -r sorcer.lv2 ~/.lv2/
 	install -d $(HOME)/.lv2/sorcer.lv2
 	install -t $(HOME)/.lv2/sorcer.lv2 ./sorcer.lv2/*
+	cp -r presets/*.lv2 ~/.lv2/
 
 
 ui: $(UISOURCES) $(UI)

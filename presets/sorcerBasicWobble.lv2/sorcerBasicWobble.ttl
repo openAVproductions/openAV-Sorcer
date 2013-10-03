@@ -1,0 +1,79 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<>
+	a pset:Preset ;
+	lv2:appliesTo <http://www.openavproductions.com/sorcer> ;
+	rdfs:label "sorcerBasicWobble" ;
+	lv2:port [
+		lv2:symbol "attack" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "compAttack" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "compMakeup" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "compRelease" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "compThreshold" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "compressorEnable" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "decay" ;
+		pset:value 0.30000001
+	] , [
+		lv2:symbol "filter1cutoff" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "filter1lfo1range" ;
+		pset:value 0.49333334
+	] , [
+		lv2:symbol "lfo1_wavetable1pos" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "lfo1_wavetable2pos" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "lfo1amp" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "lfo1freq" ;
+		pset:value 0.54666668
+	] , [
+		lv2:symbol "nvoices" ;
+		pset:value 8.0
+	] , [
+		lv2:symbol "osc1vol" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "osc2vol" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "osc3vol" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "release" ;
+		pset:value 0.2
+	] , [
+		lv2:symbol "sustain" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "vol" ;
+		pset:value 0.63333333
+	] , [
+		lv2:symbol "wavetable1pos" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "wavetable2pos" ;
+		pset:value 1.0
+	] .

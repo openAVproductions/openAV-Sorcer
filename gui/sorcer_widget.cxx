@@ -682,6 +682,7 @@ SorcerUI::SorcerUI() {
       compRelease->align(Fl_Align(FL_ALIGN_CENTER));
       compRelease->when(FL_WHEN_CHANGED);
     } // Avtk::Dial* compRelease
+    window->color( fl_rgb_color( 15,15,15 ) );
     window->end();
   } // Fl_Double_Window* window
 }
