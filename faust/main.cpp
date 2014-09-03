@@ -2,18 +2,21 @@
 // name: "Sorcer"
 // author: "OpenAV Productions"
 //
-// Code generated with Faust 0.9.46 (http://faust.grame.fr)
+// Code generated with Faust 0.9.67 (http://faust.grame.fr)
 //-----------------------------------------------------
 /* link with : "" */
 #include "helpers.h"
 #include "wavetableReader.h"
 #include <math.h>
+#ifndef FAUSTPOWER
+#define FAUSTPOWER
 #include <cmath>
-template <int N> inline float faustpower(float x) 		{ return powf(x,N); } 
-template <int N> inline double faustpower(double x) 	{ return pow(x,N); }
-template <int N> inline int faustpower(int x) 			{ return faustpower<N/2>(x) * faustpower<N-N/2>(x); } 
-template <> 	 inline int faustpower<0>(int x) 		{ return 1; }
-template <> 	 inline int faustpower<1>(int x) 		{ return x; }
+template <int N> inline float faustpower(float x)          { return powf(x,N); } 
+template <int N> inline double faustpower(double x)        { return pow(x,N); }
+template <int N> inline int faustpower(int x)              { return faustpower<N/2>(x) * faustpower<N-N/2>(x); } 
+template <> 	 inline int faustpower<0>(int x)            { return 1; }
+template <> 	 inline int faustpower<1>(int x)            { return x; }
+#endif
 /************************************************************************
  ************************************************************************
     FAUST Architecture File
@@ -397,27 +400,29 @@ class dsp {
 
 typedef long double quad;
 
-#define FAUSTCLASS sorcer
+#ifndef FAUSTCLASS 
+#define FAUSTCLASS mydsp
+#endif
 
-class sorcer : public dsp {
+class mydsp : public dsp {
   private:
 	class SIG0 {
 	  private:
 		int 	fSamplingFreq;
-		int 	iRec1[2];
+		int 	iRec2[2];
 	  public:
 		int getNumInputs() 	{ return 0; }
 		int getNumOutputs() 	{ return 1; }
 		void init(int samplingFreq) {
 			fSamplingFreq = samplingFreq;
-			for (int i=0; i<2; i++) iRec1[i] = 0;
+			for (int i=0; i<2; i++) iRec2[i] = 0;
 		}
 		void fill (int count, float output[]) {
 			for (int i=0; i<count; i++) {
-				iRec1[0] = (1 + iRec1[1]);
-				output[i] = sinf((9.587379924285257e-05f * float((iRec1[0] - 1))));
+				iRec2[0] = (1 + iRec2[1]);
+				output[i] = sinf((9.587379924285257e-05f * float((iRec2[0] - 1))));
 				// post processing
-				iRec1[1] = iRec1[0];
+				iRec2[1] = iRec2[0];
 			}
 		}
 	};
@@ -425,47 +430,47 @@ class sorcer : public dsp {
 
 	int 	iConst0;
 	float 	fConst1;
-	static float 	ftbl0[65536];
-	FAUSTFLOAT 	fslider0;
 	float 	fConst2;
+	FAUSTFLOAT 	fslider0;
 	float 	fConst3;
-	float 	fRec2[2];
+	float 	fRec1[2];
+	static float 	ftbl0[65536];
 	FAUSTFLOAT 	fslider1;
-	FAUSTFLOAT 	fslider2;
 	float 	fConst4;
-	FAUSTFLOAT 	fslider3;
 	float 	fConst5;
 	float 	fRec3[2];
+	FAUSTFLOAT 	fslider2;
+	FAUSTFLOAT 	fslider3;
 	float 	fConst6;
 	FAUSTFLOAT 	fslider4;
-	float 	fConst7;
-	FAUSTFLOAT 	fslider5;
-	float 	fConst8;
 	FAUSTFLOAT 	fentry0;
-	float 	fConst9;
+	float 	fConst7;
 	float 	fRec9[2];
+	FAUSTFLOAT 	fslider5;
 	FAUSTFLOAT 	fslider6;
 	FAUSTFLOAT 	fslider7;
 	FAUSTFLOAT 	fslider8;
 	FAUSTFLOAT 	fslider9;
 	FAUSTFLOAT 	fslider10;
 	FAUSTFLOAT 	fslider11;
-	FAUSTFLOAT 	fslider12;
 	float 	fRec8[3];
 	float 	fRec7[3];
 	FAUSTFLOAT 	fbutton0;
 	int 	iRec10[2];
+	FAUSTFLOAT 	fslider12;
 	FAUSTFLOAT 	fslider13;
 	FAUSTFLOAT 	fslider14;
 	FAUSTFLOAT 	fslider15;
-	FAUSTFLOAT 	fslider16;
 	float 	fRec11[2];
+	FAUSTFLOAT 	fslider16;
 	FAUSTFLOAT 	fslider17;
-	FAUSTFLOAT 	fslider18;
 	FAUSTFLOAT 	fentry1;
-	FAUSTFLOAT 	fslider19;
+	FAUSTFLOAT 	fslider18;
+	float 	fConst8;
 	float 	fRec6[2];
+	FAUSTFLOAT 	fslider19;
 	float 	fRec5[2];
+	float 	fConst9;
 	float 	fRec4[2];
 	FAUSTFLOAT 	fslider20;
 	float 	fRec0[2];
@@ -479,18 +484,22 @@ class sorcer : public dsp {
 		m->declare("math.lib/author", "GRAME");
 		m->declare("math.lib/copyright", "GRAME");
 		m->declare("math.lib/version", "1.0");
-		m->declare("math.lib/license", "LGPL");
+		m->declare("math.lib/license", "LGPL with exception");
 		m->declare("music.lib/name", "Music Library");
 		m->declare("music.lib/author", "GRAME");
 		m->declare("music.lib/copyright", "GRAME");
 		m->declare("music.lib/version", "1.0");
-		m->declare("music.lib/license", "LGPL");
+		m->declare("music.lib/license", "LGPL with exception");
 		m->declare("effect.lib/name", "Faust Audio Effect Library");
 		m->declare("effect.lib/author", "Julius O. Smith (jos at ccrma.stanford.edu)");
 		m->declare("effect.lib/copyright", "Julius O. Smith III");
 		m->declare("effect.lib/version", "1.33");
 		m->declare("effect.lib/license", "STK-4.3");
-		m->declare("effect.lib/reference", "https://ccrma.stanford.edu/realsimple/faust_strings/");
+		m->declare("effect.lib/exciter_name", "Harmonic Exciter");
+		m->declare("effect.lib/exciter_author", "Priyanka Shekar (pshekar@ccrma.stanford.edu)");
+		m->declare("effect.lib/exciter_copyright", "Copyright (c) 2013 Priyanka Shekar");
+		m->declare("effect.lib/exciter_version", "1.0");
+		m->declare("effect.lib/exciter_license", "MIT License (MIT)");
 		m->declare("filter.lib/name", "Faust Filter Library");
 		m->declare("filter.lib/author", "Julius O. Smith (jos at ccrma.stanford.edu)");
 		m->declare("filter.lib/copyright", "Julius O. Smith III");
@@ -500,7 +509,7 @@ class sorcer : public dsp {
 		m->declare("oscillator.lib/name", "Faust Oscillator Library");
 		m->declare("oscillator.lib/author", "Julius O. Smith (jos at ccrma.stanford.edu)");
 		m->declare("oscillator.lib/copyright", "Julius O. Smith III");
-		m->declare("oscillator.lib/version", "1.10");
+		m->declare("oscillator.lib/version", "1.11");
 		m->declare("oscillator.lib/license", "STK-4.3");
 	}
 
@@ -514,47 +523,47 @@ class sorcer : public dsp {
 	virtual void instanceInit(int samplingFreq) {
 		fSamplingFreq = samplingFreq;
 		iConst0 = min(192000, max(1, fSamplingFreq));
-		fConst1 = (96.0f / iConst0);
-		fslider0 = 0.3f;
-		fConst2 = float(iConst0);
-		fConst3 = (10 / fConst2);
-		for (int i=0; i<2; i++) fRec2[i] = 0;
-		fslider1 = 0.0f;
-		fslider2 = 0.1f;
-		fConst4 = expf((0 - (16.666666666666668f / iConst0)));
-		fslider3 = 1.0f;
-		fConst5 = (1.0f - fConst4);
+		fConst1 = (96.0f / float(iConst0));
+		fConst2 = expf((0 - (16.666666666666668f / float(iConst0))));
+		fslider0 = 1.0f;
+		fConst3 = (1.0f - fConst2);
+		for (int i=0; i<2; i++) fRec1[i] = 0;
+		fslider1 = 0.3f;
+		fConst4 = float(iConst0);
+		fConst5 = (float(10) / fConst4);
 		for (int i=0; i<2; i++) fRec3[i] = 0;
-		fConst6 = (3.141592653589793f / iConst0);
+		fslider2 = 0.0f;
+		fslider3 = 0.1f;
+		fConst6 = (3.141592653589793f / float(iConst0));
 		fslider4 = 0.0f;
-		fConst7 = (4.0f / iConst0);
-		fslider5 = 0.0f;
-		fConst8 = (2.0f / iConst0);
 		fentry0 = 2e+01f;
-		fConst9 = (0.5f / fConst2);
+		fConst7 = (0.5f / fConst4);
 		for (int i=0; i<2; i++) fRec9[i] = 0;
+		fslider5 = 0.3f;
 		fslider6 = 0.0f;
 		fslider7 = 0.0f;
 		fslider8 = 0.3f;
-		fslider9 = 0.3f;
+		fslider9 = 0.0f;
 		fslider10 = 0.0f;
-		fslider11 = 0.0f;
-		fslider12 = 0.3f;
+		fslider11 = 0.3f;
 		for (int i=0; i<3; i++) fRec8[i] = 0;
 		for (int i=0; i<3; i++) fRec7[i] = 0;
 		fbutton0 = 0.0;
 		for (int i=0; i<2; i++) iRec10[i] = 0;
-		fslider13 = 1.0f;
-		fslider14 = 0.2f;
-		fslider15 = 0.3f;
-		fslider16 = 0.01f;
+		fslider12 = 1.0f;
+		fslider13 = 0.2f;
+		fslider14 = 0.3f;
+		fslider15 = 0.01f;
 		for (int i=0; i<2; i++) fRec11[i] = 0;
-		fslider17 = 0.0f;
-		fslider18 = 0.3f;
+		fslider16 = 0.0f;
+		fslider17 = 0.3f;
 		fentry1 = 0.3f;
-		fslider19 = 0.0f;
+		fslider18 = 0.0f;
+		fConst8 = (2.0f / float(iConst0));
 		for (int i=0; i<2; i++) fRec6[i] = 0;
+		fslider19 = 0.0f;
 		for (int i=0; i<2; i++) fRec5[i] = 0;
+		fConst9 = (4.0f / float(iConst0));
 		for (int i=0; i<2; i++) fRec4[i] = 0;
 		fslider20 = 0.0f;
 		for (int i=0; i<2; i++) fRec0[i] = 0;
@@ -566,105 +575,105 @@ class sorcer : public dsp {
 	virtual void buildUserInterface(UI* interface) {
 		interface->openVerticalBox("main");
 		interface->openVerticalBox("1-adsr");
-		interface->addHorizontalSlider("attack", &fslider16, 0.01f, 0.01f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("decay", &fslider15, 0.3f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("release", &fslider14, 0.2f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("sustain", &fslider13, 1.0f, 0.0f, 1.0f, 0.01f);
+		interface->addHorizontalSlider("attack", &fslider15, 0.01f, 0.01f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("decay", &fslider14, 0.3f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("release", &fslider13, 0.2f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("sustain", &fslider12, 1.0f, 0.0f, 1.0f, 0.01f);
 		interface->closeBox();
 		interface->openVerticalBox("2-master");
-		interface->addHorizontalSlider("vol", &fslider18, 0.3f, 0.0f, 1.0f, 0.01f);
+		interface->addHorizontalSlider("vol", &fslider17, 0.3f, 0.0f, 1.0f, 0.01f);
 		interface->closeBox();
 		interface->openVerticalBox("compress");
-		interface->addHorizontalSlider("compAttack", &fslider4, 0.0f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("compAttack", &fslider19, 0.0f, 0.0f, 1.0f, 0.001f);
 		interface->addHorizontalSlider("compMakeup", &fslider20, 0.0f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("compRelease", &fslider19, 0.0f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("compThreshold", &fslider5, 0.0f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("compressorEnable", &fslider17, 0.0f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("compRelease", &fslider18, 0.0f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("compThreshold", &fslider4, 0.0f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("compressorEnable", &fslider16, 0.0f, 0.0f, 1.0f, 0.001f);
 		interface->closeBox();
-		interface->addHorizontalSlider("filter1cutoff", &fslider3, 1.0f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("filter1lfo1range", &fslider1, 0.0f, 0.0f, 1.0f, 0.0001f);
+		interface->addHorizontalSlider("filter1cutoff", &fslider0, 1.0f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("filter1lfo1range", &fslider2, 0.0f, 0.0f, 1.0f, 0.0001f);
 		interface->addNumEntry("freq", &fentry0, 2e+01f, 2e+01f, 2e+04f, 1.0f);
 		interface->addNumEntry("gain", &fentry1, 0.3f, 0.0f, 1.0f, 0.01f);
 		interface->addButton("gate", &fbutton0);
-		interface->addHorizontalSlider("lfo1_wavetable1pos", &fslider10, 0.0f, 0.0f, 1.0f, 0.01f);
+		interface->addHorizontalSlider("lfo1_wavetable1pos", &fslider9, 0.0f, 0.0f, 1.0f, 0.01f);
 		interface->addHorizontalSlider("lfo1_wavetable2pos", &fslider6, 0.0f, 0.0f, 1.0f, 0.01f);
-		interface->addHorizontalSlider("lfo1amp", &fslider2, 0.1f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("lfo1freq", &fslider0, 0.3f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("osc1vol", &fslider12, 0.3f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("lfo1amp", &fslider3, 0.1f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("lfo1freq", &fslider1, 0.3f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("osc1vol", &fslider11, 0.3f, 0.0f, 1.0f, 0.001f);
 		interface->addHorizontalSlider("osc2vol", &fslider8, 0.3f, 0.0f, 1.0f, 0.001f);
-		interface->addHorizontalSlider("osc3vol", &fslider9, 0.3f, 0.0f, 1.0f, 0.001f);
+		interface->addHorizontalSlider("osc3vol", &fslider5, 0.3f, 0.0f, 1.0f, 0.001f);
 		interface->addVerticalBargraph("output_db", &fbargraph0, -96.0f, 1e+01f);
-		interface->addHorizontalSlider("wavetable1pos", &fslider11, 0.0f, 0.0f, 1.0f, 0.01f);
+		interface->addHorizontalSlider("wavetable1pos", &fslider10, 0.0f, 0.0f, 1.0f, 0.01f);
 		interface->addHorizontalSlider("wavetable2pos", &fslider7, 0.0f, 0.0f, 1.0f, 0.01f);
 		interface->closeBox();
 	}
 	virtual void compute (int count, FAUSTFLOAT** input, FAUSTFLOAT** output) {
-		float 	fSlow0 = (fConst3 * fslider0);
-		float 	fSlow1 = (fslider2 - 0.01f);
-		float 	fSlow2 = (fSlow1 * clip(0, 6000, (faustpower<4>((1 + (4 * fslider1))) - 1)));
-		float 	fSlow3 = (fConst5 * fslider3);
-		float 	fSlow4 = (0.01f + fslider4);
-		float 	fSlow5 = expf((0 - (fConst7 / fSlow4)));
-		float 	fSlow6 = (20 * (fslider5 - 1));
-		float 	fSlow7 = expf((0 - (fConst8 / fSlow4)));
-		float 	fSlow8 = (fConst9 * fentry0);
-		float 	fSlow9 = (fSlow1 * fslider6);
-		float 	fSlow10 = fslider7;
-		float 	fSlow11 = fslider8;
-		float 	fSlow12 = fslider9;
-		float 	fSlow13 = (fSlow1 * fslider10);
-		float 	fSlow14 = fslider11;
-		float 	fSlow15 = fslider12;
-		float 	fSlow16 = fbutton0;
-		int 	iSlow17 = (fSlow16 > 0);
-		int 	iSlow18 = (fSlow16 <= 0);
-		float 	fSlow19 = fslider13;
-		float 	fSlow20 = (0.1f + fSlow19);
-		float 	fSlow21 = (0.1f + (fSlow19 + (0.001f * (fSlow20 == 0.0f))));
-		float 	fSlow22 = (0.1f + fslider14);
-		float 	fSlow23 = (1 - (1.0f / powf((1e+03f * fSlow21),(1.0f / ((fSlow22 == 0.0f) + (iConst0 * fSlow22))))));
-		float 	fSlow24 = (0.2f + (0.8f * fslider15));
-		float 	fSlow25 = (1 - powf(fSlow21,(1.0f / ((fSlow24 == 0.0f) + (iConst0 * fSlow24)))));
-		float 	fSlow26 = (0.01f + fslider16);
-		float 	fSlow27 = (1.0f / ((fSlow26 == 0.0f) + (iConst0 * fSlow26)));
-		float 	fSlow28 = fslider17;
-		float 	fSlow29 = (fentry1 * fslider18);
-		float 	fSlow30 = (fSlow29 * fSlow28);
-		float 	fSlow31 = expf((0 - (fConst8 / (0.01f + fslider19))));
+		float 	fSlow0 = (fConst3 * float(fslider0));
+		float 	fSlow1 = (fConst5 * float(fslider1));
+		float 	fSlow2 = (float(fslider3) - 0.01f);
+		float 	fSlow3 = (fSlow2 * clip(0, 6000, (faustpower<4>((1 + (4 * float(fslider2)))) - 1)));
+		float 	fSlow4 = (20 * (float(fslider4) - 1));
+		float 	fSlow5 = (fConst7 * float(fentry0));
+		float 	fSlow6 = float(fslider5);
+		float 	fSlow7 = (fSlow2 * float(fslider6));
+		float 	fSlow8 = float(fslider7);
+		float 	fSlow9 = float(fslider8);
+		float 	fSlow10 = (fSlow2 * float(fslider9));
+		float 	fSlow11 = float(fslider10);
+		float 	fSlow12 = float(fslider11);
+		float 	fSlow13 = float(fbutton0);
+		int 	iSlow14 = (fSlow13 > 0);
+		int 	iSlow15 = (fSlow13 <= 0);
+		float 	fSlow16 = float(fslider12);
+		float 	fSlow17 = (0.1f + fSlow16);
+		float 	fSlow18 = (0.1f + (fSlow16 + (0.001f * (fSlow17 == 0.0f))));
+		float 	fSlow19 = (0.1f + float(fslider13));
+		float 	fSlow20 = (1 - (1.0f / powf((1e+03f * fSlow18),(1.0f / ((iConst0 * fSlow19) + (fSlow19 == 0.0f))))));
+		float 	fSlow21 = (0.2f + (0.8f * float(fslider14)));
+		float 	fSlow22 = (1 - powf(fSlow18,(1.0f / ((iConst0 * fSlow21) + (fSlow21 == 0.0f)))));
+		float 	fSlow23 = (0.01f + float(fslider15));
+		float 	fSlow24 = (1.0f / ((fSlow23 == 0.0f) + (iConst0 * fSlow23)));
+		float 	fSlow25 = float(fslider16);
+		float 	fSlow26 = (float(fentry1) * float(fslider17));
+		float 	fSlow27 = (fSlow26 * fSlow25);
+		float 	fSlow28 = expf((0 - (fConst8 / (0.01f + float(fslider18)))));
+		float 	fSlow29 = (1.0f - fSlow28);
+		float 	fSlow30 = (0.01f + float(fslider19));
+		float 	fSlow31 = expf((0 - (fConst8 / fSlow30)));
 		float 	fSlow32 = (1.0f - fSlow31);
-		float 	fSlow33 = (1.0f - fSlow7);
-		float 	fSlow34 = (1.0f - fSlow5);
-		float 	fSlow35 = (1 - fSlow28);
-		float 	fSlow36 = (fSlow29 * (1 + fslider20));
+		float 	fSlow33 = expf((0 - (fConst9 / fSlow30)));
+		float 	fSlow34 = (1.0f - fSlow33);
+		float 	fSlow35 = (1 - fSlow25);
+		float 	fSlow36 = (fSlow26 * (1 + float(fslider20)));
 		FAUSTFLOAT* output0 = output[0];
 		for (int i=0; i<count; i++) {
-			float fTemp0 = (fSlow0 + fRec2[1]);
-			fRec2[0] = (fTemp0 - floorf(fTemp0));
-			float fTemp1 = ftbl0[int((65536.0f * fRec2[0]))];
-			fRec3[0] = (fSlow3 + (fConst4 * fRec3[1]));
-			float fTemp2 = tanf((fConst6 * clip(80, 16000, (clip(80, 18000, (18000 * faustpower<4>((0.3f + (0.5f * fRec3[0]))))) + (fSlow2 * fTemp1)))));
+			fRec1[0] = (fSlow0 + (fConst2 * fRec1[1]));
+			float fTemp0 = (fSlow1 + fRec3[1]);
+			fRec3[0] = (fTemp0 - floorf(fTemp0));
+			float fTemp1 = ftbl0[int((65536.0f * fRec3[0]))];
+			float fTemp2 = tanf((fConst6 * clip(80, 16000, ((fSlow3 * fTemp1) + clip(80, 18000, (18000 * faustpower<4>((0.3f + (0.5f * fRec1[0])))))))));
 			float fTemp3 = (1.0f / fTemp2);
 			float fTemp4 = (1 + ((0.7653668647301795f + fTemp3) / fTemp2));
 			float fTemp5 = (1 - (1.0f / faustpower<2>(fTemp2)));
 			float fTemp6 = (1 + ((1.8477590650225735f + fTemp3) / fTemp2));
-			float fTemp7 = (fSlow8 + fRec9[1]);
+			float fTemp7 = (fRec9[1] + fSlow5);
 			fRec9[0] = (fTemp7 - floorf(fTemp7));
 			float fTemp8 = ftbl0[int((65536.0f * fRec9[0]))];
 			float fTemp9 = (375.5f * (1 + fTemp8));
-			float fTemp10 = clip(0.0f, 1.0f, (fSlow10 + (fSlow9 * fTemp1)));
-			float fTemp11 = clip(0.0f, 1.0f, (fSlow14 + (fSlow13 * fTemp1)));
-			fRec8[0] = (((fSlow15 * ((wavetable2(fTemp9) * fTemp11) + ((1 - fTemp11) * wavetable1(fTemp9)))) + ((fSlow12 * fTemp8) + (fSlow11 * ((wavetable3(fTemp9) * fTemp10) + ((1 - fTemp10) * wavetable4(fTemp9)))))) - (((fRec8[2] * (1 + ((fTemp3 - 1.8477590650225735f) / fTemp2))) + (2 * (fTemp5 * fRec8[1]))) / fTemp6));
-			fRec7[0] = (((fRec8[2] + (fRec8[0] + (2 * fRec8[1]))) / fTemp6) - (((fRec7[2] * (1 + ((fTemp3 - 0.7653668647301795f) / fTemp2))) + (2 * (fRec7[1] * fTemp5))) / fTemp4));
-			iRec10[0] = (iSlow17 & (iRec10[1] | (fRec11[1] >= 1)));
-			int iTemp12 = (iSlow18 & (fRec11[1] > 0));
-			fRec11[0] = (((iTemp12 == 0) | (fRec11[1] >= 1e-06f)) * ((fSlow27 * (((iRec10[1] == 0) & iSlow17) & (fRec11[1] < 1))) + (fRec11[1] * ((1 - (fSlow25 * (iRec10[1] & (fRec11[1] > fSlow20)))) - (fSlow23 * iTemp12)))));
+			float fTemp10 = clip(0.0f, 1.0f, (fSlow8 + (fSlow7 * fTemp1)));
+			float fTemp11 = clip(0.0f, 1.0f, (fSlow11 + (fSlow10 * fTemp1)));
+			fRec8[0] = ((((fSlow12 * ((wavetable1(fTemp9) * (1 - fTemp11)) + (fTemp11 * wavetable2(fTemp9)))) + (fSlow9 * ((wavetable4(fTemp9) * (1 - fTemp10)) + (fTemp10 * wavetable3(fTemp9))))) + (fSlow6 * fTemp8)) - (((fRec8[2] * (1 + ((fTemp3 - 1.8477590650225735f) / fTemp2))) + (2 * (fRec8[1] * fTemp5))) / fTemp6));
+			fRec7[0] = (((fRec8[2] + (fRec8[0] + (2 * fRec8[1]))) / fTemp6) - (((fRec7[2] * (1 + ((fTemp3 - 0.7653668647301795f) / fTemp2))) + (2 * (fTemp5 * fRec7[1]))) / fTemp4));
+			iRec10[0] = (iSlow14 & (iRec10[1] | (fRec11[1] >= 1)));
+			int iTemp12 = (iSlow15 & (fRec11[1] > 0));
+			fRec11[0] = (((fSlow24 * (((iRec10[1] == 0) & iSlow14) & (fRec11[1] < 1))) + (fRec11[1] * ((1 - (fSlow22 * (iRec10[1] & (fRec11[1] > fSlow17)))) - (fSlow20 * iTemp12)))) * ((iTemp12 == 0) | (fRec11[1] >= 1e-06f)));
 			float fTemp13 = (fRec11[0] * (fRec7[2] + (fRec7[0] + (2 * fRec7[1]))));
-			float fTemp14 = fabsf((fSlow30 * (fTemp13 / fTemp4)));
-			fRec6[0] = ((fSlow32 * fTemp14) + (fSlow31 * max(fTemp14, fRec6[1])));
-			fRec5[0] = ((fSlow33 * fRec6[0]) + (fSlow7 * fRec5[1]));
-			fRec4[0] = ((fSlow34 * (0 - (0.9f * max(((20 * log10f(fRec5[0])) - fSlow6), 0)))) + (fSlow5 * fRec4[1]));
-			float fTemp15 = (fSlow36 * ((fTemp13 * (fSlow35 + (fSlow28 * powf(10,(0.05f * fRec4[0]))))) / fTemp4));
-			fRec0[0] = max((fRec0[1] - fConst1), min(10, (20 * log10f(max(1.584893192461114e-05f, fabsf(fTemp15))))));
+			float fTemp14 = fabsf((fSlow27 * (fTemp13 / fTemp4)));
+			fRec6[0] = ((fSlow28 * max(fTemp14, fRec6[1])) + (fSlow29 * fTemp14));
+			fRec5[0] = ((fSlow31 * fRec5[1]) + (fSlow32 * fRec6[0]));
+			fRec4[0] = ((fSlow33 * fRec4[1]) + (fSlow34 * (0 - (0.9f * max(((20 * log10f(fRec5[0])) - fSlow4), 0.0f)))));
+			float fTemp15 = (fSlow36 * ((fTemp13 * (fSlow35 + (fSlow25 * powf(10,(0.05f * fRec4[0]))))) / fTemp4));
+			fRec0[0] = max((fRec0[1] - fConst1), min((float)10, (20 * log10f(max(1.584893192461114e-05f, fabsf(fTemp15))))));
 			fbargraph0 = fRec0[0];
 			output0[i] = (FAUSTFLOAT)fTemp15;
 			// post processing
@@ -678,13 +687,13 @@ class sorcer : public dsp {
 			fRec8[2] = fRec8[1]; fRec8[1] = fRec8[0];
 			fRec9[1] = fRec9[0];
 			fRec3[1] = fRec3[0];
-			fRec2[1] = fRec2[0];
+			fRec1[1] = fRec1[0];
 		}
 	}
 };
 
 
-float 	sorcer::ftbl0[65536];
+float 	mydsp::ftbl0[65536];
 
 //----------------------------------------------------------------------------
 //  LV2 interface
@@ -702,12 +711,11 @@ float 	sorcer::ftbl0[65536];
 
 #include <lv2/lv2plug.in/ns/lv2core/lv2.h>
 #include <lv2/lv2plug.in/ns/ext/dynmanifest/dynmanifest.h>
-#include <lv2/lv2plug.in/ns/ext/event/event-helpers.h>
-#include <lv2/lv2plug.in/ns/ext/uri-map/uri-map.h>
+#include <lv2/lv2plug.in/ns/ext/atom/util.h>
 #include <lv2/lv2plug.in/ns/ext/urid/urid.h>
 
 #ifndef URI_PREFIX
-#define URI_PREFIX "http://faust-lv2.googlecode.com"
+#define URI_PREFIX "http://www.openavproductions.com"
 #endif
 
 #ifndef PLUGIN_URI
@@ -756,7 +764,7 @@ struct LV2SynthPlugin {
   bool active;		// activation status
   int rate;		// sampling rate
   int nvoices;		// current number of voices (polyphony; <= NVOICES)
-  sorcer *dsp[NVOICES];	// the dsps
+  mydsp *dsp[NVOICES];	// the dsps
   LV2UI *ui[NVOICES];	// their Faust interface descriptions
   int n_in, n_out;	// number of input and output control ports
   int *ctrls;		// Faust ui elements (indices into ui->elems)
@@ -769,15 +777,12 @@ struct LV2SynthPlugin {
   unsigned n_samples;	// current block size
   float **outbuf;	// audio buffers for mixing down the voices
   float **inbuf;	// dummy input buffer
-  LV2_Event_Buffer* event_port;	// midi input
+  LV2_Atom_Sequence* event_port; // midi input
   float *poly;		// polyphony port
   std::map<uint8_t,int> ctrlmap; // MIDI controller map
-  // Needed host features (the uri-map extension is officially deprecated, but
-  // still needed for some if not most hosts at the time of this writing).
-  LV2_URI_Map_Feature* uri_map;
-  LV2_URID_Map* map;	// the new urid extension
+  // Needed host features.
+  LV2_URID_Map* map;	// the urid extension
   LV2_URID midi_event;	// midi event uri
-  LV2_Event_Feature* event_ref;
   // Octave tunings (offsets in semitones) per MIDI channel.
   float tuning[16][12];
   // Allocated voices per MIDI channel and note.
@@ -812,9 +817,8 @@ struct LV2SynthPlugin {
     rate = 44100;
     nvoices = NVOICES;
     n_in = n_out = 0;
-    uri_map = NULL; map = NULL;
+    map = NULL;
     midi_event = -1;
-    event_ref = NULL;
     event_port = NULL;
     poly = NULL;
     freq = gain = gate = -1;
@@ -830,7 +834,7 @@ struct LV2SynthPlugin {
       rpn_msb[i] = rpn_lsb[i] = 0x7f;
       data_msb[i] = data_lsb[i] = 0;
       for (int j = 0; j < 12; j++)
-      tuning[i][j] = 0.0f;
+	tuning[i][j] = 0.0f;
     }
     n_used = 0;
     n_queued = 0;
@@ -852,18 +856,18 @@ struct LV2SynthPlugin {
     fprintf(stderr, "%s: notes =", msg);
     for (uint8_t ch = 0; ch < 16; ch++)
       for (int note = 0; note < 128; note++)
-        if (notes[ch][note] >= 0)
-          fprintf(stderr, " [%d] %d(#%d)", ch, note, notes[ch][note]);
+	if (notes[ch][note] >= 0)
+	  fprintf(stderr, " [%d] %d(#%d)", ch, note, notes[ch][note]);
     fprintf(stderr, "\nqueued (%d):", n_queued);
     for (int i = 0; i < nvoices; i++)
       if (queued[i]) fprintf(stderr, " #%d", i);
     fprintf(stderr, "\nused (%d):", n_used);
     for (boost::circular_buffer<int>::iterator it = used_voices.begin();
-      it != used_voices.end(); it++)
+	 it != used_voices.end(); it++)
       fprintf(stderr, " #%d->%d", *it, note_info[*it].note);
     fprintf(stderr, "\nfree (%d):", n_free);
     for (boost::circular_buffer<int>::iterator it = free_voices.begin();
-      it != free_voices.end(); it++)
+	 it != free_voices.end(); it++)
       fprintf(stderr, " #%d", *it);
     fprintf(stderr, "\n");
   }
@@ -878,12 +882,12 @@ struct LV2SynthPlugin {
       voice_on(i, note, vel, ch);
       // move this voice to the end of the used list
       for (boost::circular_buffer<int>::iterator it = used_voices.begin();
-           it != used_voices.end(); it++) {
-        if (*it == i) {
-          used_voices.erase(it);
-          used_voices.push_back(i);
-          break;
-        }
+	   it != used_voices.end(); it++) {
+	if (*it == i) {
+	  used_voices.erase(it);
+	  used_voices.push_back(i);
+	  break;
+	}
       }
 #if DEBUG_VOICE_ALLOC
       print_voices("retrigger");
@@ -1103,31 +1107,24 @@ instantiate(const LV2_Descriptor*     descriptor,
             const LV2_Feature* const* features)
 {
   LV2SynthPlugin* plugin = new LV2SynthPlugin;
-  // Scan host features for URID (or URI) map.
+  // Scan host features for URID map.
   for (int i = 0; features[i]; i++) {
     if (!strcmp(features[i]->URI, LV2_URID_URI "#map")) {
       plugin->map = (LV2_URID_Map*)features[i]->data;
       plugin->midi_event =
 	plugin->map->map(plugin->map->handle, MIDI_EVENT_URI);
-    } else if (!strcmp(features[i]->URI, LV2_URI_MAP_URI)) {
-      plugin->uri_map = (LV2_URI_Map_Feature*)features[i]->data;
-      plugin->midi_event =
-	plugin->uri_map->uri_to_id(plugin->uri_map->callback_data,
-				   LV2_EVENT_URI, MIDI_EVENT_URI);
-    } else if (!strcmp(features[i]->URI, LV2_EVENT_URI)) {
-      plugin->event_ref = (LV2_Event_Feature *)features[i]->data;
     }
   }
-  if (!plugin->map && !plugin->uri_map) {
+  if (!plugin->map) {
     fprintf
-      (stderr, "%s: host supports neither uri-map or urid:map, giving up\n",
+      (stderr, "%s: host doesn't support urid:map, giving up\n",
        PLUGIN_URI);
     delete plugin;
     return 0;
   }
   plugin->rate = rate;
   for (int i = 0; i < NVOICES; i++) {
-    plugin->dsp[i] = new sorcer();
+    plugin->dsp[i] = new mydsp();
     plugin->ui[i] = new LV2UI();
     plugin->dsp[i]->init(plugin->rate);
     plugin->dsp[i]->buildUserInterface(plugin->ui[i]);
@@ -1284,7 +1281,7 @@ connect_port(LV2_Handle instance,
       if (i < m)
 	plugin->outputs[i] = (float*)data;
       else if (i == m)
-	plugin->event_port = (LV2_Event_Buffer*)data;
+	plugin->event_port = (LV2_Atom_Sequence*)data;
       else if (i == m+1)
 	plugin->poly = (float*)data;
       else
@@ -1359,17 +1356,9 @@ run(LV2_Handle instance, uint32_t n_samples)
   int nvoices = plugin->nvoices;
   // Process incoming MIDI events.
   if (plugin->event_port) {
-    LV2_Event_Iterator i;
-    for (lv2_event_begin(&i, plugin->event_port);
-	 lv2_event_is_valid(&i);
-	 lv2_event_increment(&i)) {
-      LV2_Event* ev = lv2_event_get(&i, NULL);
-      if (ev->type == 0) {
-	if (plugin->event_ref) {
-	  plugin->event_ref->lv2_event_unref
-	    (plugin->event_ref->callback_data, ev);
-	}
-      } else if (ev->type == plugin->midi_event) {
+    LV2_Atom_Event* i;
+    LV2_ATOM_SEQUENCE_FOREACH(plugin->event_port, ev) {
+      if (ev->body.type == plugin->midi_event) {
 	uint8_t *data = (uint8_t*)(ev+1);
 #if 0
 	// FIXME: Consider doing sample-accurate note onsets here. LV2 keeps
@@ -1379,11 +1368,11 @@ run(LV2_Handle instance, uint32_t n_samples)
 	// a control variable which can only change at block boundaries. In
 	// the future, the gate could be implemented as an audio signal to get
 	// sample-accurate note onsets.
-	uint32_t frames = ev->frames;
+	uint32_t frames = ev->body.frames;
 #endif
 #if DEBUG_MIDI
-	fprintf(stderr, "midi ev (%u bytes):", ev->size);
-	for (unsigned i = 0; i < ev->size; i++)
+	fprintf(stderr, "midi ev (%u bytes):", ev->body.size);
+	for (unsigned i = 0; i < ev->body.size; i++)
 	  fprintf(stderr, " 0x%0x", data[i]);
 	fprintf(stderr, "\n");
 #endif
@@ -1399,11 +1388,8 @@ run(LV2_Handle instance, uint32_t n_samples)
 	  // broken the host is, so we handle this case anyway to be on the safe
 	  // side.
 	  if (data[2] == 0) goto note_off;
-    if ( data[0] == 144 )
-    {
-      plugin->alloc_voice(chan, data[1], data[2]);
-    }
-    break;
+	  plugin->alloc_voice(chan, data[1], data[2]);
+	  break;
 	}
 	case 0x80: {
 	  // note off
@@ -1420,7 +1406,7 @@ run(LV2_Handle instance, uint32_t n_samples)
 	  // data[1] is LSB, data[2] MSB, range is 0..0x3fff (which maps to
 	  // -2..+2 semitones by default), center point is 0x2000 = 8192
 	  int val = data[1] | (data[2]<<7);
-	  plugin->bend[chan] = (val-0x2000)/8192.0f*plugin->range[chan] * 6;
+	  plugin->bend[chan] = (val-0x2000)/8192.0f*plugin->range[chan];
 #if DEBUG_MIDICC
 	  fprintf(stderr, "pitch-bend (chan %d): %g cent\n", chan+1,
 		  plugin->bend[chan]*100.0);
@@ -1553,13 +1539,13 @@ run(LV2_Handle instance, uint32_t n_samples)
 	  break;
 	}
 	case 0xf0:
-	  if (data[0] == 0xf0 && data[ev->size-1] == 0xf7) {
+	  if (data[0] == 0xf0 && data[ev->body.size-1] == 0xf7) {
 	    // sysex
 	    if ((data[1] == 0x7e || data[1] == 0x7f) && data[3] == 8) {
 	      // MIDI tuning standard
 	      bool realtime = data[1] == 0x7f;
-	      if ((ev->size == 21 && data[4] == 8) ||
-		  (ev->size == 33 && data[4] == 9)) {
+	      if ((ev->body.size == 21 && data[4] == 8) ||
+		  (ev->body.size == 33 && data[4] == 9)) {
 		// MTS scale/octave tuning 1- or 2-byte form
 		bool onebyte = data[4] == 8;
 		unsigned chanmsk = (data[5]<<14) | (data[6]<<7) | data[7];
@@ -1623,7 +1609,7 @@ run(LV2_Handle instance, uint32_t n_samples)
 	  break;
 	}
       } else {
-	//fprintf(stderr, "%s: unknown event type %d\n", PLUGIN_URI, ev->type);
+	fprintf(stderr, "%s: unknown event type %d\n", PLUGIN_URI, ev->body.type);
       }
     }
   }
@@ -1704,8 +1690,10 @@ activate(LV2_Handle instance)
     plugin->dsp[i]->init(plugin->rate);
   for (int i = 0, j = 0; i < plugin->ui[0]->nelems; i++) {
     int p = plugin->ui[0]->elems[i].port;
-    float val = plugin->ui[0]->elems[i].init;
-    //plugin->portvals[p] = val;
+    if (p >= 0) {
+      float val = plugin->ui[0]->elems[i].init;
+      plugin->portvals[p] = val;
+    }
   }
   plugin->active = true;
 }
@@ -1764,7 +1752,7 @@ int lv2_dyn_manifest_open(LV2_Dyn_Manifest_Handle *handle,
 			  const LV2_Feature *const *features)
 {
   LV2SynthPlugin* plugin = new LV2SynthPlugin;
-  plugin->dsp[0] = new sorcer();
+  plugin->dsp[0] = new mydsp();
   plugin->ui[0] = new LV2UI();
   plugin->dsp[0]->init(48000);
   plugin->dsp[0]->buildUserInterface(plugin->ui[0]);
@@ -1877,19 +1865,19 @@ int lv2_dyn_manifest_get_data(LV2_Dyn_Manifest_Handle handle,
     }
   }
 #endif
-  if (!plugin_name) plugin_name = "sorcer";
-  fprintf(fp, "@prefix doap: <http://usefulinc.com/ns/doap#> .\n\
+  if (!plugin_name) plugin_name = "mydsp";
+  fprintf(fp, "@prefix doap:  <http://usefulinc.com/ns/doap#> .\n\
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .\n\
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .\n\
 @prefix epp:   <http://lv2plug.in/ns/ext/port-props#> .\n\
-@prefix ev:    <http://lv2plug.in/ns/ext/event#> .\n\
+@prefix atom:  <http://lv2plug.in/ns/ext/atom#> .\n\
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n\
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\n\
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .\n\
 <%s>\n\
        a lv2:Plugin, lv2:InstrumentPlugin ;\n\
        doap:name \"%s\" ;\n\
-       lv2:binary <sorcer.so> ;\n\
+       lv2:binary <mydsp.so> ;\n\
        lv2:optionalFeature epp:supportsStrictBounds ;\n\
        lv2:optionalFeature lv2:hardRtCapable ;\n", PLUGIN_URI, plugin_name);
   if (plugin_author)
@@ -2028,8 +2016,9 @@ int lv2_dyn_manifest_get_data(LV2_Dyn_Manifest_Handle handle,
   // midi input
   fprintf(fp, "%s [\n\
 	a lv2:InputPort ;\n\
-	a ev:EventPort ;\n\
-	ev:supportsEvent <http://lv2plug.in/ns/ext/midi#MidiEvent> ;\n\
+	a atom:AtomPort ;\n\
+	atom:bufferType atom:Sequence ;\n\
+	atom:supports <http://lv2plug.in/ns/ext/midi#MidiEvent> ;\n\
 	lv2:index %d ;\n\
 	lv2:symbol \"midiin\" ;\n\
 	lv2:name \"midiin\"\n\
