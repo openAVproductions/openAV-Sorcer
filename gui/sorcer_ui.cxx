@@ -218,6 +218,22 @@ static void port_event(LV2UI_Handle ui,
 }
 
 
+static int ui_show(LV2UI_Handle handle)
+{
+  SorcerGUI *self = (SorcerGUI *) handle;
+  self->widget->window->show();
+  
+  return 0;
+}
+
+static int ui_hide(LV2UI_Handle handle)
+{
+  SorcerGUI *self = (SorcerGUI *) handle;
+  self->widget->window->hide();
+  
+  return 0;
+}
+
 static int
 idle(LV2UI_Handle handle)
 {
@@ -228,14 +244,19 @@ idle(LV2UI_Handle handle)
   return 0;
 }
 
-static const LV2UI_Idle_Interface idle_iface = { idle };
-
 static const void*
 extension_data(const char* uri)
 {
-  if (!strcmp(uri, LV2_UI__idleInterface))
+  static const LV2UI_Show_Interface show = { ui_show, ui_hide };
+  static const LV2UI_Idle_Interface idle_iface = { idle };
+  
+  if (!strcmp(uri, LV2_UI__showInterface))
   {
-    return &idle_iface;
+    return (void*)&show;
+  }
+  else if (!strcmp(uri, LV2_UI__idleInterface))
+  {
+    return (void*)&idle_iface;
   }
   return NULL;
 }
