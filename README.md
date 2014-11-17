@@ -9,8 +9,11 @@ This is the repository of a wavetable synthesizer called Sorcer.
 
 Install
 -------
-Use make to compile and install Sorcer:
+Use CMake to compile and install Sorcer:
 ```
+mkdir build
+cd build
+cmake ..
 make
 make install
 ```
@@ -41,8 +44,14 @@ Details
 -------
 I've removed the dependency on FAUST to install: the generated CPP file is
 included in the repo now. To tweak the FAUST code, just edit faust/main.dsp.
-Running "make faustGenerateCpp" to re-generate the CPP code from faust.
-The LV2-FAUST libraries are necessary, ensure they're installed.
+
+Use FAUST with the following command to generate the next .cpp file:
+```
+faust main.dsp > main.cpp
+```
+
+Now re-run `make` from the `build` directory to re-compile with the modified FAUST
+code.
 
 
 Contact
