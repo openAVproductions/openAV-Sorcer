@@ -13,8 +13,8 @@
        doap:name "Sorcer" ;
        lv2:binary <sorcer.so> ;
        lv2:optionalFeature epp:supportsStrictBounds ;
-       lv2:optionalFeature lv2:hardRtCapable ;
-       doap:maintainer [ foaf:name "OpenAV Productions" ] ;
+       lv2:optionalFeature lv2:hardRTCapable ;
+       lv2:project [ doap:maintainer [ foaf:name "OpenAV Productions" ] ] ;
        doap:description "Wavetable Synth" ;
        
        ui:ui <http://www.openavproductions.com/sorcer/gui> ;
@@ -124,7 +124,7 @@
   lv2:index 9 ;
   lv2:symbol "compressorEnable" ;
   lv2:name "compressorEnable" ;
-        lv2:portProperty epp:hasStrictBounds ;
+        lv2:portProperty epp:hasStrictBounds, lv2:toggled ;
         epp:rangeSteps 999 ;
   lv2:default 0 ;
   lv2:minimum 0 ;
