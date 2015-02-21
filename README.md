@@ -50,8 +50,8 @@ Use FAUST with the following command to generate the next .cpp file:
 faust main.dsp > main.cpp
 ```
 
-Now re-run `make` from the `build` directory to re-compile with the modified FAUST
-code.
+See the `CMakeLists.txt` file in the top directory for instructions on how to
+re-compile with the modified FAUST code.
 
 
 Contact
