@@ -19,6 +19,7 @@
 #ifndef SORCER_AVTK
 #define SORCER_AVTK
 
+#include "avtk/avtk_box.h"
 #include "avtk/avtk_lfo.h"
 #include "avtk/avtk_adsr.h"
 #include "avtk/avtk_dial.h"

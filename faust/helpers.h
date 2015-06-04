@@ -52,7 +52,7 @@ float print ( float x )
 {
   if ( x != prevPrint)
   {
-    printf( "%d\n" , x );
+    printf( "%f\n" , x );
     prevPrint = x;
   }
   

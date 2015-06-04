@@ -5,7 +5,7 @@ project (sorcer)
 
 set(SORCER_VERSION_MAJOR "1")
 set(SORCER_VERSION_MINOR "1")
-set(SORCER_VERSION_PATCH "1")
+set(SORCER_VERSION_PATCH "2")
 
 set(SORCER_VERSION "${SORCER_VERSION_MAJOR}.${SORCER_VERSION_MINOR}.${SORCER_VERSION_PATCH}")
 
@@ -79,7 +79,7 @@ FILE(GLOB sources faust/main.cpp +
 ADD_LIBRARY(sorcer SHARED ${sources})
 
 target_link_libraries( sorcer ${NTK_LIBRARIES}     )
-target_link_libraries( sorcer ${SNDFILE_LIBRARIES} )
+#target_link_libraries( sorcer ${SNDFILE_LIBRARIES} )
 
 # Remove "lib" part before name (sorcer.so, not libsorcer.so)
 set_target_properties(sorcer PROPERTIES PREFIX "")

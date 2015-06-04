@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0300 
+version 1.0303 
 header_name {.h} 
 code_name {.cxx}
 class SorcerUI {open
@@ -11,8 +11,8 @@ class SorcerUI {open
   }
   Function {SorcerUI()} {open
   } {
-    Fl_Window window {open selected
-      xywh {495 265 515 450} type Double color 48
+    Fl_Window window {open
+      xywh {367 238 515 450} type Double color 48
       code0 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code1 {window->color( fl_rgb_color( 15,15,15 ) );}
       code2 {using namespace std;}
@@ -145,7 +145,8 @@ writePort(OSC_3_VOLUME, tmp );}
       }
       Fl_Box lfoBox {
         xywh {182 157 152 75} box DOWN_BOX labeltype NO_LABEL
-        code0 {lfoBox->color( fl_rgb_color( 28,28,28 ));}
+        code0 {//lfoBox->color( fl_rgb_color( 28,28,28 ));}
+        class {Avtk::Box}
       }
       Fl_Dial lfoSpeed {
         label Speed
@@ -189,7 +190,8 @@ writePort( int(FILTER_CUTOFF),tmp );}
       }
       Fl_Box filterBox {
         xywh {184 364 148 70} box DOWN_BOX labeltype NO_LABEL
-        code0 {filterBox->color( fl_rgb_color( 28,28,28 ));}
+        code0 {//filterBox->color( fl_rgb_color( 28,28,28 ));}
+        class {Avtk::Box}
       }
       Fl_Dial filterCutoff {
         label Cutoff
@@ -220,7 +222,8 @@ writePort( int(LFO_TO_FILTER_RANGE),tmp );}
       }
       Fl_Box adsrBox {
         xywh {353 160 148 70} box DOWN_BOX labeltype NO_LABEL
-        code0 {adsrBox->color( fl_rgb_color( 28,28,28 ));}
+        code0 {//adsrBox->color( fl_rgb_color( 28,28,28 ));}
+        class {Avtk::Box}
       }
       Fl_Dial sustain {
         label S
@@ -263,14 +266,15 @@ writePort( int(VOLUME), tmp );}
       }
       Fl_Box comp {
         callback {float tmp = o->getActive();
-writePort( int(COMPRESSOR_ENABLE), tmp );}
+writePort( int(COMPRESSOR_ENABLE), tmp );} selected
         xywh {351 268 98 93} box DOWN_BOX labeltype NO_LABEL
         code0 {comp->ratio(0.6);}
         class {Avtk::Compressor}
       }
       Fl_Box compBox {
         xywh {351 364 98 72} box DOWN_BOX labeltype NO_LABEL
-        code0 {compBox->color( fl_rgb_color( 28,28,28 ));}
+        code0 {//compBox->color( fl_rgb_color( 28,28,28 ));}
+        class {Avtk::Box}
       }
       Fl_Dial compThres {
         label Thres
