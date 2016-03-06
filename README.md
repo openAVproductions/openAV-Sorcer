@@ -18,6 +18,17 @@ make
 make install
 ```
 
+If an error saying "package NTK not found" occurs, it means the development
+files for NTK are not present. The following will download the source for
+NTK and install it:
+```
+git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
+cd ntk
+./waf configure --prefix=/usr
+./waf
+./waf install
+```
+
 Running
 -------
 After the INSTALL step Ardour3, QTractor, and any other LV2 host should
