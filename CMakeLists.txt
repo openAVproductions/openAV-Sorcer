@@ -10,6 +10,7 @@ set(SORCER_VERSION_PATCH "3")
 set(SORCER_VERSION "${SORCER_VERSION_MAJOR}.${SORCER_VERSION_MINOR}.${SORCER_VERSION_PATCH}")
 
 option(RELEASE_BUILD  "Build for production usage" ON )
+option(BUILD_SSE      "Build with SSE flags"       ON  )
 
 find_package(PkgConfig)
 
@@ -26,11 +27,15 @@ pkg_check_modules(CAIRO cairo REQUIRED)
 include_directories( ${CAIRO_INCLUDE_DIRS}  )
 link_directories   ( ${CAIRO_LIBRARY_DIRS}  )
 
-SET(CMAKE_SHARED_LINKER_FLAGS "-fPIC -shared -Wl,-z,nodelete -Wl,--no-undefined")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fPIC -shared -Wl,-z,nodelete -Wl,--no-undefined")
+SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
+SET(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -W -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
 
-IF(RELEASE_BUILD)
-  SET(CMAKE_CXX_FLAGS "-g -Wall -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
-  SET(CMAKE_C_FLAGS "-g -Wall -W -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
+IF(BUILD_SSE)
+  IF(NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+    SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2 -mfpmath=sse -ffast-math")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2 -mfpmath=sse -ffast-math")
+  ENDIF()
 ENDIF()
 
 ## The following commands will re-generate the .cpp files from the FAUST .dsp,
