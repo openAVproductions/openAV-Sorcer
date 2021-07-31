@@ -23,6 +23,8 @@ files for NTK are not present. The following will download the source for
 NTK and install it:
 ```
 git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
+# or from here; https://git.kx.studio/non/ntk
+
 cd ntk
 ./waf configure --prefix=/usr
 ./waf
