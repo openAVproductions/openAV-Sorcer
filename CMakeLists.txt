@@ -28,13 +28,13 @@ include_directories( ${CAIRO_INCLUDE_DIRS}  )
 link_directories   ( ${CAIRO_LIBRARY_DIRS}  )
 
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fPIC -shared -Wl,-z,nodelete -Wl,--no-undefined")
-SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
-SET(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -W -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
+SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -ffast-math")
+SET(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -W -Wno-unused-variable -ffast-math")
 
 IF(BUILD_SSE)
-  IF(NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
-    SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2 -mfpmath=sse -ffast-math")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2 -mfpmath=sse -ffast-math")
+  IF(NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm|ppc")
+    SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2 -mfpmath=sse")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2 -mfpmath=sse")
   ENDIF()
 ENDIF()
 
