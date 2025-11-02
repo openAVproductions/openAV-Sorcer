@@ -13,18 +13,23 @@ Use CMake to compile and install Sorcer:
 ```
 mkdir build
 cd build
-cmake ..
+
+# here we set the pkg-config path to the repo, to pick up `ntk-static`.
+# Statically linking NTK makes it simpler to distribute Fabla.
+PKG_CONFIG_PATH=../ cmake ..
+
 make
 make install
+
+# Verify that the plugin is identified by lv2 tooling
+lv2ls | grep Sorcer
 ```
 
 If an error saying "package NTK not found" occurs, it means the development
 files for NTK are not present. The following will download the source for
 NTK and install it:
 ```
-git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
-# or from here; https://git.kx.studio/non/ntk
-
+git clone https://github.com/linuxaudio/ntk
 cd ntk
 ./waf configure --prefix=/usr
 ./waf

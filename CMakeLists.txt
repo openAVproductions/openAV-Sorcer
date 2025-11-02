@@ -1,5 +1,6 @@
-
-cmake_minimum_required (VERSION 2.6)
+# This is a very basic CMakeLists file, and will work from
+# version 2.4 or so upwards. Newer CMakes complain about older than 3.5..
+cmake_minimum_required (VERSION 3.5)
 
 project (sorcer)
 
@@ -16,7 +17,7 @@ find_package(PkgConfig)
 
 #SET(CMAKE_INSTALL_PREFIX "/usr" )
 
-pkg_check_modules(NTK ntk REQUIRED)
+pkg_check_modules(NTK ntk-static REQUIRED)
 include_directories( ${NTK_INCLUDE_DIRS}  )
 link_directories   ( ${NTK_LIBRARY_DIRS}  )
 
@@ -45,7 +46,7 @@ ENDIF()
 ## Note: This is *NOT* necessary for packaging, as the generated files are commited
 ## in the repo to remove the dependency on FAUST, and to easy packaging.
 ##
-#  cd faust/ 
+#  cd faust/
 #  g++ -fPIC -shared -ffast-math -O3 -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"'  -Wl,-z,nodelete main.cpp -o sorcer.so
 #  g++ -DPLUGIN_URI='"http://www.openavproductions.com/sorcer"' main.cpp
 #  ./a.out > sorcer.ttl
