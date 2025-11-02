@@ -29,8 +29,8 @@ include_directories( ${CAIRO_INCLUDE_DIRS}  )
 link_directories   ( ${CAIRO_LIBRARY_DIRS}  )
 
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fPIC -shared -Wl,-z,nodelete -Wl,--no-undefined")
-SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -ffast-math")
-SET(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -W -Wno-unused-variable -ffast-math")
+SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -ffast-math -fvisibility=hidden")
+SET(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -W -Wno-unused-variable -ffast-math -fvisibility=hidden")
 
 IF(BUILD_SSE)
   IF(NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm|ppc")
@@ -86,7 +86,29 @@ FILE(GLOB sources faust/main.cpp +
   gui/sorcer_widget.cxx +
   gui/sorcer_ui.cxx )
 
+# Create linker version script to only export LV2 symbols
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/lv2_symbols.map "{
+global:
+  lv2_descriptor;
+  lv2ui_descriptor;
+  lv2_dyn_manifest_open;
+  lv2_dyn_manifest_close;
+  lv2_dyn_manifest_get_subjects;
+  lv2_dyn_manifest_get_data;
+local:
+  *;
+};
+")
+
 ADD_LIBRARY(sorcer SHARED ${sources})
+
+# Set symbol visibility to hidden by default, only export LV2 symbols
+set_target_properties(sorcer PROPERTIES
+    CXX_VISIBILITY_PRESET hidden
+    C_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN 1
+    LINK_FLAGS "-Wl,--version-script=${CMAKE_CURRENT_BINARY_DIR}/lv2_symbols.map"
+)
 
 target_link_libraries( sorcer ${NTK_LIBRARIES}     )
 #target_link_libraries( sorcer ${SNDFILE_LIBRARIES} )

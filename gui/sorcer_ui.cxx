@@ -265,6 +265,7 @@ static LV2UI_Descriptor descriptors[] = {
     {SORCER_UI_URI, instantiate, cleanup, port_event, extension_data}
 };
 
+LV2_SYMBOL_EXPORT
 const LV2UI_Descriptor * lv2ui_descriptor(uint32_t index)
 {
   if (index >= sizeof(descriptors) / sizeof(descriptors[0]))
