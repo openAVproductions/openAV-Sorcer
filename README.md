@@ -25,6 +25,12 @@ make install
 lv2ls | grep Sorcer
 ```
 
+Note that Sorcer depends on Boost "circular_buffer.hpp", which is not usually
+pre-installed on desktop systems. You can install it using your package manager, for example on Ubuntu:
+```
+sudo apt-get install libboost-dev
+```
+
 If an error saying "package NTK not found" occurs, it means the development
 files for NTK are not present. The following will download the source for
 NTK and install it:
