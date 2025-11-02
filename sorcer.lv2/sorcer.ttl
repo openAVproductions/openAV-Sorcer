@@ -7,18 +7,22 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
+@prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
 
 <http://www.openavproductions.com/sorcer>
        a lv2:Plugin, lv2:InstrumentPlugin ;
        doap:name "Sorcer" ;
        lv2:binary <sorcer.so> ;
+       lv2:minorVersion 1 ;
+       lv2:microVersion 0 ;
        lv2:optionalFeature epp:supportsStrictBounds ;
        lv2:optionalFeature lv2:hardRTCapable ;
+       lv2:requiredFeature urid:map ;
        lv2:project [ doap:maintainer [ foaf:name "OpenAV Productions" ] ] ;
        doap:description "Wavetable Synth" ;
-       
+
        ui:ui <http://www.openavproductions.com/sorcer/gui> ;
-       
+
     lv2:port [
   a lv2:InputPort ;
   a lv2:ControlPort ;
@@ -288,3 +292,9 @@
   lv2:maximum 16 ;
     ]
 .
+
+<http://www.openavproductions.com/sorcer/gui>
+    a ui:X11UI ;
+    lv2:binary <sorcer.so> ;
+    lv2:requiredFeature ui:idleInterface ;
+    lv2:extensionData ui:showInterface .
