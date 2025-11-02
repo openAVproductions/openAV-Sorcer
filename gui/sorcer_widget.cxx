@@ -250,6 +250,11 @@ void SorcerUI::cb_volume(Avtk::Volume* o, void* v) {
 void SorcerUI::cb_comp_i(Avtk::Compressor* o, void*) {
   float tmp = o->getActive();
 writePort( int(COMPRESSOR_ENABLE), tmp );
+  
+  // Handle makeup gain changes from dragging the compressor graph
+  float makeupValue = o->getMakeup();
+  compMakeup->value(makeupValue);
+  writePort( int(COMPRESSOR_MAKEUP), makeupValue );
 }
 void SorcerUI::cb_comp(Avtk::Compressor* o, void* v) {
   ((SorcerUI*)(o->parent()->user_data()))->cb_comp_i(o,v);
