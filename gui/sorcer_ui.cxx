@@ -49,7 +49,7 @@ static LV2UI_Handle instantiate(const LV2UI_Descriptor * descriptor,
                 const char * bundle_path,
                 LV2UI_Write_Function write_function,
                 LV2UI_Controller controller,
-                LV2UI_Widget * widget,
+                LV2UI_Widget * out_widget,
                 const LV2_Feature * const * features)
 {
   if (strcmp(plugin_uri, SORCER_URI) != 0) {
@@ -78,6 +78,7 @@ static LV2UI_Handle instantiate(const LV2UI_Descriptor * descriptor,
   fl_open_display();
   
   self->widget = new SorcerUI();
+  *out_widget = (void *)self->widget;
   
   self->widget->window->border(0);
   self->widget->subbass->X(0.5);
