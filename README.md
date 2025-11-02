@@ -49,8 +49,8 @@ $  ./run.sh
 
 Presets
 -------
-Presets are included in this repo, and copied to the 
-
+Presets are included in this repo, and when installed normally they are copied to the
+system wide installation directory: `/usr/lib/lv2/`. Each host can save presets in difference directories, so user-saved presets are likely in a different location.
 
 Bug Reports
 -----------
