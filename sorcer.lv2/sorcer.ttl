@@ -18,7 +18,15 @@
        lv2:optionalFeature epp:supportsStrictBounds ;
        lv2:optionalFeature lv2:hardRTCapable ;
        lv2:requiredFeature urid:map ;
-       lv2:project [ doap:maintainer [ foaf:name "OpenAV Productions" ] ] ;
+       doap:license <http://www.gnu.org/licenses/gpl-3.0.html> ;
+       lv2:project [
+           doap:name "Sorcer" ;
+           doap:maintainer [
+               foaf:name "OpenAV Productions" ;
+               foaf:mbox <mailto:harryhaaren@gmail.com> ;
+               foaf:homepage <http://openavproductions.com>
+           ]
+       ] ;
        doap:description "Wavetable Synth" ;
 
        ui:ui <http://www.openavproductions.com/sorcer/gui> ;
