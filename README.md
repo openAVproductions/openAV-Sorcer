@@ -86,3 +86,44 @@ harryhaaren@gmail.com
 ```
 
 Cheers, -Harry
+
+## Quick Start (Beginner Friendly)
+
+Follow these steps to quickly build and run Sorcer:
+
+1. Clone the repository:
+   git clone https://github.com/harryhaaren/openAV-Sorcer
+
+2. Navigate into the project:
+   cd openAV-Sorcer
+
+3. Create a build directory:
+   mkdir build && cd build
+
+4. Run CMake:
+   PKG_CONFIG_PATH=../ cmake ..
+
+5. Compile:
+   make
+
+6. Install:
+   sudo make install
+
+7. Verify installation:
+   lv2ls | grep Sorcer
+
+If Sorcer appears in the list, installation was successful.
+
+## Common Errors
+
+### NTK not found
+Ensure NTK is installed correctly:
+git clone https://github.com/linuxaudio/ntk
+cd ntk
+./waf configure --prefix=/usr
+./waf
+./waf install
+
+### Boost missing
+Install Boost library:
+sudo apt-get install libboost-dev
